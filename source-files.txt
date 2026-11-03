@@ -163,6 +163,11 @@ common/ssd/acer/gm7/GM7_POLICY.md
 device-index.json
 devices/oxp3.json
 docs/ADAPTATIONS.md
+docs/BUILD.en.md
+docs/BUILD.md
+docs/README.en.md
+docs/TOON.en.md
+docs/TOON.md
 docs/RELEASE_0.1.0-layout.1.md
 LICENSE
 licenses/GPL-2.0.txt
