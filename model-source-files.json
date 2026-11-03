@@ -1705,8 +1705,8 @@
     },
     {
       "path": "scripts/build-index.py",
-      "size": 34508,
-      "sha256": "03fbece835444309855fb0db138ecf39d7635c822de502c86ec7c677b6116bea"
+      "size": 34520,
+      "sha256": "ba68ec057315bd45f2e70df3f4479438300926811cabf658981a026e9f56a8ef"
     },
     {
       "path": "scripts/build-keyboard-runtime.py",
@@ -1795,8 +1795,8 @@
     },
     {
       "path": "tests/test_registry.py",
-      "size": 12496,
-      "sha256": "a12cd82b35416f67e42c72023b71587d82e0410202098ec3084a64e69fc6ad84"
+      "size": 13088,
+      "sha256": "72086d6d9f0c00cebad46e8d06fc05bf230f9bb031acc8f8d4ae3974e1884dd5"
     },
     {
       "path": "toon-parser-lock.json",

@@ -168,8 +168,8 @@ def committed_records():
     if Path(git('rev-parse', '--show-toplevel').decode().strip()).resolve() != ROOT.resolve():
         raise ValueError('Release candidates require an independent public registry checkout')
     origin = git('remote', 'get-url', 'origin').decode().strip()
-    if origin not in ('https://github.com/FlightDan/Boiler-devices', 'https://github.com/FlightDan/Boiler-devices.git',
-                      'git@github.com:FlightDan/Boiler-devices.git'):
+    if origin not in ('https://github.com/FlightDan/Boiler-adaptations', 'https://github.com/FlightDan/Boiler-adaptations.git',
+                      'git@github.com:FlightDan/Boiler-adaptations.git'):
         raise ValueError('Unexpected public registry origin')
     commit = git('rev-parse', 'HEAD').decode().strip()
     records = []
