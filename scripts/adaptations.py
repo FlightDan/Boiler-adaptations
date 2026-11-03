@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import ast
 import hashlib
+import importlib.util
 import json
 from pathlib import Path, PurePosixPath
 import re
@@ -78,6 +79,73 @@ def guide(root, model, *, write=False):
         raise ValueError('Guide differs from component manifest: ' + model['guide'])
 
 
+
+# The original inventory is immutable. Only these ten historical BMI260 paths
+# resolve to the separately documented shared resource.
+OLD_GYRO = 'brands/onexplayer/common/scripts/gyro/'
+NEW_GYRO = 'common/sensors/bosch/bmi260/gyro/sources/'
+RELOCATION = 'records/migrations/bmi260-source-relocation-20261103.json'
+GYRO_FILES = frozenset(('gyro_binding.py', 'Makefile', 'bmi270.h', 'inputplumber.conf',
+                        'launch.sh', 'load.sh', 'onexplayer3-bmi260.patch',
+                        'oxp3-gyro.service', 'oxp3_bmi260.c', 'unload.sh'))
+
+
+def relocations(root, lock):
+    record = read(root/RELOCATION)
+    if (record.get('kind') != 'BoilerSourceRelocation' or record.get('schema_version') != 1
+            or record.get('source') != lock['source']
+            or record.get('repository_baseline') != '5c79ead752e21970303f0a2d03b810a1ee77ac43'):
+        raise ValueError('BMI260 relocation provenance differs')
+    expected = {item['path']: item for item in lock['files'] if item['path'].startswith(OLD_GYRO)}
+    if set(expected) != {OLD_GYRO + name for name in GYRO_FILES}:
+        raise ValueError('Historical BMI260 inventory differs')
+    rows = record.get('files')
+    if not isinstance(rows, list) or len(rows) != len(expected):
+        raise ValueError('BMI260 relocation file count differs')
+    mapping = {}
+    for row in rows:
+        old = row.get('old_path')
+        if old not in expected or old in mapping:
+            raise ValueError('Unexpected BMI260 relocation')
+        item = expected[old]
+        new = NEW_GYRO + old[len(OLD_GYRO):]
+        if row != {'old_path': old, 'new_path': new, 'upstream_path': item['upstream_path'],
+                   'size': item['size'], 'sha256': item['sha256'],
+                   'license': 'MIT' if old[len(OLD_GYRO):] in ('gyro_binding.py', 'inputplumber.conf') else 'GPL-2.0'}:
+            raise ValueError('BMI260 relocation metadata differs: ' + old)
+        if local(root, old).exists():
+            raise ValueError('Legacy BMI260 source still exists: ' + old)
+        mapping[old] = new
+    return mapping
+
+
+def validate_common(root):
+    spec = importlib.util.spec_from_file_location('common_device_sources', Path(__file__).with_name('common-device-sources.py'))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    module.ROOT = root
+    module.VENDOR = root/'vendor'
+    module.build()
+    return module
+
+
+def validate_gyro_reference(module, name, model):
+    identifier = model.get('id', '')
+    if not isinstance(identifier, str) or not identifier.startswith('guide:') or not identifier[6:]:
+        raise ValueError('Invalid gyro model guide identity: ' + name)
+    reference = module.load(name)
+    if (reference.get('schema_version') != 1 or reference.get('kind') != 'BoilerModelCommonReferences'
+            or reference.get('source_only') is not True
+            or reference.get('model_id') != 'device:' + identifier[6:]):
+        raise ValueError('Gyro model TOON identity differs: ' + name)
+    resources = reference.get('resources')
+    if not isinstance(resources, list):
+        raise ValueError('Gyro model TOON resources missing: ' + name)
+    gyro = [row for row in resources if isinstance(row, dict) and row.get('id') == 'resource:bmi260-gyro']
+    if gyro != [{'id': 'resource:bmi260-gyro', 'source': 'common/sensors/bosch/bmi260/gyro/source.toon'}]:
+        raise ValueError('Gyro model TOON resource differs: ' + name)
+
+
 def prepare(checkout, root=ROOT):
     plan = read(root/'source-plan.json')
     source = plan['source']
@@ -94,6 +162,8 @@ def prepare(checkout, root=ROOT):
     # Read Git objects rather than the potentially modified working files.
     if git('rev-parse', commit+'^{commit}').decode().strip() != commit:
         raise ValueError('Public source commit is unavailable')
+    historical = read(root/'source-lock.json')
+    mapping = relocations(root, historical)
     inventory, pending = [], []
     seen = set()
     for entry in plan['files']:
@@ -112,13 +182,13 @@ def prepare(checkout, root=ROOT):
         data = git('show', commit+':'+original)
         data.decode('utf-8')  # No binary drivers, firmware or runtime payloads.
         inventory.append(dict(entry, size=len(data), sha256=hashlib.sha256(data).hexdigest()))
-        pending.append((destination, data))
+        pending.append((local(root, mapping.get(target, target)), data))
+    lock = dict(schema_version=1, kind='AdaptationSourceInventory', source=source, files=inventory)
+    if lock != historical:
+        raise ValueError('Regenerated source inventory differs from immutable historical lock')
     for path, data in pending:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_bytes(data)
-    lock = dict(schema_version=1, kind='AdaptationSourceInventory', source=source, files=inventory)
-    (root/'source-lock.json').write_text(json.dumps(lock, ensure_ascii=False, indent=2)+'\n',
-                                       encoding='utf-8', newline='\n')
     for name, model in records(root):
         model['source_revision'] = source
         model['source_inventory'] = 'source-lock.json'
@@ -137,10 +207,12 @@ def check(root=ROOT):
     if (len(planned) != len(plan['files']) or len(inventory) != len(lock['files'])
             or set(planned) != set(inventory)):
         raise ValueError('Source plan and generated inventory differ')
+    mapping = relocations(root, lock)
+    common = validate_common(root)
     for name, item in inventory.items():
         if item['upstream_path'] != planned[name]['upstream_path']:
             raise ValueError('Source provenance mismatch: ' + name)
-        data = local(root, name).read_bytes()
+        data = local(root, mapping.get(name, name)).read_bytes()
         if len(data) != item['size'] or hashlib.sha256(data).hexdigest() != item['sha256']:
             raise ValueError('Adaptation source changed; prepare from reviewed source again: ' + name)
         if name.endswith('.py'):
@@ -149,8 +221,9 @@ def check(root=ROOT):
     actual = {path.relative_to(root).as_posix() for folder in (root/'common/scripts', root/'brands')
               for path in folder.rglob('*') if path.is_file() and 'scripts' in path.relative_to(root).parts
               and '__pycache__' not in path.parts and path.suffix != '.pyc'}
-    if actual != set(inventory):
-        raise ValueError('Uninventoried or missing adaptation script files: '+str(sorted(actual ^ set(inventory))))
+    expected_actual = set(inventory) - set(mapping)
+    if actual != expected_actual:
+        raise ValueError('Uninventoried or missing adaptation script files: '+str(sorted(actual ^ expected_actual)))
     models = records(root)
     for name, model in models:
         if model['kind'] != 'ModelInstallGuide' or model['installable'] is not False:
@@ -160,14 +233,22 @@ def check(root=ROOT):
         components = {item['id']: item for item in model['components']}
         if len(components) != len(model['components']):
             raise ValueError('Duplicate component ID: '+name)
+        if name in ('brands/onexplayer/oxp3/manifest.json', 'brands/onexplayer/x2-mini/manifest.json') and 'gyro' not in components:
+            raise ValueError('Missing gyro component: '+name)
         for item in components.values():
             if item['recommendation'] not in LEVELS or item.get('default') is not False:
                 raise ValueError('Source-only choices cannot become installation defaults')
             for dependency in item['dependencies']:
                 if dependency not in components or components[dependency]['recommendation'] == 'excluded':
                     raise ValueError('Missing or excluded dependency: '+dependency)
+            if item['id'] == 'gyro':
+                expected_toon = str(PurePosixPath(name).parent / 'common-device-sources.toon')
+                if item['sources'] != [expected_toon]:
+                    raise ValueError('Gyro must reference its own model TOON: ' + name)
+                local(root, expected_toon)
+                validate_gyro_reference(common, expected_toon, model)
             for path in item['sources']:
-                if path not in inventory:
+                if item['id'] != 'gyro' and path not in inventory:
                     raise ValueError('Uninventoried component source: '+path)
             if item['recommendation'] == 'pending' and item['sources']:
                 raise ValueError('Pending implementation must not claim an existing script')

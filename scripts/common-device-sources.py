@@ -144,7 +144,7 @@ def model(model_id: str, source: str, policy: dict) -> dict:
     if value.get('schema_version') != 1 or value.get('kind') != 'BoilerModelCommonReferences' or value.get('source_only') is not True or value.get('model_id') != model_id:
         raise ValueError('model common reference identity differs: ' + source)
     seen = {(row.get('id'), row.get('source')) for row in value.get('resources', []) if isinstance(row, dict)}
-    if seen != set(RESOURCES.items()) or len(seen) != 4:
+    if seen != set(RESOURCES.items()) or len(value.get('resources', [])) != len(RESOURCES):
         raise ValueError('model common resources differ: ' + source)
     policies = value.get('boot_policies')
     expected = {'id': policy['id'], 'version': policy['version'], 'source': policy['source'], 'component_ref': 'ssd-gm7-boot-repair'}

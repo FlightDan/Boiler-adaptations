@@ -59,10 +59,7 @@
         "input"
       ],
       "sources": [
-        "brands/onexplayer/common/scripts/gyro/oxp3_bmi260.c",
-        "brands/onexplayer/common/scripts/gyro/launch.sh",
-        "brands/onexplayer/common/scripts/gyro/oxp3-gyro.service",
-        "brands/onexplayer/common/scripts/gyro/gyro_binding.py"
+        "brands/onexplayer/x2-mini/common-device-sources.toon"
       ],
       "status": "source_reference_only",
       "notes": "核对 ACPI/I2C、0x27 芯片 ID、精确内核和配套 InputPlumber；新装重新校准。"

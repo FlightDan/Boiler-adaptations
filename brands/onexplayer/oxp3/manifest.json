@@ -162,10 +162,7 @@
         "input"
       ],
       "sources": [
-        "brands/onexplayer/common/scripts/gyro/oxp3_bmi260.c",
-        "brands/onexplayer/common/scripts/gyro/launch.sh",
-        "brands/onexplayer/common/scripts/gyro/oxp3-gyro.service",
-        "brands/onexplayer/common/scripts/gyro/gyro_binding.py"
+        "brands/onexplayer/oxp3/common-device-sources.toon"
       ],
       "status": "source_reference_only",
       "notes": "需精确内核、BMI260 芯片识别、bmi270_core/固件及配套 InputPlumber；新装重新校准。"
