@@ -2,7 +2,6 @@
 .gitignore
 adaptations.json
 ADAPTATIONS.md
-AGENTS.md
 brands/onexplayer/common/components.md
 brands/onexplayer/common/scripts/gyro/bmi270.h
 brands/onexplayer/common/scripts/gyro/gyro_binding.py
