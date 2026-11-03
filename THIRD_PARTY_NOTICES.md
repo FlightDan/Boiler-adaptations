@@ -24,8 +24,11 @@ the Git for Windows distribution's license document; its original preface is
 also retained. `licenses/license-inventory.json` records that supplementary
 document's origin, size and SHA-256. This does not alter the upstream dual
 license choice. TabMaster's separate third-party source patch is outside this
-collection's export list.
+collection's export list. The public release's InputPlumber 0.78 gyro patch and
+its accompanying GPL version 3 license text are retained under
+`common/sensors/bosch/bmi260/gyro/`; the unmodified release notice is included
+without asserting additional grants.
 
-Python is required to run the builder and tests, but no Python interpreter or
-third-party Python package is bundled in this source repository. This registry
+Python is required to run the builder and tests. The pinned MIT-licensed
+TOON decoder is included under `vendor/`; no Python interpreter is bundled. This registry
 does not bundle QEMU, Alpine Linux, .NET, rEFInd, Decky, or model payloads.

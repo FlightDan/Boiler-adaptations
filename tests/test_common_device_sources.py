@@ -1,5 +1,6 @@
 import importlib.util
 import hashlib
+import json
 from pathlib import Path
 import tempfile
 import unittest
@@ -30,6 +31,24 @@ class CommonDeviceSourceTests(unittest.TestCase):
         bmi = catalog.load(catalog.RESOURCES['resource:bmi260-gyro'])
         self.assertIn('sources/bmi270.h', [row['path'] for row in bmi['files']])
         self.assertIn('sources/oxp3-gyro.service', [row['path'] for row in bmi['files']])
+
+    def test_bmi_inputplumber_public_source_and_license(self):
+        base = ROOT/'common/sensors/bosch/bmi260/gyro'
+        patch = base/'sources/inputplumber-0.78.0-oxp3-gyro.patch'
+        license = base/'licenses/InputPlumber-LICENSE'
+        self.assertEqual((len(patch.read_bytes()), hashlib.sha256(patch.read_bytes()).hexdigest()),
+                         (31057, 'e1fd31a17aaacb4bb35b1158dae4471f0ea74f21861ef581ac9985bba9d1bc2d'))
+        self.assertEqual((len(license.read_bytes()), hashlib.sha256(license.read_bytes()).hexdigest()),
+                         (35151, '7fe14716ed31cc71fc3bf9af293c368d464a853a70ea86e9995388f6b9e929e5'))
+        self.assertIn('Version 3, 29 June 2007', license.read_text(encoding='utf-8'))
+        bmi = catalog.load(catalog.RESOURCES['resource:bmi260-gyro'])
+        self.assertIn('licenses/InputPlumber-LICENSE', bmi['licenses'])
+        self.assertIn('sources/inputplumber-0.78.0-oxp3-gyro.patch', [r['path'] for r in bmi['files']])
+        migration = json.loads((ROOT/'records/migrations/common-bmi260-inputplumber-20261103.json').read_text(encoding='utf-8'))
+        self.assertEqual(migration['upstream']['sha256'], 'd8bee8bad14f4cd136c814ebcaa3299fa59202b6cdc6d26ec9c52af0e055f4d4')
+        self.assertEqual(migration['file_maps'][0]['old_path'], 'cache/integration/sources/gyro/inputplumber-0.78.0-oxp3-gyro.patch')
+        self.assertEqual(migration['license_source']['sha256'], hashlib.sha256(license.read_bytes()).hexdigest())
+        self.assertFalse(migration['runtime_binaries_included'])
 
     def test_selected_advisory_transforms_reproduce_locked_final_bytes(self):
         cases = (

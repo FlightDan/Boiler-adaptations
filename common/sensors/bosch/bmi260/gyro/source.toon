@@ -11,7 +11,7 @@ compatibility:
   architectures[1]: x86_64
   os_ids[1]: steamos
   kernels[1]: 7.2.4-valve1-1-neptune-72-g5ab4af5e2eb9
-files[10]{path,size,sha256,origin,license,availability}:
+files[11]{path,size,sha256,origin,license,availability}:
   sources/gyro_binding.py,11894,967701d1cbb3ba274acb459a87df9de81309f33530f582b995bdb9f1fa298926,FlightDan/OneXPlayer3-SteamOS@72f864e0498c10366493c74608c5ffed62cc99ca,MIT,checked-in
   sources/onexplayer3-bmi260.patch,2400,d869d7c3e67815c4c44ea508c8ae32a30de4af021f1a59475172638c817c4fa5,FlightDan/OneXPlayer3-SteamOS@72f864e0498c10366493c74608c5ffed62cc99ca,GPL-2.0,checked-in
   sources/oxp3_bmi260.c,1906,6d5db91566ac5d6fbf0838d87d6a3e611be4ebd7cc7f373f6dad557bcd831939,FlightDan/OneXPlayer3-SteamOS@72f864e0498c10366493c74608c5ffed62cc99ca,GPL-2.0,checked-in
@@ -22,8 +22,9 @@ files[10]{path,size,sha256,origin,license,availability}:
   sources/unload.sh,83,370f22b1be7b537169238f809ba66ef9f83d19e551a073df20f6a3e68b7d62e9,FlightDan/OneXPlayer3-SteamOS@72f864e0498c10366493c74608c5ffed62cc99ca,GPL-2.0,checked-in
   sources/oxp3-gyro.service,384,5aeea94e5e7c999cd90058c88101c174e23f6317b14d1eca3af201ac5badf66b,FlightDan/OneXPlayer3-SteamOS@72f864e0498c10366493c74608c5ffed62cc99ca,GPL-2.0,checked-in
   sources/Makefile,23,6fed206b92d43604d3ef666034373e76dbdae380c2858c58ff1566955838747d,FlightDan/OneXPlayer3-SteamOS@72f864e0498c10366493c74608c5ffed62cc99ca,GPL-2.0,checked-in
+  sources/inputplumber-0.78.0-oxp3-gyro.patch,31057,e1fd31a17aaacb4bb35b1158dae4471f0ea74f21861ef581ac9985bba9d1bc2d,FlightDan/OneXPlayer3-SteamOS@e181a9055e1c94e8d758e2b9575f60fb5fc5109c:public-release-v1.0.6+installer.20261022.220437,InputPlumber-GPLv3-notice,checked-in
 lifecycle:
   install: binding journal restores bmi160_i2c on stop or failure
   restore: a real module and InputPlumber 0.78 availability check is mandatory
   limitation: kernel module binary and physical calibration are intentionally absent
-licenses[2]: licenses/GPL-2.0.txt,licenses/MIT.txt
+licenses[3]: licenses/GPL-2.0.txt,licenses/MIT.txt,licenses/InputPlumber-LICENSE

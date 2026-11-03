@@ -27,8 +27,8 @@
     {
       "id": "resource:bmi260-gyro",
       "source": "common/sensors/bosch/bmi260/gyro/source.toon",
-      "source_sha256": "1a869dc7ac285224460a28e90b2c8e07999315f52b4bd77681199cdd2c8c2c0b",
-      "files": 10,
+      "source_sha256": "b014f3a238e1a7b74fbf4b0332e520e9aff7877b4132cca228833bfe61c63d17",
+      "files": 11,
       "external_inputs": 0
     }
   ],

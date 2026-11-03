@@ -156,10 +156,12 @@ common/scripts/windows-reboot/rollup.config.js
 common/scripts/windows-reboot/src/index.tsx
 common/scripts/windows-reboot/tsconfig.json
 common/sensors/bosch/bmi260/gyro/licenses/GPL-2.0.txt
+common/sensors/bosch/bmi260/gyro/licenses/InputPlumber-LICENSE
 common/sensors/bosch/bmi260/gyro/licenses/MIT.txt
 common/sensors/bosch/bmi260/gyro/source.toon
 common/sensors/bosch/bmi260/gyro/sources/bmi270.h
 common/sensors/bosch/bmi260/gyro/sources/gyro_binding.py
+common/sensors/bosch/bmi260/gyro/sources/inputplumber-0.78.0-oxp3-gyro.patch
 common/sensors/bosch/bmi260/gyro/sources/inputplumber.conf
 common/sensors/bosch/bmi260/gyro/sources/launch.sh
 common/sensors/bosch/bmi260/gyro/sources/load.sh
@@ -177,6 +179,7 @@ LICENSE
 licenses/GPL-2.0.txt
 licenses/license-inventory.json
 README.md
+records/migrations/common-bmi260-inputplumber-20261103.json
 records/migrations/common-device-resource-ownership-20261103.json
 records/reviewed-transforms-v2/source-transform-lock.json
 records/reviewed-transforms-v2/speaker_route.py

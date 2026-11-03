@@ -28,7 +28,8 @@ MODELS = {
 }
 GM7 = 'common/ssd/acer/gm7/components.toon'
 INDEX = 'common-device-source-index.json'
-MIGRATION = 'records/migrations/common-device-resource-ownership-20261103.json'
+MIGRATIONS = ('records/migrations/common-device-resource-ownership-20261103.json',
+              'records/migrations/common-bmi260-inputplumber-20261103.json')
 
 
 def digest(path: Path) -> str:
@@ -107,8 +108,11 @@ def resource(identifier: str, source: str) -> dict:
 
 
 def validate_migration() -> None:
-    value = json.loads(relative(MIGRATION).read_text(encoding='utf-8'))
-    actual = value.get('file_maps', []) + value.get('external_input_maps', [])
+    actual = []
+    for name in MIGRATIONS:
+        value = json.loads(relative(name).read_text(encoding='utf-8'))
+        actual.extend(value.get('file_maps', []))
+        actual.extend(value.get('external_input_maps', []))
     mapped = {(row.get('id'), row.get('new_path'), row.get('size'), row.get('sha256')) for row in actual}
     expected = set()
     for identifier, source in RESOURCES.items():
