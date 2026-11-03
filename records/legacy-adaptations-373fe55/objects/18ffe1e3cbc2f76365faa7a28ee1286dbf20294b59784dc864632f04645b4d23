@@ -1,0 +1,13 @@
+kind: SelectedPublicComponentSources
+input:
+  path: inputs/public-installer/oxp3-steamos-installer-1.0.6-20261022-220437.zip
+  url: "https://github.com/FlightDan/OneXPlayer3-SteamOS/releases/download/v1.0.6%2Binstaller.20261022.220437/oxp3-steamos-installer-1.0.6-20261022-220437.zip"
+  name: oxp3-steamos-installer-1.0.6-20261022-220437.zip
+  size: 555684389
+  sha256: d8bee8bad14f4cd136c814ebcaa3299fa59202b6cdc6d26ec9c52af0e055f4d4
+component: legacy-runtime
+files[4]{path,size,sha256,upstream_member}:
+  inputs/000-volume.py,4849,ca976105ae6b715335f734712a0a64b0342a5533f60232bd21d67e01f902aa87,cache/integration/legacy-runtime/000.bin
+  inputs/001-battery.sh,3618,d8092826d4a1550668655ab0a51507d1151ba4c05ea71a0e939c9f4f37ce3abb,cache/integration/legacy-runtime/001.bin
+  inputs/002-oxp3-volkey-fix.service,323,62d09ca885285e8953a85158ec9f5db17e9d73bc8f59f3b3d9963ef5a2938338,cache/integration/legacy-runtime/002.bin
+  inputs/003-oxp3-battery-clamp.service,338,0a2538f41bdd5f132f38c2c087ce10430d0ee939f7e7592d79f8e7087df5c074,cache/integration/legacy-runtime/003.bin

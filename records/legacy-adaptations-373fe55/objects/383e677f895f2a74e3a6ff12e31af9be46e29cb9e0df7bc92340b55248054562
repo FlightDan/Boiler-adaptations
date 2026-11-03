@@ -1,0 +1,14 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:onexplayer-legacy-runtime"
+files[10]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  devices/input/onexplayer/legacy-runtime/inputs/000-volume.py,4849,ca976105ae6b715335f734712a0a64b0342a5533f60232bd21d67e01f902aa87
+  devices/input/onexplayer/legacy-runtime/inputs/001-battery.sh,3618,d8092826d4a1550668655ab0a51507d1151ba4c05ea71a0e939c9f4f37ce3abb
+  devices/input/onexplayer/legacy-runtime/inputs/002-oxp3-volkey-fix.service,323,62d09ca885285e8953a85158ec9f5db17e9d73bc8f59f3b3d9963ef5a2938338
+  devices/input/onexplayer/legacy-runtime/inputs/003-oxp3-battery-clamp.service,338,0a2538f41bdd5f132f38c2c087ce10430d0ee939f7e7592d79f8e7087df5c074
+  devices/input/onexplayer/legacy-runtime/licenses/project-AGPL-3.0.txt,35184,e0eedba615d5cd1b986afb6c5b3a4b1ae33713e7e9dc74d19daec5e3221f9d2e
+  devices/input/onexplayer/legacy-runtime/licenses/upstream-fixes-MIT.txt,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  devices/input/onexplayer/legacy-runtime/resource.toon,1208,0e276fcfd892a438eac62de62846258ef4d7f56d45ee0b985fe6dc2441a13612
+  devices/input/onexplayer/legacy-runtime/source-lock.toon,1084,18ffe1e3cbc2f76365faa7a28ee1286dbf20294b59784dc864632f04645b4d23

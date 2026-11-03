@@ -14,7 +14,6 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 VENDOR = ROOT / 'vendor'
 sys.path.insert(0, str(VENDOR))
-import toon_format  # noqa: E402
 
 RESOURCES = {
     'resource:intel-xevmafix-724': 'common/gpu/intel/xe/xevmafix-724/source.toon',
@@ -57,6 +56,8 @@ def validate_codec() -> None:
     """Accept exactly the pinned TOON decoder source, not local bytecode."""
     lock_path = VENDOR / 'toon-parser-lock.json'
     lock = json.loads(lock_path.read_text(encoding='utf-8'))
+    if lock != json.loads((ROOT / 'toon-parser-lock.json').read_text(encoding='utf-8')):
+        raise ValueError('vendored TOON codec lock differs from project lock')
     if lock.get('package') != 'toon-format' or lock.get('version') != '1.2.0' or lock.get('spec') != '4.4':
         raise ValueError('unexpected TOON codec lock')
     expected = {row['path']: row for row in lock.get('files', [])}
@@ -70,6 +71,11 @@ def validate_codec() -> None:
             raise ValueError('TOON codec bytes differ from lock: ' + name)
 
 
+# Authenticate vendored parser bytes before importing executable parser code.
+validate_codec()
+import toon_format  # noqa: E402
+
+
 def checked_file(row: dict, source: str) -> None:
     required = {'path', 'size', 'sha256', 'origin', 'license', 'availability'}
     if set(row) != required or not isinstance(row['path'], str):
@@ -79,7 +85,11 @@ def checked_file(row: dict, source: str) -> None:
         path = relative(str(PurePosixPath(source).parent / row['path']))
         if not path.is_file() or path.is_symlink() or path.stat().st_size != row['size'] or digest(path) != row['sha256']:
             raise ValueError('source bytes differ: ' + str(path.relative_to(ROOT)))
-    elif availability != 'external-locked':
+    elif availability == 'external-locked':
+        path = relative(str(PurePosixPath(source).parent / row['path']))
+        if path.exists() and (not path.is_file() or path.is_symlink() or path.stat().st_size != row['size'] or digest(path) != row['sha256']):
+            raise ValueError('available external source bytes differ: ' + str(path.relative_to(ROOT)))
+    else:
         raise ValueError('unknown source availability: ' + str(availability))
 
 
@@ -140,7 +150,11 @@ def gm7() -> dict:
 
 
 def model(model_id: str, source: str, policy: dict) -> dict:
-    value = load(source)
+    guide_path = str(PurePosixPath(source).parent / (model_id.split(':', 1)[1] + '.toon'))
+    guide = load(guide_path)
+    value = guide.get('resource_model', {}).get('common_references')
+    if not isinstance(value, dict) or load(source) != value:
+        raise ValueError('generated common references differ from model TOON: ' + source)
     if value.get('schema_version') != 1 or value.get('kind') != 'BoilerModelCommonReferences' or value.get('source_only') is not True or value.get('model_id') != model_id:
         raise ValueError('model common reference identity differs: ' + source)
     seen = {(row.get('id'), row.get('source')) for row in value.get('resources', []) if isinstance(row, dict)}
@@ -168,6 +182,12 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('action', choices=('check', 'write'))
     action = parser.parse_args().action
+    if action == 'write':
+        for model_id, source in MODELS.items():
+            guide_path = str(PurePosixPath(source).parent / (model_id.split(':', 1)[1] + '.toon'))
+            value = load(guide_path).get('resource_model', {}).get('common_references')
+            if not isinstance(value, dict): raise ValueError('missing model common references')
+            relative(source).write_text(toon_format.dumps(value) + '\n', encoding='utf-8', newline='\n')
     output = json.dumps(build(), ensure_ascii=False, indent=2) + '\n'
     path = ROOT / INDEX
     if action == 'write':

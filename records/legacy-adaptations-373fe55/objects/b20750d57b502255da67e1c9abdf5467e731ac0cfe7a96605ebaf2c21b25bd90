@@ -1,0 +1,69 @@
+# Boiler-adaptations
+
+Shared hardware resources for Boiler. ONEXPLAYER 3 and X2 Mini each have one model
+TOON referencing the same 30 resources; the installer includes one shared pool.
+Game and desktop HDR mappings are respectively 472/1100 and 475/700. Model-name
+matching is advisory; each resource still checks its actual interfaces and ABI.
+The public CPU source baseline is commit
+`72f864e0498c10366493c74608c5ffed62cc99ca`.
+
+The explicit public baseline inventory contains 104 verified files. Its 13 JSON
+configuration templates are stored as TOON; `locks/public-baseline.toon` records the
+upstream byte hashes and converted source hashes separately. Converted files preserve
+values, not original JSON formatting. Baseline scripts are reference/build inputs,
+not installation entry points for the old complete installer.
+
+Run `python tools/check.py` and `python tests/test_standalone.py` without a Boiler
+checkout or network. `python tools/materialize_baseline.py --output <fresh-directory>`
+renders public build inputs outside this repository, including JSON where upstream
+consumers require it. Generated JSON is not committed to this source repository.
+
+```text
+common/                 Generic RAPL, storage, boot, software and session resources
+devices/                Shared CPU/GPU/network/audio/display/controller/sensor/EC resources
+  CPU/Intel/G3E/        G3E topology, public CPU controls and telemetry schema
+brands/onexplayer/models/
+  onexplayer-3.toon      Resource references and OXP3 parameters
+  x2-mini.toon          Same references and X2 Mini parameters
+locks/resources/        Per-resource source, license and input hashes
+repository.toon         Generated resource/model index and exact SDK contract
+```
+
+Every authored configuration, declaration and lock is TOON. Runtime JSON required
+by upstream software is generated outside this source repository. Exact upstream
+archives retain their original contents and licenses. `baseline/` is immutable
+public source/provenance input, never an old whole-installer execution entry.
+
+Use the matching [Boiler SDK](https://github.com/FlightDan/Boiler-installer), whose
+`sdk-source-contract.toon` hash must equal `repository.toon`'s SDK hash. Download
+`native-output.tar.gz` from the `native-hdr-20261031.1` release and verify the size
+and SHA-256 in `devices/display/kwin/gamma22-hdr/build-inputs.toon`. Then run:
+
+```text
+python scripts/compile-adaptations.py --source-root <this-repository> --sdk-manifest <SDK>/sdk-source-contract.toon --sdk-sha256 <repository-sdk-hash> --desktop-native-archive <native-output.tar.gz> --output <new-pool-directory>
+```
+
+The SDK uses its pinned TOON parser and 7z runtime. Opti inputs are fetched from
+their exact public URLs and checked by size/hash; builds can reuse the verified
+input cache. The native HDR release also contains complete corresponding KWin
+source. Its resource directory retains supplementary source, licenses, the actual
+fixed-prefix build recipe, 405 locked SDK package inputs and distribution trust
+anchors. Source locks and output inventories are checked before use.
+
+The pre-release includes installation, verification, reviewed restore and retry
+entry points. Android images are initialized from the official service on demand;
+network failure retains ownership and can be retried. Physical device acceptance
+and formal signing are separate from the recorded software checks. Unpublished
+power research is excluded.
+
+The `installer-e18` directories contain archival source and provenance from
+installer commit `1fc2b490c93a43770042f565bda467622ed12e80`, recorded in
+`locks/installer-e18/classification.toon`. The archives do not add or activate
+resources, change either model, or extend the SDK. Original installer-relative
+paths, licenses and context are recorded there; archived scripts are not
+standalone entry points. JSON conversions preserve values and retain the
+SHA-256 of their original installer bytes.
+
+That installer commit is not the matching SDK. The existing matching SDK
+manifest is available at [installer commit `9dcf74b1c21732e17981c03934d7fe3a271b8bdf`](https://github.com/FlightDan/Boiler-installer/blob/9dcf74b1c21732e17981c03934d7fe3a271b8bdf/sdk-source-contract.toon)
+and has the SHA-256 pinned in `repository.toon`.

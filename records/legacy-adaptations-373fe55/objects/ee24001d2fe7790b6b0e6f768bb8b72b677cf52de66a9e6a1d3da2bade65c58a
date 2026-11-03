@@ -1,0 +1,33 @@
+schema_version: 1
+kind: BoilerResourceSource
+id: "resource:onexplayer-light"
+version: 0.1.0+source-split.20261031
+dependencies: []
+external_component_dependencies[1]: decky
+hardware_requires:
+  onexplayer_light_interface[1]: public-hid-or-native-led-v1
+  decky_plugin_runtime[1]: true
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+  os_versions[1]: "3.10"
+install_kind: files-v1
+verify:
+  kind: sha256-v1
+restore:
+  kind: transaction-backup-v1
+renderer: files-v1
+source_lock: locks/resources/onexplayer-light.toon
+recipe:
+  payload[9]{source,renderer,target,mode,scope}:
+    baseline/brands/onexplayer/oxp3/scripts/light/main.py,identity-v1,var/lib/boiler/decky/runtime/plugins/oxp3-light/main.py,420,root-slots
+    baseline/brands/onexplayer/oxp3/scripts/light/light_control.py,identity-v1,var/lib/boiler/decky/runtime/plugins/oxp3-light/light_control.py,420,root-slots
+    baseline/brands/onexplayer/oxp3/scripts/light/dist/index.js,identity-v1,var/lib/boiler/decky/runtime/plugins/oxp3-light/dist/index.js,420,root-slots
+    baseline/brands/onexplayer/oxp3/scripts/light/plugin.toon,toon-json-v1,var/lib/boiler/decky/runtime/plugins/oxp3-light/plugin.json,420,root-slots
+    baseline/brands/onexplayer/oxp3/scripts/light/package.toon,toon-json-v1,var/lib/boiler/decky/runtime/plugins/oxp3-light/package.json,420,root-slots
+    baseline/brands/onexplayer/oxp3/scripts/light/LICENSE,identity-v1,var/lib/boiler/decky/runtime/plugins/oxp3-light/LICENSE,420,root-slots
+    baseline/brands/onexplayer/oxp3/scripts/light/LICENSE-HHD,identity-v1,var/lib/boiler/decky/runtime/plugins/oxp3-light/LICENSE-HHD,420,root-slots
+    baseline/brands/onexplayer/oxp3/scripts/light/LICENSE-HueSync,identity-v1,var/lib/boiler/decky/runtime/plugins/oxp3-light/LICENSE-HueSync,420,root-slots
+    baseline/brands/onexplayer/oxp3/scripts/light/THIRD_PARTY_NOTICES.md,identity-v1,var/lib/boiler/decky/runtime/plugins/oxp3-light/THIRD_PARTY_NOTICES.md,420,root-slots
+  license_files[2]: LICENSE,baseline/common/scripts/licenses/upstream-fixes-MIT.txt
+  install_details:

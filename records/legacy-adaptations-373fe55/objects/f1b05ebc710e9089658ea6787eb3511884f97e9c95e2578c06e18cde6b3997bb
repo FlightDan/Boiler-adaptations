@@ -1,0 +1,33 @@
+schema_version: 1
+kind: BoilerResourceSource
+id: "resource:common-waydroid"
+version: 1.6.3+boiler-local-test.20261031
+dependencies: []
+external_component_dependencies: []
+hardware_requires:
+  kernel[1]: 7.2.4-valve1-1-neptune-72-g5ab4af5e2eb9
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+  os_versions[1]: "3.10"
+  kernels[1]: 7.2.4-valve1-1-neptune-72-g5ab4af5e2eb9
+install_kind: files-v1
+verify:
+  kind: sha256-v1
+restore:
+  kind: transaction-backup-v1
+renderer: files-v1
+source_lock: locks/resources/common-waydroid.toon
+recipe:
+  payload[9]{source,renderer,target,mode,scope}:
+    common/virtualization/waydroid/artifacts/dnsmasq-2.93-1-x86_64.pkg.tar.zst,identity-v1,usr/local/lib/boiler/resources/waydroid/packages/dnsmasq-2.93-1-x86_64.pkg.tar.zst,420,root-slots
+    common/virtualization/waydroid/artifacts/dnsmasq-2.93-1-x86_64.pkg.tar.zst.sig,identity-v1,usr/local/lib/boiler/resources/waydroid/packages/dnsmasq-2.93-1-x86_64.pkg.tar.zst.sig,420,root-slots
+    common/virtualization/waydroid/artifacts/libgbinder-1.1.52-1-x86_64.pkg.tar.zst,identity-v1,usr/local/lib/boiler/resources/waydroid/packages/libgbinder-1.1.52-1-x86_64.pkg.tar.zst,420,root-slots
+    common/virtualization/waydroid/artifacts/libglibutil-1.0.80-1-x86_64.pkg.tar.zst,identity-v1,usr/local/lib/boiler/resources/waydroid/packages/libglibutil-1.0.80-1-x86_64.pkg.tar.zst,420,root-slots
+    common/virtualization/waydroid/artifacts/lxc-1_7.0.0-1-x86_64.pkg.tar.zst,identity-v1,usr/local/lib/boiler/resources/waydroid/packages/lxc-1_7.0.0-1-x86_64.pkg.tar.zst,420,root-slots
+    common/virtualization/waydroid/artifacts/lxc-1_7.0.0-1-x86_64.pkg.tar.zst.sig,identity-v1,usr/local/lib/boiler/resources/waydroid/packages/lxc-1_7.0.0-1-x86_64.pkg.tar.zst.sig,420,root-slots
+    common/virtualization/waydroid/artifacts/python-gbinder-1.3.1-1-x86_64.pkg.tar.zst,identity-v1,usr/local/lib/boiler/resources/waydroid/packages/python-gbinder-1.3.1-1-x86_64.pkg.tar.zst,420,root-slots
+    common/virtualization/waydroid/artifacts/steamos-waydroid-binder-1-2-x86_64.pkg.tar.zst,identity-v1,usr/local/lib/boiler/resources/waydroid/packages/steamos-waydroid-binder-1-2-x86_64.pkg.tar.zst,420,root-slots
+    common/virtualization/waydroid/artifacts/waydroid-1.6.3-1-any.pkg.tar.zst,identity-v1,usr/local/lib/boiler/resources/waydroid/packages/waydroid-1.6.3-1-any.pkg.tar.zst,420,root-slots
+  license_files[2]: LICENSE,baseline/common/scripts/licenses/upstream-fixes-MIT.txt
+  install_details:

@@ -1,0 +1,11 @@
+--- upstream/oxp3-battery.service
++++ resource/oxp3-battery.service
+@@ -4,7 +4,7 @@
+ After=dbus.socket oxp3-fan-module.service
+ Wants=oxp3-fan-module.service
+ [Service]
+-ExecCondition=/usr/bin/python3 -I -B /usr/local/lib/oxp3-integration/integration_runtime.py guard
++ExecCondition=/usr/bin/python3 -I -B /usr/local/lib/boiler-resource-guard/charge_guard.py
+ Type=dbus
+ BusName=org.onexplayer.SteamOSManager.Battery
+ ExecStart=/usr/bin/python3 -I -B /var/lib/oxp3-battery/battery_provider.py

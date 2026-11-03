@@ -1,0 +1,13 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:common-partition-mount"
+files[9]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  baseline/common/scripts/licenses/upstream-fixes-MIT.txt,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  baseline/common/scripts/partition-mount/desktop.py,10783,c08bfe84313399dfd196c98b99937e0a58b391c9498ffbfd875ca6a7d3ebf326
+  baseline/common/scripts/partition-mount/mounts.py,18225,e297f1159f490b3928a7e1043392382a5aaf409cdf4d334dfdb974836befc94a
+  baseline/common/scripts/partition-mount/oxp3-partition-mount,81,08cfc11c3caab4ca1e938b797610933e2ee6738c317646491dc562bff015148f
+  baseline/common/scripts/partition-mount/oxp3-partition-mount.desktop,421,455b9cb677cf76cdfc60e67ca03ca74dfa84dded6f6c4d2e0b7bcf4f53cd9ed5
+  common/storage/partition-mount/resource.toon,1360,0cd801deda842795a1fd551acd35495a9b87fa37fe9533e0e663b701a0f8e1de
+  locks/public-baseline.toon,32751,15dae171a0bbdf7423a117fb008e71e0f7737d2a3647ede1b1887bf051c549cf

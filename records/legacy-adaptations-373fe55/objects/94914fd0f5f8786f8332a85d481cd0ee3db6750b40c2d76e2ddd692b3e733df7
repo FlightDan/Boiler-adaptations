@@ -1,0 +1,26 @@
+schema_version: 1
+kind: BoilerResourceSource
+id: "resource:steamos-manager"
+version: 1.0.0+public.20261022
+dependencies: []
+external_component_dependencies: []
+hardware_requires:
+  steamos_manager_package[1]: 26.4.1-2
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+  os_versions[1]: "3.10"
+install_kind: files-v1
+verify:
+  kind: sha256-v1
+restore:
+  kind: transaction-backup-v1
+renderer: additional-files-v1
+source_lock: locks/resources/steamos-manager.toon
+recipe:
+  payload[2]{input,renderer,target,mode,scope}:
+    inputs/000-steamos-manager,identity-v1,usr/bin/steamos-manager,493,root-slots
+    inputs/001-steamosctl,identity-v1,usr/bin/steamosctl,493,root-slots
+  license_files[3]: licenses/project-AGPL-3.0.txt,licenses/upstream-fixes-MIT.txt,licenses/Valve-steamos-manager-MIT.txt
+  runtime_state:
+  install_details:

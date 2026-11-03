@@ -1,0 +1,8 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:onexplayer-input"
+files[4]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  devices/input/onexplayer/source-bundle/input-source-r5.tar.gz,88166653,e8b2c16dac9b7d21d66fe30f1f947219dc573a39cc2f08ce2f4ef99fdc1101e9
+  devices/input/onexplayer/source-bundle/resource.toon,1099,2aa4dcba42013adcb3318cd422a41ea62d9f6893d2a2eea633161c3ee23738f5

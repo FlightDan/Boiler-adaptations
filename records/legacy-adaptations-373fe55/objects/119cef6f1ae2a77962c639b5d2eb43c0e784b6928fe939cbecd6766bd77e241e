@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Desktop HDR trial
+Name[zh_CN]=桌面 HDR 测试
+Exec=/usr/bin/python3 -I -B /opt/oxp3-desktop-gamma22/6.7.3-1.6/libexec/boiler-desktop-hdr/hdr_trial.py
+Terminal=false
+Categories=Settings;HardwareSettings;

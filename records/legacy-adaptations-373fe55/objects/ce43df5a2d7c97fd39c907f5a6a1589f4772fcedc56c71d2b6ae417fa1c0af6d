@@ -1,0 +1,11 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:gamescope-environment"
+files[7]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  common/session/gamescope-env/inputs/000-90-oxp3-desktop-env-isolation.conf,222,9616729dac8be729b56bd201b8cfbbb1fcd0eb2fb7163944638306856e85a13b
+  common/session/gamescope-env/licenses/project-AGPL-3.0.txt,35184,e0eedba615d5cd1b986afb6c5b3a4b1ae33713e7e9dc74d19daec5e3221f9d2e
+  common/session/gamescope-env/licenses/upstream-fixes-MIT.txt,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  common/session/gamescope-env/resource.toon,885,1a93f7e69ddaaf8d284287e19bde25d6f24bd665026eaebefe876b90ad7c9270
+  common/session/gamescope-env/source-lock.toon,671,f51a29c59f8ce1958ec0980e546f66423aa283c2027d31f96d816e852603b41c

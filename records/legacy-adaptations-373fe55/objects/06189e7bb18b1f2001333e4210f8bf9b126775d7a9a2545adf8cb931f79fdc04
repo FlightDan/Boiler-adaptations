@@ -1,0 +1,6 @@
+schema_version: 1
+kind: WaydroidOfficialArchPackaging
+packages[2]{name,tag,commit,url,path,size,sha256,upstream_sha256,authentication}:
+  lxc,1-7.0.0-1,3010da7793b4d78692179b4e4eaf5a1d1a0f83f8,"https://gitlab.archlinux.org/api/v4/projects/archlinux%2Fpackaging%2Fpackages%2Flxc/repository/archive.tar.gz?sha=3010da7793b4d78692179b4e4eaf5a1d1a0f83f8",upstream/arch-lxc-1-7.0.0-1.tar.gz,6710,560acb023764e0d8b46ac8cb18c1e592927c5ea506dfb5afb69613153d037176,ba0c860626efbac6683f351dd718edb062065e919716d787b89e3d547c5d9493,official_tag_fetched_signature_not_independently_checked
+  dnsmasq,2.93-1,035d1847c3443bfb80a537ae56026188384762ae,"https://gitlab.archlinux.org/api/v4/projects/archlinux%2Fpackaging%2Fpackages%2Fdnsmasq/repository/archive.tar.gz?sha=035d1847c3443bfb80a537ae56026188384762ae",upstream/arch-dnsmasq-2.93-1.tar.gz,5852,089d53b7979abb0aef2f09d42bab0805e7c71548d25626a34639dd4eec6275e2,0c00d4e5c97c8306e5fb932b348b34269c9c29a0e7df0e8e82958b407092bc19,official_tag_fetched_signature_not_independently_checked
+note: PKGBUILD upstream hashes match the retained official source archives; binary reproduction has not been claimed.

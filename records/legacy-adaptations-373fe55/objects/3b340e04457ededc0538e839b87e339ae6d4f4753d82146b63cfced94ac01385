@@ -1,0 +1,20 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:intel-be201-firmware"
+files[16]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  devices/network/intel/be201/inputs/inputs/000-iwlwifi-sc-a0-fm-c0-c101.ucode,2305636,3475bdb1f59d15707d5018144484d370a3b1f4868d5f4e6f38ef83a5004704c2
+  devices/network/intel/be201/inputs/inputs/001-iwlwifi-sc-a0-fm-c0-c102.ucode,2311660,4efdd46b024b6fa5aaae8f9b921fc10d6cde04e035fa6d5a93c2f419ebfbdeec
+  devices/network/intel/be201/inputs/inputs/002-iwlwifi-sc-a0-fm-c0-c103.ucode,2326720,cce159597d0b8915e3d1166a8680c00a3c12133c4c2ec577d7f09f60636edd9c
+  devices/network/intel/be201/inputs/inputs/003-iwlwifi-sc-a0-fm-c0-c106.ucode,2226844,7a4b428edf7dfc5ec1573bc1b8f98804b52e3a469aeec8187cae9aae66b583fd
+  devices/network/intel/be201/inputs/inputs/004-ibt-00a0-0291-iml.sfi,62892,a9401eeea677c80fb027d316e4530e3a839463967b74ab3e610921ba1b215903
+  devices/network/intel/be201/inputs/inputs/005-ibt-00a0-0291-pci.ddc,4,e0fb10fe29f60607d6507ced3f697492d9611f62c4765feaee59c4bd4101d3e7
+  devices/network/intel/be201/inputs/inputs/006-ibt-00a0-0291-pci.sfi,997224,6d417061ab9890658e33e1b7015a05a40d0fae0df7a4a6ab652a5bb6936b48cd
+  devices/network/intel/be201/inputs/inputs/007-ibt-00a0-0291-usb.ddc,4,e0fb10fe29f60607d6507ced3f697492d9611f62c4765feaee59c4bd4101d3e7
+  devices/network/intel/be201/inputs/inputs/008-ibt-00a0-0291-usb.sfi,991052,b0987a2b366dce2812e53ff0f3e04e48368424da90e16a2618d87b4127fec778
+  devices/network/intel/be201/inputs/sources/000-LICENCE.ibt_firmware,2040,5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4
+  devices/network/intel/be201/inputs/sources/001-LICENCE.iwlwifi_firmware,2046,16d5040c7cf851fc693b7542e20870935b99802533ea1bfd231c377a2305e5c5
+  devices/network/intel/be201/resource.toon,9529,bf51f6f88cf00531672f73a82a6c565185f1e805b32669fb93f27d480da75bda
+  devices/network/intel/be201/source-evidence/original-metadata.zip,3928,cd624bbad0801f960b723c6a8159467e11919727dbee983e34607e1e8fd4925b
+  devices/network/intel/be201/sources/provenance.toon,3379,1a656feeb6b4b6403ca1ef6dea4345830791b64b2f95d287b313d4fe021c6282

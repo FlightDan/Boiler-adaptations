@@ -1,0 +1,40 @@
+"""Verify the fixed KWin source using explicit offline GnuPG tools/keyring."""
+import argparse
+import hashlib
+import json
+from pathlib import Path
+import re
+import subprocess
+import tempfile
+
+PKGBUILD_SHA='aafa88c69e5ff28d3514f430e794e401ec57a56a4805fb719f0672ee9d2ee0d3'
+UPSTREAM_SHA='345b45d400884cc6b00f4b3585cc056aa2780f32afe2df394d20c5a98273c559'
+KEYRING_SHA='dd63dc4f052bcd2f4e0686921bb63f0cb1e396bf8178b8fd103b1f8c59d3765e'
+def sha(raw):return hashlib.sha256(raw).hexdigest()
+def verify(prepared,keyring,gpg,gpgv):
+    prepared,keyring=Path(prepared),Path(keyring)
+    source=prepared/'inputs/kwin-6.7.3.tar.xz';signature=prepared/'inputs/kwin-6.7.3.tar.xz.sig'
+    pkg=(prepared/'inputs/PKGBUILD').read_bytes()
+    if sha(pkg)!=PKGBUILD_SHA or sha(source.read_bytes())!=UPSTREAM_SHA or sha(keyring.read_bytes())!=KEYRING_SHA:
+        raise ValueError('Fixed source, PKGBUILD or offline keyring differs')
+    allowed=re.findall(r"'([A-F0-9]{40})'",pkg.decode().split('validpgpkeys=(',1)[1].split(')',1)[0])
+    if len(allowed)!=5:raise ValueError('Fixed signer contract differs')
+    # All state belongs to this disposable directory. No default user keyring,
+    # trust DB, key server, agent, source tree or installed filesystem is used.
+    with tempfile.TemporaryDirectory(prefix='boiler-hdr-signature-') as temp:
+        binary=Path(temp)/'keys.gpg'
+        convert=subprocess.run([str(gpg),'--no-options','--batch','--no-autostart','--homedir',temp,'--dearmor','--output',str(binary),str(keyring.resolve())],capture_output=True,text=True,timeout=120)
+        if convert.returncode:raise ValueError('Keyring conversion failed: '+convert.stderr)
+        checked=subprocess.run([str(gpgv),'--homedir',temp,'--keyring',str(binary),'--status-fd','1',str(signature.resolve()),str(source.resolve())],capture_output=True,text=True,timeout=120)
+        valid=[line.split() for line in checked.stdout.splitlines() if line.startswith('[GNUPG:] VALIDSIG ')]
+        if checked.returncode or len(valid)!=1 or valid[0][-1] not in allowed:
+            raise ValueError('KWin detached signature rejected: '+checked.stderr)
+        return dict(kind='DesktopHDRKDEUpstreamSignature',status='verified',source_sha256=UPSTREAM_SHA,
+            keyring_sha256=KEYRING_SHA,pkgbuild_sha256=PKGBUILD_SHA,primary_fingerprint=valid[0][-1],signing_fingerprint=valid[0][2],
+            accepted_primary_fingerprints=allowed,upstream_signature_verified=True,valve_outer_signature_verified=False,
+            production_authority=False)
+if __name__=='__main__':
+    p=argparse.ArgumentParser();p.add_argument('--prepared',required=True);p.add_argument('--keyring',required=True);p.add_argument('--gpg',required=True);p.add_argument('--gpgv',required=True);p.add_argument('--output',required=True)
+    a=p.parse_args();result=verify(a.prepared,a.keyring,a.gpg,a.gpgv);out=Path(a.output)
+    with out.open('x',encoding='utf-8') as f:f.write(json.dumps(result,indent=2)+'\n')
+    print(json.dumps(result))

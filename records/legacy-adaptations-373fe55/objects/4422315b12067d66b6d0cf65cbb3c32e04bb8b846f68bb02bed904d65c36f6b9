@@ -1,0 +1,27 @@
+schema_version: 1
+kind: BoilerResourceSource
+id: "resource:onexplayer-microphone"
+version: 0.1.0+source-split.20261031
+dependencies: []
+external_component_dependencies: []
+hardware_requires:
+  alsa_capture_switch[1]: true
+  audio_session_tools[1]: true
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+  os_versions[1]: "3.10"
+install_kind: files-v1
+verify:
+  kind: sha256-v1
+restore:
+  kind: transaction-backup-v1
+renderer: files-v1
+source_lock: locks/resources/onexplayer-microphone.toon
+recipe:
+  payload[3]{source,renderer,target,mode,scope}:
+    devices/Audio/onexplayer/microphone/src/microphone.py,identity-v1,usr/local/lib/oxp-microphone/microphone.py,420,root-slots
+    devices/Audio/onexplayer/microphone/src/oxp-microphone.service,identity-v1,etc/systemd/user/oxp-microphone.service,420,root-slots
+    devices/Audio/onexplayer/microphone/src/90-oxp-microphone.conf,identity-v1,etc/systemd/user/default.target.d/90-oxp-microphone.conf,420,root-slots
+  license_files[2]: LICENSE,baseline/common/scripts/licenses/upstream-fixes-MIT.txt
+  install_details:

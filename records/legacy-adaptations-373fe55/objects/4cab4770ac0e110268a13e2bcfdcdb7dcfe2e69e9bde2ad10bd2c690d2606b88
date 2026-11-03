@@ -1,0 +1,5 @@
+schemaVersion: 1
+files[3]{source,target,mode,owner}:
+  microphone.py,/usr/local/lib/oxp-microphone/microphone.py,"0644","root:root"
+  oxp-microphone.service,/etc/systemd/user/oxp-microphone.service,"0644","root:root"
+  90-oxp-microphone.conf,/etc/systemd/user/default.target.d/90-oxp-microphone.conf,"0644","root:root"

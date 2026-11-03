@@ -1,0 +1,72 @@
+#!/bin/bash
+# oxp3-battery-clamp.sh - keep the ONEXPLAYER 3 battery percentage at or below 100 %.
+#
+# The battery gauge ("Intel SR 1", model "SR Real Battery") reports an energy_now above its own energy_full after a
+# full charge (seen: 92.17 Wh now vs 89.88 Wh full, design 84.55 Wh). Two things then show more than 100 %:
+#   * the ACPI battery driver reports /sys/class/power_supply/BAT0/capacity = 103 (rounded, not clamped because
+#     energy_full is above the design value); Steam reads that through its bundled SDL3 -> 103 % in the Steam UI;
+#   * the performance overlay (mangoapp / MangoHud) computes energy_now / energy_full itself -> 101-103 %.
+# upower is the only reader that clamps.
+#
+# Fix: bind-mount tmpfs files over the sysfs "capacity" and "energy_full" attributes. energy_full is reported as
+# max(kernel energy_full, energy_now) - the value the battery demonstrably holds, the same thing upower does - and
+# capacity as min(100, round(energy_now * 100 / energy_full)). Refreshed once a minute with fixed-width in-place
+# writes, so a reader never sees an empty file. energy_now / status / uevent stay untouched. Runs as a root service
+# (see the fix pack). Revert: systemctl disable --now oxp3-battery-clamp.service (ExecStopPost unmounts both files).
+BAT=/sys/class/power_supply/BAT0
+[ -r "$BAT/energy_now" ] && [ -r "$BAT/energy_full" ] || exit 0
+REALDIR="$(readlink -f "$BAT")"
+DIR=/run/oxp3-battery
+INTERVAL=${OXP3_BATTERY_INTERVAL:-60}   # the percentage moves about 1 % per minute at most
+
+kernel_full() { # the driver's energy_full, read from behind our own mount if it is already there
+    if mountpoint -q "$REALDIR/energy_full"; then cat "$DIR/kernel_energy_full"; else cat "$BAT/energy_full"; fi
+}
+
+compute() { # sets FULL (uWh) and PCT
+    local n f
+    n=$(cat "$BAT/energy_now"); f=$(kernel_full)
+    [ "${f:-0}" -gt 0 ] || f=$n
+    [ -s "$DIR/max_energy_now" ] && [ "$(cat "$DIR/max_energy_now")" -gt "$n" ] 2>/dev/null && n_max=$(cat "$DIR/max_energy_now") || n_max=$n
+    echo "$n_max" > "$DIR/max_energy_now"
+    FULL=$f; [ "$n_max" -gt "$FULL" ] && FULL=$n_max
+    PCT=$(( (n * 100 + FULL / 2) / FULL ))
+    [ "$PCT" -gt 100 ] && PCT=100
+    [ "$PCT" -lt 0 ] && PCT=0
+}
+
+write_fixed() { # write_fixed <file> <width> <value>: in-place, no truncation (single write of a fixed-size record)
+    printf "%${2}d\n" "$3" | dd of="$1" bs=$(( $2 + 1 )) count=1 conv=notrunc status=none
+}
+
+case "$1" in
+    --stop)
+        for a in capacity energy_full; do mountpoint -q "$REALDIR/$a" && umount "$REALDIR/$a"; done
+        exit 0 ;;
+    --once)
+        if ! mkdir -p "$DIR" 2>/dev/null || [ ! -w "$DIR" ]; then   # not root: keep the service's state untouched
+            t=$(mktemp -d); [ -f "$DIR/kernel_energy_full" ] && cp "$DIR/kernel_energy_full" "$DIR/max_energy_now" "$t/" 2>/dev/null; DIR=$t
+        fi
+        compute
+        echo "energy_now=$(cat "$BAT/energy_now") kernel energy_full=$(kernel_full) -> reported energy_full=$FULL capacity=$PCT"
+        exit 0 ;;
+esac
+
+mkdir -p "$DIR"
+mountpoint -q "$REALDIR/energy_full" || cat "$BAT/energy_full" > "$DIR/kernel_energy_full"
+compute
+[ -s "$DIR/capacity" ]    || printf '%3d\n' "$PCT"  > "$DIR/capacity"
+[ -s "$DIR/energy_full" ] || printf '%9d\n' "$FULL" > "$DIR/energy_full"
+for a in capacity energy_full; do
+    mountpoint -q "$REALDIR/$a" || mount --bind "$DIR/$a" "$REALDIR/$a" || exit 1
+done
+last=""
+while :; do
+    compute
+    if [ "$PCT/$FULL" != "$last" ]; then
+        write_fixed "$DIR/capacity" 3 "$PCT"
+        write_fixed "$DIR/energy_full" 9 "$FULL"
+        last="$PCT/$FULL"
+    fi
+    sleep "$INTERVAL"
+done

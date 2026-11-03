@@ -1,0 +1,17 @@
+[Unit]
+Description=Boiler Intel RAPL remote for SteamOS Manager
+Requires=dbus.socket
+After=dbus.socket systemd-udev-trigger.service
+[Service]
+Type=dbus
+BusName=org.onexplayer.SteamOSManager.PowerControl
+ExecStart=/usr/bin/python3 -I -B /usr/local/lib/boiler-rapl/provider.py
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelModules=yes
+ReadWritePaths=/run/lock /sys/class/powercap
+[Install]
+WantedBy=multi-user.target

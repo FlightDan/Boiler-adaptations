@@ -1,0 +1,7 @@
+name: Restart into Windows
+author: OXP3 SteamOS
+flags[1]: root
+api_version: 1
+publish:
+  tags[2]: utility,root
+  description: Restart into Windows or the SteamOS boot-manager entry for one boot.

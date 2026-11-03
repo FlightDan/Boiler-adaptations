@@ -1,0 +1,19 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:common-windows-reboot"
+files[15]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  baseline/common/scripts/licenses/upstream-fixes-MIT.txt,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  baseline/common/scripts/windows-reboot/49-oxp3-restart-windows.rules,209,9eee2dfdb85d94026d22f9c89ed98d591f2356869062c230742de38a96a1cd83
+  baseline/common/scripts/windows-reboot/boot.py,7866,d530864f1ecb9de59005a9fd0b66a8821bf5b9c8f72d772d2f31224a90256ff5
+  baseline/common/scripts/windows-reboot/desktop.py,2184,8443df12f2784d05a72bd85c4041f20b9113e51a652095d4b9655a8beac3f104
+  baseline/common/scripts/windows-reboot/dist/index.js,7412,0e7ae2fd1b0cd2193248b8128fd2f4b2fa2acb1e22bbbf814c0cf1396c7c2747
+  baseline/common/scripts/windows-reboot/main.py,1961,3a014ce4e4b8055d2ca2af3362cb6e471fb6f48a10a43fc928239228e47ef5a1
+  baseline/common/scripts/windows-reboot/org.oxp3.restart-windows.policy,705,58a5dfb5c560e892cf3b4687aafa434e57ab90c9ecb85ce186a32de5f8ada54a
+  baseline/common/scripts/windows-reboot/oxp3-reboot-windows,86,2c12b51f165f75a08907a351dda24283432383145fee2c77d4683d56435d6fdf
+  baseline/common/scripts/windows-reboot/oxp3-reboot-windows.desktop,378,fc4752c0fe804e1cdb9de9064188890dc1f564c08b8cbeafdc9f70ebd4510d26
+  baseline/common/scripts/windows-reboot/package.toon,300,80078e9938a44bf837c49d62539b9fd5e47cc2a6b3ebfc8d0f94d117e244564d
+  baseline/common/scripts/windows-reboot/plugin.toon,195,6ac935bae79b58c4653430dc0cd18700a66f92b1c3b628be245188a2457e2876
+  common/boot/windows-reboot/resource.toon,2307,d0dda36a51a7dfe5eea649d6378fafb53eb98b450ce03b6c1a192b41f5868833
+  locks/public-baseline.toon,32751,15dae171a0bbdf7423a117fb008e71e0f7737d2a3647ede1b1887bf051c549cf

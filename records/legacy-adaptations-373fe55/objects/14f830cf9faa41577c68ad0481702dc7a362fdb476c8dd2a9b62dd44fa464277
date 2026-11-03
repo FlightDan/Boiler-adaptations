@@ -1,0 +1,24 @@
+"""Complete EDID structural decoding, shared with retained maintenance."""
+
+def decode_edid(raw):
+    if (type(raw) is not bytes or not 128 <= len(raw) <= 4096 or len(raw) % 128
+            or raw[:8] != b'\x00\xff\xff\xff\xff\xff\xff\x00'
+            or (raw[126] + 1) * 128 != len(raw)
+            or any(sum(raw[i:i+128]) % 256 for i in range(0, len(raw), 128))):
+        raise ValueError('Invalid complete internal panel EDID')
+    code = int.from_bytes(raw[8:10], 'big')
+    chars = [(code >> shift) & 31 for shift in (10, 5, 0)]
+    if code & 0x8000 or any(not 1 <= c <= 26 for c in chars):
+        raise ValueError('Invalid EDID PNP manufacturer')
+    model = None
+    for start in range(54, 126, 18):
+        block = raw[start:start+18]
+        if block[:5] == b'\x00\x00\x00\xfc\x00':
+            name = block[5:18].split(b'\n', 1)[0].rstrip(b' \x00')
+            if not name or any(c < 32 or c > 126 for c in name) or model is not None:
+                raise ValueError('Invalid or ambiguous EDID display name')
+            model = name.decode('ascii')
+    return dict(vendor=''.join(chr(64+c) for c in chars),
+                product=int.from_bytes(raw[10:12], 'little'), model=model)
+
+

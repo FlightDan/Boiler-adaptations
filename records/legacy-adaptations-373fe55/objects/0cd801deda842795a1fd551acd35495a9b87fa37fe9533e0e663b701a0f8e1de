@@ -1,0 +1,28 @@
+schema_version: 1
+kind: BoilerResourceSource
+id: "resource:common-partition-mount"
+version: 0.1.0+source-split.20261031
+dependencies: []
+external_component_dependencies: []
+hardware_requires:
+  partition_mount_tools[1]: true
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+  os_versions[1]: "3.10"
+install_kind: files-v1
+verify:
+  kind: sha256-v1
+restore:
+  kind: transaction-backup-v1
+renderer: files-v1
+source_lock: locks/resources/common-partition-mount.toon
+recipe:
+  payload[5]{source,renderer,target,mode,scope}:
+    baseline/common/scripts/partition-mount/mounts.py,identity-v1,home/.oxp3-partition-mount/mounts.py,420,shared-home
+    baseline/common/scripts/partition-mount/desktop.py,identity-v1,home/.oxp3-partition-mount/desktop.py,420,shared-home
+    baseline/common/scripts/partition-mount/oxp3-partition-mount,identity-v1,home/.oxp3-partition-mount/oxp3-partition-mount,493,shared-home
+    baseline/common/scripts/partition-mount/oxp3-partition-mount.desktop,identity-v1,home/deck/Desktop/oxp3-partition-mount.desktop,493,shared-home
+    baseline/common/scripts/partition-mount/oxp3-partition-mount.desktop,identity-v1,home/deck/.local/share/applications/oxp3-partition-mount.desktop,493,shared-home
+  license_files[2]: LICENSE,baseline/common/scripts/licenses/upstream-fixes-MIT.txt
+  install_details:

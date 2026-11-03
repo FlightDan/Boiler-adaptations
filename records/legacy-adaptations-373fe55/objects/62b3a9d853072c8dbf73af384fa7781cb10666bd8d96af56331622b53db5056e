@@ -1,0 +1,129 @@
+#!/usr/bin/python3 -I
+"""Fixed desktop compositor launcher; failures always choose stock KWin."""
+import json
+import hashlib
+import os
+from pathlib import Path, PurePosixPath
+import pwd
+import stat
+import subprocess
+import sys
+
+PREFIX = Path('/opt/oxp3-desktop-gamma22/6.7.3-1.6')
+LIBEXEC = PREFIX/'libexec/boiler-desktop-hdr'
+for key in ('LD_LIBRARY_PATH','KWIN_OXP3_GAMMA22_HDR','KWIN_X2MINI_HDR_PROFILE',
+            'KWIN_BOILER_HDR_PANEL_SHA256','KWIN_BOILER_HDR_CONNECTOR'):
+    os.environ.pop(key,None)
+
+def protected(path):
+    path=Path(path)
+    for part in (path,*path.parents):
+        info=part.lstat()
+        if stat.S_ISLNK(info.st_mode) or info.st_uid != 0 or info.st_mode & 0o022:
+            raise ValueError('Unprotected desktop HDR runtime path')
+    info=path.stat()
+    if not stat.S_ISREG(info.st_mode) or info.st_nlink != 1:
+        raise ValueError('Desktop HDR runtime member is not a regular file')
+    return path
+
+def check_session(account):
+    if os.environ.get('HOME') != account.pw_dir:
+        raise ValueError('Desktop session home differs from installed account')
+    if (os.environ.get('XDG_SESSION_TYPE')!='wayland' or not any(
+            value.casefold() in {'kde','plasma'} for value in os.environ.get('XDG_CURRENT_DESKTOP','').split(':'))):
+        raise ValueError('Desktop HDR requires the actual KDE Wayland session')
+    runtime=Path(os.environ.get('XDG_RUNTIME_DIR',''))
+    if not runtime.is_absolute() or not runtime.is_dir() or runtime.stat().st_uid!=account.pw_uid:
+        raise ValueError('Desktop user runtime directory is unavailable')
+    bus=os.environ.get('DBUS_SESSION_BUS_ADDRESS','')
+    if bus!='unix:path='+str(runtime/'bus') or not stat.S_ISSOCK((runtime/'bus').stat().st_mode):
+        raise ValueError('Desktop user bus is unavailable')
+
+def launch():
+    if len(sys.argv) != 1 or os.getuid() == 0:
+        raise ValueError('Desktop HDR launcher requires the target user without arguments')
+    # The interpreter's isolated mode still imports only root-owned code here.
+    protected(LIBEXEC/'boiler_desktop/__init__.py')
+    protected(LIBEXEC/'boiler_desktop/desktop_hdr_panel.py')
+    protected(LIBEXEC/'boiler_desktop/hdr_live_panel.py')
+    sys.path.insert(0,str(LIBEXEC))
+    from boiler_desktop.desktop_hdr_panel import validate_binding,probe_internal_edp
+    projection=protected(PREFIX/'share/boiler-desktop-hdr/panel-binding.json')
+    if projection.stat().st_size > 20000: raise ValueError('Oversized desktop binding')
+    binding=validate_binding(json.loads(projection.read_bytes()))
+    profile_file=protected(PREFIX/'share/boiler-desktop-hdr/profile.json')
+    if profile_file.stat().st_size>4096:raise ValueError('Oversized desktop profile')
+    profile=json.loads(profile_file.read_bytes())
+    expected_profile=dict(kind='BoilerDesktopHdrProfileV1',schema_version=1,profile=binding['profile'],
+        full_frame=binding['full_frame'],peak=binding['peak'],policy=binding['policy'])
+    if profile!=expected_profile or any(type(profile[k]) is not int for k in ('schema_version','full_frame','peak')):
+        raise ValueError('Installed desktop profile differs from binding')
+    account=pwd.getpwuid(os.getuid())
+    if (account.pw_name,account.pw_uid,account.pw_gid,account.pw_dir) != (
+            binding['account']['name'],binding['account']['uid'],binding['account']['gid'],binding['account']['home']):
+        raise ValueError('Desktop account differs from installed binding')
+    check_session(account)
+    manifest=protected(PREFIX/'share/boiler-desktop-hdr/native-inventory.json')
+    if manifest.stat().st_size>1048576:raise ValueError('Desktop native inventory exceeds size limit')
+    raw=manifest.read_bytes()
+    if hashlib.sha256(raw).hexdigest()!=binding['bundle_sha256']:raise ValueError('Desktop native inventory differs from installed binding')
+    inventory=json.loads(raw)
+    if type(inventory) is not dict or set(inventory)!={'schema_version','files'} or type(inventory['schema_version']) is not int or inventory['schema_version']!=1 or type(inventory['files']) is not list or not inventory['files']:
+        raise ValueError('Invalid desktop native inventory')
+    seen=set()
+    for row in inventory['files']:
+        if type(row) is not dict or set(row)!={'path','size','sha256'} or type(row['path']) is not str or type(row['size']) is not int or row['size']<0 or type(row['sha256']) is not str:
+            raise ValueError('Invalid desktop native inventory entry')
+        relative=PurePosixPath(row['path'])
+        if relative.is_absolute() or not relative.parts or any(part in ('.','..') for part in relative.parts) or str(relative)!=row['path'] or row['path'] in seen:
+            raise ValueError('Invalid desktop native inventory path')
+        seen.add(row['path']);member=protected(PREFIX.joinpath(*relative.parts))
+        if member.stat().st_size!=row['size']:raise ValueError('Desktop native member size differs')
+        with member.open('rb') as stream:
+            if hashlib.file_digest(stream,'sha256').hexdigest()!=row['sha256']:raise ValueError('Desktop native member digest differs')
+    if not {'bin/kwin_wayland_wrapper','bin/kwin_wayland','bin/boiler-desktop-edid-probe','bin/boiler-desktop-interface-probe','bin/oxp3-hdr-pattern','compatible-packages.txt'} <= seen:
+        raise ValueError('Desktop native inventory lacks required executable members')
+    observed=probe_internal_edp()
+    if observed['edid'] != binding['edid'] or observed['connector'] != binding['connector']:
+        raise ValueError('Internal panel differs from installed binding')
+    interface=protected(PREFIX/'bin/boiler-desktop-interface-probe')
+    result=subprocess.run([str(interface)],input=bytes.fromhex(binding['edid']),capture_output=True,timeout=3,check=True,
+        env={'PATH':'/usr/bin','LD_LIBRARY_PATH':str(PREFIX/'lib')})
+    status=json.loads(result.stdout)
+    required={'schema_version','connector','sha256','valid_edid','native_colorimetry_present','pq','bt2020','colorspace','hdr_metadata','driver_policy'}
+    if (type(status) is not dict or set(status)!=required or type(status['schema_version']) is not int or status['schema_version']!=1
+            or status['connector']!=binding['connector'] or status['sha256']!=binding['edid_sha256']
+            or any(status[key] is not True for key in ('valid_edid','pq','bt2020','colorspace','hdr_metadata','driver_policy'))
+            or binding['profile']=='x2-mini' and status['native_colorimetry_present'] is not True):
+        raise ValueError('Bound panel DRM HDR/WCG interfaces are unavailable')
+    expected=protected(PREFIX/'compatible-packages.txt').read_text('utf-8').strip()
+    actual=subprocess.run(['/usr/bin/pacman','-Q','kwin','qt6-base','qt6-declarative'],capture_output=True,text=True,check=True,timeout=4).stdout.strip()
+    if not expected or actual != expected: raise ValueError('Desktop runtime package ABI differs')
+    if binding['profile']=='x2-mini':
+        probe=protected(PREFIX/'bin/boiler-desktop-edid-probe')
+        result=subprocess.run([str(probe)],input=bytes.fromhex(binding['edid']),capture_output=True,timeout=3,check=True,
+            env={'PATH':'/usr/bin','LD_LIBRARY_PATH':str(PREFIX/'lib')})
+        status=json.loads(result.stdout)
+        if status != {'schema_version':1,'sha256':binding['edid_sha256'],'valid_edid':True,'native_colorimetry_present':True}:
+            raise ValueError('KWin EDID decoder did not establish native colorimetry')
+    trial=protected(LIBEXEC/'hdr_trial.py')
+    subprocess.run(['/usr/bin/python3','-I','-B',str(trial),'--recover-startup'],timeout=5,check=True)
+    custom=protected(PREFIX/'bin/kwin_wayland_wrapper')
+    os.environ['KWIN_OXP3_GAMMA22_HDR']='1'
+    if binding['profile']=='x2-mini':
+        os.environ.update(KWIN_X2MINI_HDR_PROFILE='1',KWIN_BOILER_HDR_PANEL_SHA256=binding['edid_sha256'],
+                          KWIN_BOILER_HDR_CONNECTOR=binding['connector'])
+    os.environ['LD_LIBRARY_PATH']=str(PREFIX/'lib')
+    os.environ['PATH']=str(PREFIX/'bin')+':/usr/local/bin:/usr/bin'
+    os.execv(str(custom),[str(custom),'--xwayland'])
+
+if __name__ == '__main__':
+    try: launch()
+    except Exception as error:
+        try: subprocess.run(['/usr/bin/logger','-t','boiler-desktop-hdr',str(error)],check=False,timeout=2)
+        except Exception: pass
+        os.environ.pop('LD_LIBRARY_PATH',None)
+        for key in ('KWIN_OXP3_GAMMA22_HDR','KWIN_X2MINI_HDR_PROFILE','KWIN_BOILER_HDR_PANEL_SHA256','KWIN_BOILER_HDR_CONNECTOR'):
+            os.environ.pop(key,None)
+        os.environ['PATH']='/usr/local/bin:/usr/bin'
+        os.execv('/usr/bin/kwin_wayland_wrapper',['/usr/bin/kwin_wayland_wrapper','--xwayland'])

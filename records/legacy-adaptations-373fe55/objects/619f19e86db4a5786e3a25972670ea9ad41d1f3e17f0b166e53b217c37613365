@@ -1,0 +1,46 @@
+schema_version: 1
+kind: BoilerAdaptationsSourceRepository
+name: Boiler-adaptations
+state: prerelease
+configuration_format: TOON
+complete: true
+publication_ready: true
+baseline: locks/public-baseline.toon
+models[2]: brands/onexplayer/models/onexplayer-3.toon,brands/onexplayer/models/x2-mini.toon
+sdk:
+  schema_version: 1
+  compiler: source-authority-preview-v1
+  manifest_sha256: 1041727674e7811913129047e65dfd0f446b5360dbeec92e748bff0350002123
+  capabilities[14]: identity-v1,toon-json-v1,locked-archive-member-v1,gamma22-shared-v1,fixed-public-cpu-v1,fixed-boot-settings-v1,fixed-input-r5-v1,fixed-public-cpu-live-v1,fixed-ec-profile-v1,fixed-kde-keyboard-v1,fixed-flathub-mirror-v1,fixed-telemetry-overlay-v1,fixed-desktop-hdr-v1,fixed-opti2xmx-v1
+resource_index[30]{id,declaration,source_lock}:
+  "resource:common-slot-switch",common/boot/slot-switch/resource.toon,locks/resources/common-slot-switch.toon
+  "resource:common-partition-mount",common/storage/partition-mount/resource.toon,locks/resources/common-partition-mount.toon
+  "resource:common-serial-console-policy",common/system/serial-console-policy/resource.toon,locks/resources/common-serial-console-policy.toon
+  "resource:common-windows-reboot",common/boot/windows-reboot/resource.toon,locks/resources/common-windows-reboot.toon
+  "resource:onexplayer-light",devices/EC/onexplayer/light/resource.toon,locks/resources/onexplayer-light.toon
+  "resource:oxp3-speaker-route",devices/Audio/onexplayer/speaker-route/resource.toon,locks/resources/oxp3-speaker-route.toon
+  "resource:common-charge-compatibility-guard",common/system/charge-compatibility-guard/resource.toon,locks/resources/common-charge-compatibility-guard.toon
+  "resource:onexplayer-battery-common",devices/EC/onexplayer/battery/common/resource.toon,locks/resources/onexplayer-battery-common.toon
+  "resource:onexplayer-battery-charge-backend",devices/EC/onexplayer/battery/charge-backend/resource.toon,locks/resources/onexplayer-battery-charge-backend.toon
+  "resource:onexplayer-microphone",devices/Audio/onexplayer/microphone/resource.toon,locks/resources/onexplayer-microphone.toon
+  "resource:intel-xevmafix-724",devices/GPU/Intel/xe/xevmafix-724/resource.toon,locks/resources/intel-xevmafix-724.toon
+  "resource:intel-be201-firmware",devices/network/intel/be201/resource.toon,locks/resources/intel-be201-firmware.toon
+  "resource:gamma22-hdr-game",devices/display/gamescope/gamma22-hdr/resource.toon,locks/resources/gamma22-hdr-game.toon
+  "resource:intel-g3e-public-cpu-controls",devices/CPU/Intel/G3E/resource.toon,locks/resources/intel-g3e-public-cpu-controls.toon
+  "resource:common-boot-fixes",common/boot/fixes/resource.toon,locks/resources/common-boot-fixes.toon
+  "resource:onexplayer-ec-fan-driver",devices/EC/onexplayer/fan-driver/resource.toon,locks/resources/onexplayer-ec-fan-driver.toon
+  "resource:onexplayer-fan",devices/EC/onexplayer/fan/resource.toon,locks/resources/onexplayer-fan.toon
+  "resource:steamos-manager",common/system/steamos-manager/resource.toon,locks/resources/steamos-manager.toon
+  "resource:onexplayer-legacy-runtime",devices/input/onexplayer/legacy-runtime/resource.toon,locks/resources/onexplayer-legacy-runtime.toon
+  "resource:gamescope-environment",common/session/gamescope-env/resource.toon,locks/resources/gamescope-environment.toon
+  "resource:intel-xe-dsb",devices/display/intel/xe-dsb/resource.toon,locks/resources/intel-xe-dsb.toon
+  "resource:common-intel-rapl",common/CPU/Intel/rapl/resource.toon,locks/resources/common-intel-rapl.toon
+  "resource:onexplayer-input",devices/input/onexplayer/source-bundle/resource.toon,locks/resources/onexplayer-input.toon
+  "resource:bosch-bmi260-gyro",devices/input/onexplayer/source-bundle/gyro-resource.toon,locks/resources/bosch-bmi260-gyro.toon
+  "resource:common-kde-keyboard",common/session/kde-keyboard/resource.toon,locks/resources/common-kde-keyboard.toon
+  "resource:common-flathub-mirror",common/flatpak/flathub/resource.toon,locks/resources/common-flathub-mirror.toon
+  "resource:common-telemetry-overlay",common/telemetry/overlay/resource.toon,locks/resources/common-telemetry-overlay.toon
+  "resource:gamma22-hdr-desktop",devices/display/kwin/gamma22-hdr/resource.toon,locks/resources/gamma22-hdr-desktop.toon
+  "resource:common-opti2xmx",common/plugins/opti2xmx/resource.toon,locks/resources/common-opti2xmx.toon
+  "resource:common-waydroid",common/virtualization/waydroid/resource.toon,locks/resources/common-waydroid.toon
+export_inventory: locks/base-resource-sources.toon

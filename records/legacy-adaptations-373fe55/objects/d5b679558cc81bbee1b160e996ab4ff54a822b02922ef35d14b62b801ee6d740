@@ -1,0 +1,8 @@
+source_archive_sha256: 2b113d4748091f5e0cf20465f9b49cedef191f2c16cbe53a4a1cb42055cdd65f
+git_commit: a0d399defebd60db30ba38325d9cf47dbda49bee
+public_source_tag: v26.4.1
+export_sha256: 0191e09b05324aab8fe4dfd7e133e8e702fc1a633d29484ed0a367216ad35817
+export_size: 962560
+executed_source: false
+notices[1]{path,size,sha256}:
+  LICENSE,1128,f53dcc321aae90730a5d8b831de34eca141ad277f352ab3f8ad5f860060cef77

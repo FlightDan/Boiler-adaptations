@@ -1,0 +1,39 @@
+import importlib.util
+from pathlib import Path
+import shutil
+import tempfile
+import unittest
+
+SOURCE=Path(__file__).resolve().parents[1]
+
+class StandaloneTests(unittest.TestCase):
+    def setUp(self):
+        self.temp=tempfile.TemporaryDirectory();self.root=Path(self.temp.name)/'repo'
+        shutil.copytree(SOURCE,self.root,ignore=shutil.ignore_patterns('__pycache__','.git'))
+        spec=importlib.util.spec_from_file_location('standalone_check',self.root/'tools/check.py')
+        self.module=importlib.util.module_from_spec(spec);spec.loader.exec_module(self.module)
+    def tearDown(self):self.temp.cleanup()
+    def test_standalone(self):self.module.check()
+    def test_payload_tamper(self):
+        path=next((self.root/'baseline').rglob('*.py'));path.write_bytes(path.read_bytes()+b'\n# changed\n')
+        with self.assertRaisesRegex(ValueError,'Baseline member differs'):self.module.check()
+    def test_json_rejected(self):
+        (self.root/'extra.json').write_text('{}')
+        with self.assertRaisesRegex(ValueError,'JSON file'):self.module.check()
+    def test_parser_tamper(self):
+        path=self.root/'vendor/toon_format/_decoder.py';path.write_bytes(path.read_bytes()+b'\n')
+        with self.assertRaisesRegex(ValueError,'Parser source differs'):self.module.check()
+    def test_unlisted_file_rejected(self):
+        (self.root/'private-note.txt').write_text('must not be exported')
+        with self.assertRaisesRegex(ValueError,'explicit whitelist'):self.module.check()
+    def test_long_descendant_path_is_inside_root(self):
+        path='work/'+'/'.join(['segment'*5]*9)+'/source.txt'
+        expected=self.module.member(path)
+        try:
+            expected.parent.mkdir(parents=True);expected.write_text('long path')
+            self.assertEqual(self.module.member(path).read_text(),'long path')
+            with self.assertRaises(ValueError):self.module.member('../escape.txt')
+        finally:
+            if self.module.member('work').exists():shutil.rmtree(self.module.member('work'))
+
+if __name__=='__main__':unittest.main()

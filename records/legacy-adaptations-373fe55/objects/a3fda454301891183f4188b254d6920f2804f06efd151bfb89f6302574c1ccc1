@@ -1,0 +1,36 @@
+schema_version: 1
+kind: BoilerResourceSource
+id: "resource:common-boot-fixes"
+version: 0.1.0+combined-boot.live1
+dependencies: []
+external_component_dependencies: []
+hardware_requires:
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+  os_versions[1]: "3.10"
+install_kind: boiler-boot-settings-v1
+verify:
+  kind: sha256-v1
+restore:
+  kind: transaction-backup-v1
+renderer: fixed-boot-settings-v1
+source_lock: locks/resources/common-boot-fixes.toon
+recipe:
+  resource:
+    name: Boot compatibility fixes
+    parameters:
+      split_lock: true
+      gm7_resume: true
+    payload:
+      files: []
+    fixed_targets[3]: efi/EFI/steamos/grub.cfg,etc/default/grub.d/boiler-splitlock.cfg,etc/default/grub.d/boiler-nvme.cfg
+    license_files[2]: licenses/project-AGPL-3.0,licenses/split-lock-MIT
+    provenance:
+      public_commit: 72f864e0498c10366493c74608c5ffed62cc99ca
+      source_paths[2]: baseline/common/scripts/split_lock.py,baseline/brands/onexplayer/oxp3/scripts/boot_repairs.py
+      runtime_renderer: maintenance/boot_resources.py
+      model_name_policy: advisory-only
+    install_details:
+      files: []
+  license_sources[2]: common/boot/fixes/licenses/project-AGPL-3.0,common/boot/fixes/licenses/split-lock-MIT

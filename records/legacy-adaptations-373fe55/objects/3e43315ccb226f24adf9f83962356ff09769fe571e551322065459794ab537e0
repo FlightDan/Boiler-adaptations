@@ -1,0 +1,511 @@
+--- a/steamos-manager/src/power.rs
++++ b/steamos-manager/src/power.rs
+@@ -23,7 +23,8 @@
+ use tokio::net::unix::pipe;
+ use tokio::sync::mpsc::{UnboundedReceiver, UnboundedSender};
+ use tokio::sync::oneshot;
+-use tokio::task::JoinSet;
++use tokio::task::{JoinHandle, JoinSet};
++use tokio_stream::StreamExt;
+ use tracing::{debug, error, warn};
+ use zbus::names::OwnedBusName;
+ use zbus::zvariant::OwnedObjectPath;
+@@ -199,7 +200,9 @@
+ 
+ pub(crate) struct TdpManagerService {
+     proxy: RootManagerProxy<'static>,
++    system: Connection,
+     session: Connection,
++    signal_task: Option<JoinHandle<()>>,
+     channel: UnboundedReceiver<TdpManagerCommand>,
+     download_set: JoinSet<String>,
+     download_handles: HashMap<String, u32>,
+@@ -212,7 +215,7 @@
+ 
+ #[derive(Debug)]
+ pub(crate) enum TdpManagerCommand {
+-    SetTdpLimit(u32),
++    SetTdpLimit(u32, oneshot::Sender<Result<()>>),
+     GetTdpLimit(oneshot::Sender<Result<u32>>),
+     GetTdpLimitRange(oneshot::Sender<Result<RangeInclusive<u32>>>),
+     IsActive(oneshot::Sender<Result<bool>>),
+@@ -651,6 +654,7 @@
+                 TdpLimit1Proxy::builder(&self.connection)
+                     .path(path)?
+                     .destination(destination)?
++                    .cache_properties(zbus::proxy::CacheProperties::No)
+                     .build()
+                     .await?,
+             )
+@@ -820,7 +824,9 @@
+ 
+         Ok(TdpManagerService {
+             proxy,
++            system: system.clone(),
+             session: session.clone(),
++            signal_task: None,
+             channel,
+             download_set: JoinSet::new(),
+             download_handles: HashMap::new(),
+@@ -951,18 +957,73 @@
+         tokio::spawn(async move {
+             if let Ok(interface) = object_server.interface::<_, TdpLimit1>(MANAGER_PATH).await {
+                 let ctx = interface.signal_emitter();
+-                let _ = interface.get().await.tdp_limit_changed(ctx).await;
++                let _ = interface.get().await.tdp_limit_invalidate(ctx).await;
+             }
+         });
+         Ok(())
+     }
+ 
++    async fn set_proxy(&mut self, proxy: Option<(OwnedBusName, OwnedObjectPath)>) -> Result<()> {
++        let signal_task = if let Some((destination, path)) = &proxy {
++            // Raw signals do not populate a GetAll cache, which can permanently
++            // retain an initial hardware error and stop property change streams.
++            let properties = fdo::PropertiesProxy::builder(&self.system)
++                .destination(destination.clone())?
++                .path(path.clone())?
++                .cache_properties(zbus::proxy::CacheProperties::No)
++                .build()
++                .await?;
++            let mut signals = properties.receive_properties_changed().await?;
++            let session = self.session.clone();
++            Some(tokio::spawn(async move {
++                while let Some(signal) = signals.next().await {
++                    let args = match signal.args() {
++                        Ok(args) => args,
++                        Err(error) => {
++                            warn!("Invalid remote TDP PropertiesChanged signal: {error}");
++                            continue;
++                        }
++                    };
++                    if args.interface_name != "com.steampowered.SteamOSManager1.TdpLimit1"
++                        || (!args.changed_properties.contains_key("TdpLimit")
++                            && !args.invalidated_properties.contains(&"TdpLimit"))
++                    {
++                        continue;
++                    }
++                    let object_server = session.object_server();
++                    if let Ok(interface) = object_server.interface::<_, TdpLimit1>(MANAGER_PATH).await {
++                        let ctx = interface.signal_emitter();
++                        if let Err(error) = interface.get().await.tdp_limit_invalidate(ctx).await {
++                            error!("Failed to invalidate remote TDP limit: {error}");
++                        }
++                    }
++                }
++            }))
++        } else {
++            None
++        };
++        if let Err(error) = self.manager.set_proxy(proxy).await {
++            if let Some(task) = signal_task {
++                task.abort();
++            }
++            return Err(error);
++        }
++        if let Some(task) = self.signal_task.take() {
++            task.abort();
++        }
++        self.signal_task = signal_task;
++        Ok(())
++    }
++
+     async fn handle_command(&mut self, command: TdpManagerCommand) -> Result<()> {
+         match command {
+-            TdpManagerCommand::SetTdpLimit(limit) => {
+-                if self.download_handles.is_empty() {
+-                    self.set_tdp_limit(limit).await?;
+-                }
++            TdpManagerCommand::SetTdpLimit(limit, reply) => {
++                let result = if self.download_handles.is_empty() {
++                    self.set_tdp_limit(limit).await
++                } else {
++                    Err(anyhow!("Cannot set TDP limit while download mode is active"))
++                };
++                let _ = reply.send(result.inspect_err(|e| error!("Failed to set TDP limit: {e}")));
+             }
+             TdpManagerCommand::GetTdpLimit(reply) => {
+                 let _ = reply.send(self.manager.get_tdp_limit().await);
+@@ -984,10 +1045,18 @@
+                 let _ = reply.send(self.download_handles.clone());
+             }
+             TdpManagerCommand::SetProxy(proxy, reply) => {
+-                let _ = reply.send(self.manager.set_proxy(proxy).await);
++                let _ = reply.send(self.set_proxy(proxy).await);
+             }
+         }
+         Ok(())
++    }
++}
++
++impl Drop for TdpManagerService {
++    fn drop(&mut self) {
++        if let Some(task) = self.signal_task.take() {
++            task.abort();
++        }
+     }
+ }
+ 
+@@ -1685,7 +1754,9 @@
+ 
+         sleep(Duration::from_millis(1)).await;
+ 
+-        tx.send(TdpManagerCommand::SetTdpLimit(15)).unwrap();
++        let (set_tx, set_rx) = oneshot::channel();
++        tx.send(TdpManagerCommand::SetTdpLimit(15, set_tx)).unwrap();
++        set_rx.await.unwrap().unwrap();
+         reply_rx.recv().await;
+         assert_eq!(manager.get_tdp_limit().await.unwrap(), 15);
+ 
+@@ -1711,7 +1782,16 @@
+                 .unwrap();
+             assert_eq!(os_rx.await.unwrap(), [(String::from("test"), 1u32)].into());
+ 
+-            tx.send(TdpManagerCommand::SetTdpLimit(15)).unwrap();
++            let (set_tx, set_rx) = oneshot::channel();
++            tx.send(TdpManagerCommand::SetTdpLimit(15, set_tx)).unwrap();
++            assert!(
++                set_rx
++                    .await
++                    .unwrap()
++                    .unwrap_err()
++                    .to_string()
++                    .contains("download mode")
++            );
+             assert!(tokio::select! {
+                 _ = reply_rx.recv() => false,
+                 _ = sleep(Duration::from_millis(2)) => true,
+@@ -1721,7 +1801,9 @@
+         reply_rx.recv().await;
+         assert_eq!(manager.get_tdp_limit().await.unwrap(), 15);
+ 
+-        tx.send(TdpManagerCommand::SetTdpLimit(12)).unwrap();
++        let (set_tx, set_rx) = oneshot::channel();
++        tx.send(TdpManagerCommand::SetTdpLimit(12, set_tx)).unwrap();
++        set_rx.await.unwrap().unwrap();
+         reply_rx.recv().await;
+         assert_eq!(manager.get_tdp_limit().await.unwrap(), 12);
+ 
+@@ -1793,7 +1875,9 @@
+ 
+         sleep(Duration::from_millis(1)).await;
+ 
+-        tx.send(TdpManagerCommand::SetTdpLimit(6)).unwrap();
++        let (set_tx, set_rx) = oneshot::channel();
++        tx.send(TdpManagerCommand::SetTdpLimit(6, set_tx)).unwrap();
++        set_rx.await.unwrap().unwrap();
+ 
+         let (h_tx, h_rx) = oneshot::channel();
+         tx.send(TdpManagerCommand::EnterDownloadMode(
+@@ -1871,7 +1955,9 @@
+ 
+         sleep(Duration::from_millis(1)).await;
+ 
+-        tx.send(TdpManagerCommand::SetTdpLimit(15)).unwrap();
++        let (set_tx, set_rx) = oneshot::channel();
++        tx.send(TdpManagerCommand::SetTdpLimit(15, set_tx)).unwrap();
++        set_rx.await.unwrap().unwrap();
+         reply_rx.recv().await;
+         assert_eq!(manager.get_tdp_limit().await.unwrap(), 15);
+ 
+--- a/steamos-manager/src/manager/user.rs
++++ b/steamos-manager/src/manager/user.rs
+@@ -1331,17 +1331,15 @@
+     context = Option<UnboundedSender<TdpManagerCommand>>,
+ )]
+ impl TdpLimit1 {
+-    #[zbus(property)]
+-    async fn tdp_limit(&self) -> u32 {
++    #[zbus(property(emits_changed_signal = "invalidates"))]
++    async fn tdp_limit(&self) -> fdo::Result<u32> {
+         let (tx, rx) = oneshot::channel();
+-        if self
+-            .manager
++        self.manager
+             .send(TdpManagerCommand::GetTdpLimit(tx))
+-            .is_err()
+-        {
+-            return 0;
+-        }
+-        rx.await.unwrap_or(Ok(0)).unwrap_or(0)
++            .map_err(to_zbus_fdo_error)?;
++        rx.await
++            .map_err(to_zbus_fdo_error)?
++            .map_err(to_zbus_fdo_error)
+     }
+ 
+     #[zbus(property)]
+@@ -1357,43 +1355,39 @@
+             debug!("set TdpLimit: discarding out of order serial");
+             return Ok(());
+         }
++        let (tx, rx) = oneshot::channel();
+         self.manager
+-            .send(TdpManagerCommand::SetTdpLimit(limit))
+-            .map_err(|_| fdo::Error::Failed(String::from("Failed to set TDP limit")))
++            .send(TdpManagerCommand::SetTdpLimit(limit, tx))
++            .map_err(to_zbus_fdo_error)?;
++        rx.await
++            .map_err(to_zbus_fdo_error)?
++            .map_err(to_zbus_fdo_error)
+     }
+ 
+     #[zbus(property(emits_changed_signal = "const"))]
+-    async fn tdp_limit_min(&self) -> u32 {
++    async fn tdp_limit_min(&self) -> fdo::Result<u32> {
+         let (tx, rx) = oneshot::channel();
+-        if self
+-            .manager
++        self.manager
+             .send(TdpManagerCommand::GetTdpLimitRange(tx))
+-            .is_err()
+-        {
+-            return 0;
+-        }
+-        if let Ok(range) = rx.await {
+-            range.map(|r| *r.start()).unwrap_or(0)
+-        } else {
+-            0
+-        }
++            .map_err(to_zbus_fdo_error)?;
++        let range = rx
++            .await
++            .map_err(to_zbus_fdo_error)?
++            .map_err(to_zbus_fdo_error)?;
++        Ok(*range.start())
+     }
+ 
+     #[zbus(property(emits_changed_signal = "const"))]
+-    async fn tdp_limit_max(&self) -> u32 {
++    async fn tdp_limit_max(&self) -> fdo::Result<u32> {
+         let (tx, rx) = oneshot::channel();
+-        if self
+-            .manager
++        self.manager
+             .send(TdpManagerCommand::GetTdpLimitRange(tx))
+-            .is_err()
+-        {
+-            return 0;
+-        }
+-        if let Ok(range) = rx.await {
+-            range.map(|r| *r.end()).unwrap_or(0)
+-        } else {
+-            0
+-        }
++            .map_err(to_zbus_fdo_error)?;
++        let range = rx
++            .await
++            .map_err(to_zbus_fdo_error)?
++            .map_err(to_zbus_fdo_error)?;
++        Ok(*range.end())
+     }
+ }
+ 
+@@ -3524,13 +3518,17 @@
+         limit: u32,
+         min: u32,
+         max: u32,
++        fail_reads: bool,
+     }
+ 
+     #[interface(name = "com.steampowered.SteamOSManager1.TdpLimit1")]
+     impl MockTdpLimit1 {
+-        #[zbus(property)]
+-        async fn tdp_limit(&self) -> u32 {
+-            self.limit
++        #[zbus(property(emits_changed_signal = "invalidates"))]
++        async fn tdp_limit(&self) -> fdo::Result<u32> {
++            if self.fail_reads {
++                return Err(fdo::Error::Failed(String::from("injected TDP read failure")));
++            }
++            Ok(self.limit)
+         }
+ 
+         #[zbus(property)]
+@@ -3543,13 +3541,19 @@
+         }
+ 
+         #[zbus(property(emits_changed_signal = "const"))]
+-        async fn tdp_limit_min(&self) -> u32 {
+-            self.min
++        async fn tdp_limit_min(&self) -> fdo::Result<u32> {
++            if self.fail_reads {
++                return Err(fdo::Error::Failed(String::from("injected TDP range failure")));
++            }
++            Ok(self.min)
+         }
+ 
+         #[zbus(property(emits_changed_signal = "const"))]
+-        async fn tdp_limit_max(&self) -> u32 {
+-            self.max
++        async fn tdp_limit_max(&self) -> fdo::Result<u32> {
++            if self.fail_reads {
++                return Err(fdo::Error::Failed(String::from("injected TDP range failure")));
++            }
++            Ok(self.max)
+         }
+     }
+ 
+@@ -3619,6 +3623,7 @@
+         let proxy = TdpLimit1Proxy::builder(&new_conn)
+             .destination(test.connection.unique_name().unwrap())
+             .unwrap()
++            .cache_properties(CacheProperties::No)
+             .build()
+             .await
+             .unwrap();
+@@ -3627,6 +3632,7 @@
+             limit: 10,
+             min: 3,
+             max: 15,
++            fail_reads: false,
+         };
+         let object_server = new_conn.object_server();
+         object_server.at("/foo", remote).await.unwrap();
+@@ -3639,8 +3645,128 @@
+         assert_eq!(proxy.tdp_limit_max().await.unwrap(), 15);
+         proxy.set_tdp_limit(12).await.unwrap();
+         assert_eq!(remote.get().await.limit, 12);
++        let error = proxy.set_tdp_limit(26).await.unwrap_err();
++        assert!(error.to_string().contains("out of range"));
++        assert_eq!(remote.get().await.limit, 12);
+ 
+         service.abort();
++        let _ = service.await;
++        assert!(proxy.tdp_limit().await.is_err());
++        assert!(proxy.tdp_limit_min().await.is_err());
++        assert!(proxy.tdp_limit_max().await.is_err());
++        assert!(proxy.set_tdp_limit(10).await.is_err());
++    }
++
++    #[tokio::test]
++    async fn remote_tdp_limit1_read_errors() {
++        let mut test = start(TestConfig::none()).await.unwrap();
++        let service = setup_tdp_manager(&mut test).await.unwrap();
++        let new_conn = test.handle.new_connection().await.unwrap();
++        test_remote_interface_added::<TdpLimit1, _>(&test, &new_conn)
++            .await
++            .unwrap();
++        let proxy = TdpLimit1Proxy::builder(&new_conn)
++            .destination(test.connection.unique_name().unwrap())
++            .unwrap()
++            .cache_properties(CacheProperties::No)
++            .build()
++            .await
++            .unwrap();
++        new_conn
++            .object_server()
++            .at(
++                "/foo",
++                MockTdpLimit1 {
++                    limit: 10,
++                    min: 3,
++                    max: 15,
++                    fail_reads: true,
++                },
++            )
++            .await
++            .unwrap();
++
++        let error = proxy.tdp_limit().await.unwrap_err();
++        assert!(error.to_string().contains("injected TDP read failure"));
++        let error = proxy.tdp_limit_min().await.unwrap_err();
++        assert!(error.to_string().contains("injected TDP range failure"));
++        let error = proxy.tdp_limit_max().await.unwrap_err();
++        assert!(error.to_string().contains("injected TDP range failure"));
++        service.abort();
++    }
++
++    #[tokio::test]
++    async fn remote_tdp_limit1_recovers_after_initial_read_error() {
++        let mut test = start(TestConfig::none()).await.unwrap();
++        let service = setup_tdp_manager(&mut test).await.unwrap();
++        let new_conn = test.handle.new_connection().await.unwrap();
++        test_remote_interface_added::<TdpLimit1, _>(&test, &new_conn)
++            .await
++            .unwrap();
++        let proxy = TdpLimit1Proxy::builder(&new_conn)
++            .destination(test.connection.unique_name().unwrap())
++            .unwrap()
++            .cache_properties(CacheProperties::No)
++            .build()
++            .await
++            .unwrap();
++        let object_server = new_conn.object_server();
++        object_server
++            .at(
++                "/foo",
++                MockTdpLimit1 {
++                    limit: 10,
++                    min: 3,
++                    max: 35,
++                    fail_reads: true,
++                },
++            )
++            .await
++            .unwrap();
++        let remote = object_server
++            .interface::<_, MockTdpLimit1>("/foo")
++            .await
++            .unwrap();
++
++        assert!(proxy.tdp_limit().await.unwrap_err().to_string().contains("injected TDP read failure"));
++        assert!(proxy.tdp_limit_min().await.unwrap_err().to_string().contains("injected TDP range failure"));
++        proxy.set_tdp_limit(15).await.unwrap();
++        assert_eq!(remote.get().await.limit, 15);
++        remote.get_mut().await.fail_reads = false;
++        // The same Manager/backend proxy must recover without reconstruction.
++        assert_eq!(proxy.tdp_limit().await.unwrap(), 15);
++        assert_eq!(proxy.tdp_limit_min().await.unwrap(), 3);
++        assert_eq!(proxy.tdp_limit_max().await.unwrap(), 35);
++
++        // An ordinary cached client that starts healthy must receive invalidation
++        // even while the provider getter fails, then recover on a later signal.
++        let cached = TdpLimit1Proxy::builder(&new_conn)
++            .destination(test.connection.unique_name().unwrap())
++            .unwrap()
++            .build()
++            .await
++            .unwrap();
++        assert_eq!(cached.tdp_limit().await.unwrap(), 15);
++        let mut changes = cached.receive_tdp_limit_changed().await;
++        let wait = std::time::Duration::from_secs(5);
++        tokio::time::timeout(wait, changes.next()).await.unwrap().unwrap();
++
++        remote.get_mut().await.fail_reads = true;
++        remote.get().await.tdp_limit_invalidate(remote.signal_emitter()).await.unwrap();
++        tokio::time::timeout(wait, changes.next()).await.unwrap().unwrap();
++        assert!(cached.tdp_limit().await.unwrap_err().to_string().contains("injected TDP read failure"));
++
++        {
++            let mut remote = remote.get_mut().await;
++            remote.fail_reads = false;
++            remote.limit = 20;
++        }
++        remote.get().await.tdp_limit_invalidate(remote.signal_emitter()).await.unwrap();
++        tokio::time::timeout(wait, changes.next()).await.unwrap().unwrap();
++        assert_eq!(cached.tdp_limit().await.unwrap(), 20);
++        assert_eq!(proxy.tdp_limit().await.unwrap(), 20);
++        service.abort();
++        let _ = service.await;
+     }
+ 
+     #[tokio::test]
+@@ -3687,6 +3813,7 @@
+             limit: 10,
+             min: 3,
+             max: 15,
++            fail_reads: false,
+         };
+         let object_server = new_conn.object_server();
+         object_server.at("/foo", remote).await.unwrap();
+@@ -3700,6 +3827,9 @@
+         let fd = low_power_proxy.enter_download_mode("foo").await.unwrap();
+         assert_eq!(receiver.next().await.unwrap().get().await.unwrap(), 5);
+         assert_eq!(proxy.tdp_limit().await.unwrap(), 5);
++        assert_eq!(remote.get().await.limit, 5);
++        let error = proxy.set_tdp_limit(12).await.unwrap_err();
++        assert!(error.to_string().contains("download mode"));
+         assert_eq!(remote.get().await.limit, 5);
+         drop(fd);
+         assert_eq!(receiver.next().await.unwrap().get().await.unwrap(), 10);

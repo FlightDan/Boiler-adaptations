@@ -1,0 +1,22 @@
+[Unit]
+Description=ONEXPLAYER3 fan curve controller
+Requires=oxp3-fan-module.service
+After=oxp3-fan-module.service
+[Service]
+ExecCondition=/usr/bin/python3 -I -B /usr/local/lib/oxp3-integration/integration_runtime.py guard
+Type=notify
+ExecStart=/usr/bin/python3 -I /var/lib/oxp3-fan/fan.py run
+ExecStopPost=/usr/bin/python3 -I /var/lib/oxp3-fan/fan.py auto
+WatchdogSec=10
+Restart=no
+TimeoutStopSec=5
+RuntimeDirectory=oxp3-fan
+RuntimeDirectoryMode=0755
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ReadWritePaths=/sys/devices/platform/oxp-platform /run/lock
+[Install]
+WantedBy=multi-user.target

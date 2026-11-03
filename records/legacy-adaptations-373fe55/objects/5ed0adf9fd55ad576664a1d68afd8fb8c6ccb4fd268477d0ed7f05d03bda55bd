@@ -1,0 +1,7 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:common-kde-keyboard"
+files[3]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  common/session/kde-keyboard/resource.toon,508,01e35d7112e44de509103be7b82cf497d72a4fe6100ef959ca395cba350929d1

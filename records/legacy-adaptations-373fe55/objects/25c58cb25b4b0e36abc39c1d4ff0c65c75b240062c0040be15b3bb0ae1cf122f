@@ -1,0 +1,4 @@
+#!/bin/sh
+case "$1" in
+  post) /usr/bin/systemctl reload boiler-overlay-read.service ;;
+esac

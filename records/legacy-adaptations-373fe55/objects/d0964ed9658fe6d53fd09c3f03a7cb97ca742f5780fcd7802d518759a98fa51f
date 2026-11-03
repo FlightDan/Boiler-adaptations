@@ -1,0 +1,9 @@
+schema_version: 1
+kind: BoilerFixedIntelG3eTelemetrySchema
+guid: 0x03086000
+telem_size: 3352
+gpu_energy_offset: 1640
+gpu_energy_length: 8
+gpu_energy_divisor: 16384
+byte_order: little
+max_watts: 160

@@ -1,0 +1,33 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Fixed stdin-only decoder linked against the built KWin library.
+#include "utils/edid.h"
+#include "oxp3_gamma22_policy.h"
+#include <QByteArray>
+#include <QCryptographicHash>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <cstdio>
+#include <span>
+
+int main(int argc, char **)
+{
+    if (argc != 1) { std::fputs("unexpected argument\n", stderr); return 2; }
+    QFile input;
+    if (!input.open(stdin, QIODevice::ReadOnly)) { std::fputs("stdin unavailable\n", stderr); return 3; }
+    QByteArray raw;
+    while (raw.size() < 4097) {
+        const QByteArray chunk = input.read(4097 - raw.size());
+        if (chunk.isEmpty()) break;
+        raw += chunk;
+    }
+    const auto data = std::span(reinterpret_cast<const uint8_t *>(raw.constData()), raw.size());
+    if (!KWin::boilerCompleteEdid(data)) { std::fputs("invalid complete EDID\n", stderr); return 4; }
+    const KWin::Edid edid{QByteArrayView(raw)};
+    if (!edid.isValid()) { std::fputs("KWin EDID decoder rejected input\n", stderr); return 5; }
+    const QJsonObject result{{"schema_version", 1},
+        {"sha256", QString::fromLatin1(QCryptographicHash::hash(raw, QCryptographicHash::Sha256).toHex())},
+        {"valid_edid", true}, {"native_colorimetry_present", edid.nativeColorimetry().has_value()}};
+    const QByteArray output = QJsonDocument(result).toJson(QJsonDocument::Compact) + '\n';
+    return std::fwrite(output.constData(), 1, output.size(), stdout) == static_cast<std::size_t>(output.size()) ? 0 : 6;
+}

@@ -1,0 +1,1018 @@
+{
+  "schema_version": 1,
+  "kind": "ReviewedInstallerAdaptationSourceImport",
+  "public_whitelist": "scripts/source-files.json",
+  "public_cpu_baseline": "72f864e0498c10366493c74608c5ffed62cc99ca",
+  "note": "Exact whitelisted source bytes only; legacy model-specific repair source paths are historical inputs, not proof of common-resource runtime activation. External build inputs and source closure remain to be validated.",
+  "files": [
+    {
+      "path": "brands/onexplayer/common/battery/battery-plugin-index.js",
+      "size": 11336,
+      "sha256": "2e73f21f74bccdd06bbfebd2693d1dc744e980843290674bcb87338accc353fb",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/battery/battery-plugin-main.py",
+      "size": 947,
+      "sha256": "17012e3b6d0d6861ea4e66426686545c5ea18227ddb7617bc116dc99f7679bfb",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/battery/battery_control.py",
+      "size": 2616,
+      "sha256": "1ea349b1a679a9859a918459dd55d39716934746c5c52783e314daa4505decb3",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/battery/battery_provider.py",
+      "size": 4432,
+      "sha256": "33dbd7a324656c28abcfad841c3ba324ed03aeee18321a02f4c7d275f829ff57",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/battery/check-battery-sleep-ui.mjs",
+      "size": 20457,
+      "sha256": "97f4b13b09b787d5947ff3635c540c723ed2ff174a55efe8c377912fc195ffb2",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/battery/check-battery-ui.mjs",
+      "size": 2406,
+      "sha256": "b89944b3d765b50b95116dcf14a87211beba860482a08b106d136b75b6b5a70e",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/battery/deploy-battery.py",
+      "size": 3963,
+      "sha256": "7cec3544d12715b955205c7311f66504d4a66e77f327b35d0b2260bdcabdafdf",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/battery/sleep-router.conf",
+      "size": 171,
+      "sha256": "a2f0853556e9387e7f1862a8d0a16fd2e8b8400eed67e595f63c3d68df1729b2",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/battery/sleep_control.py",
+      "size": 8463,
+      "sha256": "b4a0df256f978d7bd3c9fb1388a8da5df83767b068b9ca2ea96582bd40629e99",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/battery/templates/battery-dbus.conf",
+      "size": 418,
+      "sha256": "df9acac75b4b2906c6c0d953460de16f6e7de30789ec74fdea00f2faffabef43",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/battery/templates/oxp3-battery.service",
+      "size": 618,
+      "sha256": "d5771cac38919a517f3ff228de56add0700fdac9e3e7f4d92c461f8ee2fe4767",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/battery/templates/oxp3-battery.toml",
+      "size": 128,
+      "sha256": "98367b4ecf45d8a48c1349b9931cd192d55b462aed49b71f14d21f92d5ef1f48",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/battery/templates/package.json",
+      "size": 62,
+      "sha256": "b72b30577e44e59ec2850f7bfe79743ea6e4d10f0fb86e47b9d2f4f64a98772f",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/battery/templates/plugin.json",
+      "size": 96,
+      "sha256": "ad11a19b1957aa12eb6bcc63c2c65a85516011ec5517ae725275777d6a41b668",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/battery/test_sleep_control.py",
+      "size": 12682,
+      "sha256": "e2c8b08642e3a2ecc95109c87a93359eb9ce00bad4ca55956b5def687459a8bc",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/battery/uninstall-battery.sh",
+      "size": 1273,
+      "sha256": "1f8aeb65d3be996429c4f0d7ee0136ccecbab44069aa9d00e3f49a82ee48f399",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/battery/update-battery-ui.py",
+      "size": 2161,
+      "sha256": "5101f89d0113abf666d29e98efaf5e45341aff119028446e1240aab0acc3dc82",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/components.toon",
+      "size": 7490,
+      "sha256": "b76da276c5bef0ea737fbdfcaea84d2b37836b90d9373a0b2311caa69482478f",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/microphone/90-oxp-microphone.conf",
+      "size": 36,
+      "sha256": "40b0db31f7f8f7f2fc96fa147a8ff10ed3316dff7316a1b83b7d59d8a34f7888",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/microphone/install.json",
+      "size": 455,
+      "sha256": "43c21e89edee043c784ac3c72b5debba17b116abd0cb9d452c14a4211e4d393e",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/microphone/microphone.py",
+      "size": 9440,
+      "sha256": "25074a70432dcd3be14f48b5e3133f063611ad0fd46805fbfa829c054b03c269",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/common/microphone/oxp-microphone.service",
+      "size": 364,
+      "sha256": "902ebd2f3a4caecdf9fc91be16360f1dd95df9dc9428b2aa6cf81be596e9317a",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/.gitignore",
+      "size": 33,
+      "sha256": "adc0c7acfe8ea99a093fb8a7348a1bf44ece8ce8f405d9e3dcf0b04f08756d36",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/LICENSE",
+      "size": 34523,
+      "sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/README.md",
+      "size": 6076,
+      "sha256": "6a2e3098c88ad227362721538024f580e0a31fd03102430008c1c3f9de3efadb",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/THIRD_PARTY_NOTICES.md",
+      "size": 11690,
+      "sha256": "99f0bce28d6b10958e4ad7dcc075366ba9463ae475940db39a38d4bb499b2eb6",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/adapter.py",
+      "size": 53178,
+      "sha256": "3a02c2e7f98023f3b35b08c9f8a9edd2a8528961fbbdb05e523da26c3879a3ee",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/docs/MAINTENANCE_PACKAGE.md",
+      "size": 3976,
+      "sha256": "dd7aae623f2196c93824179b012cc65cb66603c1dc02fde799fbcd58d02ef052",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/full_efi_sources.py",
+      "size": 1088,
+      "sha256": "64fc948c584ba497ba9df419996c93feaf5120d3d64a17287a502729c3e50d0f",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/maintenance-static-lock.json",
+      "size": 544,
+      "sha256": "94122c302702adc732bb3edb16cec7eb5f78357b70f15001c9bb9c9074d8d0a0",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/maintenance_adapter.py",
+      "size": 34911,
+      "sha256": "f11aad955b288a7107c5eec88b8df47ad4d147537b854d02e37a5e712b3b988d",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/opti-offline-lock.json",
+      "size": 6462,
+      "sha256": "a09a8b18ddaf4c7c93d0be9fa33165a5a59b9dc66529703cb483354d8b1cabf3",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/public-adoption.py",
+      "size": 20687,
+      "sha256": "f12a9a4b7185073dbfb03d8df2d1fe903ff66c6e093f05be5265adac810f90d7",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/scripts/apply.sh",
+      "size": 130,
+      "sha256": "77fe7511173a401d137e015a05b0b09d5262f849855b203ec94d10117c79ea49",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/scripts/build-maintenance.py",
+      "size": 8378,
+      "sha256": "bd7d49774dc84ef2565105f74296ab7d40ffd9d8574e4a126b20a8bc58b52071",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/scripts/build-shared-adaptations.py",
+      "size": 11840,
+      "sha256": "efa577d4d255db6f12f035ede121f59b9088cc612902c209134aaf2679d2d03d",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/scripts/build.py",
+      "size": 29697,
+      "sha256": "58a7de21f771a3ec2a7b24fff595dc530bc758cd30fcb7c0321d23fd6e645a9f",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/scripts/fetch-input.py",
+      "size": 1260,
+      "sha256": "f68abcceb5db2775e7289e073a58d8dbbf0dd9241f86ff188c7754ccaab964bc",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/scripts/maintenance.sh",
+      "size": 141,
+      "sha256": "81244b088f00276d600ebcbd29f6f5526116f816956eff20aeda8f2302703105",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/scripts/prepare-shared-inputs.py",
+      "size": 5312,
+      "sha256": "47e10ef21b08665d3dc8925262f15170e844b5c34aaf14fa4536f2822a0e5d92",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/scripts/restore.sh",
+      "size": 132,
+      "sha256": "268237cadf57447dbdc4ed2f7f27b80fea0772de090a4d5ccfa27fa988e1151d",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/scripts/verify.sh",
+      "size": 131,
+      "sha256": "63c0e6cbc9ee60857c640ae1920d6577461b3273805a4eff9372eb7981866201",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/selection.example.json",
+      "size": 276,
+      "sha256": "1fe0f491f4bfbdeba6591467c987ecf4649bcdd5fc7ff98d3b2e874284ec449f",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/source-files.txt",
+      "size": 590,
+      "sha256": "dc4b0d22cbf415cc372870e2a44e0538f360dfd5bda1df3f553740be54638d27",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/tests/test_adapter.py",
+      "size": 28545,
+      "sha256": "74ed86df2c6e4c79993701b95d66c99544af8ff081f4a7da0d48112ed66f6997",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/tests/test_maintenance_adapter.py",
+      "size": 28478,
+      "sha256": "8f37c13029f76a4cc0c9c2e031d937351764114aebd8e30c92a725b5b51c035d",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/tests/test_maintenance_package.py",
+      "size": 6440,
+      "sha256": "6059e065cbb69e23f105d95c63c0a7149ccb80aea92ad99bc167782306e8964b",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/tests/test_opti_updates.py",
+      "size": 8130,
+      "sha256": "6f8ad29edf7a58064a31108462bfdcbb743db90641fb0de35a241ed45117878e",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/tests/test_shared_adaptations.py",
+      "size": 3586,
+      "sha256": "b48bddcd6baee2d20626299b3cb1bba260d5264cbf398238a5f16e379c8f7401",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/bridge/upstream-lock.json",
+      "size": 996,
+      "sha256": "8475c3363bae582198ec71ccce85357b4541fc75dda1c0fa256aa0e7f4ee3ced",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/fingerprint/69-boiler-oxp3-fingerprint.rules",
+      "size": 545,
+      "sha256": "68d4eca256cfe27f13494089cb7957fca429e4739aaa0ad0953717c6e866b1a5",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/upstream-20261029/20-oxp3-speaker-resume.conf",
+      "size": 41,
+      "sha256": "bb9d378a3b1b5fa783d668c982a6e94779a5a289170d4fa00531475302031601",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/upstream-20261029/90-oxp3-speaker-route.conf",
+      "size": 40,
+      "sha256": "7a36e2ef341e6eec0aef1a63b92954452ad98ff0ba090b1e9b0d3e5543b3bde1",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/upstream-20261029/PROVENANCE.json",
+      "size": 1347,
+      "sha256": "198409b82781c0d7885de76c667cceee81411dacb9191d1c95caffc1b61782d2",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/upstream-20261029/UPSTREAM_LICENSE",
+      "size": 1070,
+      "sha256": "1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/upstream-20261029/dock_input.py",
+      "size": 1782,
+      "sha256": "6c98018c8106924cfb5036c32b162a4155a3a06bd420246b8767cfa3cddbfeb1",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/upstream-20261029/install.json",
+      "size": 1580,
+      "sha256": "e99f5e6240d8271ef41b7055026d8915d697ac2992a8524ca50fd1b6fe8c6490",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/upstream-20261029/oxp3-speaker-resume.service",
+      "size": 284,
+      "sha256": "efe98f22d45c43988e848ec5db406feffe1d7e1b9734d5956663b9b75f3d05d9",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/upstream-20261029/oxp3-speaker-route.service",
+      "size": 221,
+      "sha256": "327dade2d73ab6da60572967d8e14b7a3bb7377c147c4fb4efa386183b989324",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/upstream-20261029/speaker_route.py",
+      "size": 5510,
+      "sha256": "b47f916aa80036d5730c0df26deac7aedcd8f9af14cc615058d9f6432e9c7739",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/xevma-20261029/90-boiler-oxp3-xevmafix.conf",
+      "size": 42,
+      "sha256": "ba2a8b4edebc640910521643e7962d09546a043cd8f539fcb1b504047e503132",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/xevma-20261029/LICENSE",
+      "size": 18600,
+      "sha256": "8780e78a1a737e127f25a65f6d95269bffd36158dc261114de7859b490bfc5aa",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/xevma-20261029/Makefile",
+      "size": 20,
+      "sha256": "1cd3b948f78e7622583dd6d30a6f076e54a8b9ae680ffae38e06409a987dcb4a",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/xevma-20261029/README.md",
+      "size": 2300,
+      "sha256": "3382fb696e004bc00ddabb8729ca16ba2b32f6e5be0b6ca244ced88f4cc74b00",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/xevma-20261029/UPSTREAM_LICENSE",
+      "size": 1070,
+      "sha256": "1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/xevma-20261029/UPSTREAM_README.md",
+      "size": 3528,
+      "sha256": "bc478f9e972bc5ace5d594d337e5e16c83e7fd9b6729321ebb084471877638c7",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/xevma-20261029/boiler-oxp3-xevmafix.service",
+      "size": 218,
+      "sha256": "4e05053564db612fab03dd7c838aa85b7472c4dc3791a5bee5f1162acc6641e8",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/xevma-20261029/install.json",
+      "size": 2187,
+      "sha256": "bb427afb8db3152dec0b2cb79ff47631a06dc183582c2156c6f69736936fe76e",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/xevma-20261029/load.py",
+      "size": 2330,
+      "sha256": "bf49070cb295c872c3059480cc0a393c77bc1b129ffdaba05e12e90ec78dc646",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/xevma-20261029/module-lock.json",
+      "size": 26919,
+      "sha256": "8bb5ee26ae6bcd2bfa8ecf57cb18f9d6819b95f595a76b5bd857a8ae15db6f41",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/oxp3/current/xevma-20261029/xevmafix.c",
+      "size": 5135,
+      "sha256": "ff2c89af58171028f23d4e23b613c0c346a02708b668a142f216d93c9ac1d9c5",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/x2-mini/bridge/README.md",
+      "size": 9921,
+      "sha256": "5ae8888815dde0bfc60e202e01ccb81942f7405e8dafcc832d9d504972e507cf",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/x2-mini/bridge/assets/90-oxp3-desktop-env-isolation.conf",
+      "size": 222,
+      "sha256": "9616729dac8be729b56bd201b8cfbbb1fcd0eb2fb7163944638306856e85a13b",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/x2-mini/bridge/fixed_efi_sources.py",
+      "size": 1667,
+      "sha256": "44b04774e27d5bded09b6803d4fd124980e739518e41c8cf59c44c606e26f856",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/x2-mini/bridge/scripts/build.py",
+      "size": 6236,
+      "sha256": "cb94e3e0dc68d2a202b41a23053e7007d5cc4cfdd8bb8ec1a7c8325fe96037d5",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/x2-mini/bridge/source-lock.json",
+      "size": 6547,
+      "sha256": "d14b0cc281f9f29ce2faf587d02aab384d7beb98dc7c0f071114a05e2a887c6b",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/x2-mini/current/battery_control.py",
+      "size": 837,
+      "sha256": "c53c91e39cf96f869bc5aec56338313087626edf2bc4466d1f31520e153f8d0e",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "brands/onexplayer/x2-mini/current/fingerprint/69-boiler-x2-fingerprint.rules",
+      "size": 356,
+      "sha256": "808e72d3f63ed9453374f70510a8641f55a367dfa805adb3f89d895244e3668d",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/bridge/index.js",
+      "size": 14560,
+      "sha256": "ad04959e4422b50b71d792d7d4d0afe3751d7899b9b1a49acd857c0566ea9fcb",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/bridge/main.py",
+      "size": 3730,
+      "sha256": "fed2f29f9cd1f7adea973bf624195a4ba3e093cf2fe1cf664e8cdf040dad1de1",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/bridge/package.json",
+      "size": 84,
+      "sha256": "2329a3005601b81ef5637b30a937ad3dd0aa549fb79c80605079ebaf610d866d",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/bridge/plugin.json",
+      "size": 111,
+      "sha256": "53e738e0537c26000f51a6937ac600c30633666cc6d94a6ff7067c24a09eefb7",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/public-COPYING",
+      "size": 34523,
+      "sha256": "0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/public-bridge-lock.json",
+      "size": 2152,
+      "sha256": "bf19b68d45acc6d2733c4c60e30a021c32104c11a642eaa86434e5991bd46d7a",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/runtime-profile/COPYING",
+      "size": 26436,
+      "sha256": "5df07007198989c622f5d41de8d703e7bef3d0e79d62e24332ee739a452af62a",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/runtime-profile/boiler-fprintd.service",
+      "size": 297,
+      "sha256": "7c34339bc2c51b37bc3e397a5ef57e2a7936300f6820ea55a3f49c5a87fb49fa",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/runtime-profile/net.reactivated.Fprint.service",
+      "size": 150,
+      "sha256": "7189936528b25d066fa7c504c8d3a510a68534cd499b9e764726908ec6ea9e54",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/runtime-profile/profile.json",
+      "size": 243,
+      "sha256": "33975adb8a98a7dfe79c3a55a9a239fab8d413a11b3c1b225f0f5d3f154aa449",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/runtime-profile/spidev.conf",
+      "size": 29,
+      "sha256": "4fa71ac24903901425aa99ffb1d669569e7858044dbabbe22303183a845269dc",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/source-lock.json",
+      "size": 2193,
+      "sha256": "bfbb3d6f5c541936b61fea648be230f0f8760e7020625d5b48eab0b13ffd8b73",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/upstream/LICENSE",
+      "size": 1067,
+      "sha256": "52a65e9c001fbd9a4d411363103a5ad9b2aa5a0e8a2c6b672159788f2d7b3d69",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/upstream/dist/index.js",
+      "size": 35815,
+      "sha256": "5f9d9d1d94b94fb4cf21d07632b6c2f35ab4497c525058a44d0959ba4b2e6295",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/upstream/main.py",
+      "size": 17528,
+      "sha256": "7298a16670e373800c92bbf6172d1813ea24aba40ddb9adb2001d9c1e5e1202b",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/upstream/package.json",
+      "size": 677,
+      "sha256": "f8a0990777fc27883787da4dd71ddea5fcd084c211aceaa101d7fc94fd0c3391",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/upstream/plugin.json",
+      "size": 523,
+      "sha256": "731ddb300e4bb46b30a5d93d0461947998d291d9d8e999366aa9a5e6e1c8253c",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/upstream/pnpm-lock.yaml",
+      "size": 39947,
+      "sha256": "cbf4accdee69270cbb10c9a4dbf0fb12344d1f6c0ad8d3858cb5e3487248784a",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/upstream/rollup.config.js",
+      "size": 311,
+      "sha256": "62b83d8699a8607fd1d5678dba85df37ba7ee7eb4ab7551e4a3fdbde57be600c",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/upstream/src/index.tsx",
+      "size": 32506,
+      "sha256": "32934d9f6e36ea16114b5e0d22c1bc969c36ab66f69149f74be646da3603ce81",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/fingerprint/upstream/tsconfig.json",
+      "size": 837,
+      "sha256": "0c25a159538ae436532d3226f24937d6b351d5135130c72020e339447a8c3025",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/network/intel/be201/inputs/iwlwifi-sc-a0-fm-c0-c101.ucode",
+      "size": 2305636,
+      "sha256": "3475bdb1f59d15707d5018144484d370a3b1f4868d5f4e6f38ef83a5004704c2",
+      "disposition": "relocated-explicit-whitelist",
+      "source_path": "common/resource-inputs/intel-be201/inputs/000-iwlwifi-sc-a0-fm-c0-c101.ucode"
+    },
+    {
+      "path": "common/network/intel/be201/inputs/iwlwifi-sc-a0-fm-c0-c102.ucode",
+      "size": 2311660,
+      "sha256": "4efdd46b024b6fa5aaae8f9b921fc10d6cde04e035fa6d5a93c2f419ebfbdeec",
+      "disposition": "relocated-explicit-whitelist",
+      "source_path": "common/resource-inputs/intel-be201/inputs/001-iwlwifi-sc-a0-fm-c0-c102.ucode"
+    },
+    {
+      "path": "common/network/intel/be201/inputs/iwlwifi-sc-a0-fm-c0-c103.ucode",
+      "size": 2326720,
+      "sha256": "cce159597d0b8915e3d1166a8680c00a3c12133c4c2ec577d7f09f60636edd9c",
+      "disposition": "relocated-explicit-whitelist",
+      "source_path": "common/resource-inputs/intel-be201/inputs/002-iwlwifi-sc-a0-fm-c0-c103.ucode"
+    },
+    {
+      "path": "common/network/intel/be201/inputs/iwlwifi-sc-a0-fm-c0-c106.ucode",
+      "size": 2226844,
+      "sha256": "7a4b428edf7dfc5ec1573bc1b8f98804b52e3a469aeec8187cae9aae66b583fd",
+      "disposition": "relocated-explicit-whitelist",
+      "source_path": "common/resource-inputs/intel-be201/inputs/003-iwlwifi-sc-a0-fm-c0-c106.ucode"
+    },
+    {
+      "path": "common/network/intel/be201/inputs/ibt-00a0-0291-iml.sfi",
+      "size": 62892,
+      "sha256": "a9401eeea677c80fb027d316e4530e3a839463967b74ab3e610921ba1b215903",
+      "disposition": "relocated-explicit-whitelist",
+      "source_path": "common/resource-inputs/intel-be201/inputs/004-ibt-00a0-0291-iml.sfi"
+    },
+    {
+      "path": "common/network/intel/be201/inputs/ibt-00a0-0291-pci.ddc",
+      "size": 4,
+      "sha256": "e0fb10fe29f60607d6507ced3f697492d9611f62c4765feaee59c4bd4101d3e7",
+      "disposition": "relocated-explicit-whitelist",
+      "source_path": "common/resource-inputs/intel-be201/inputs/005-ibt-00a0-0291-pci.ddc"
+    },
+    {
+      "path": "common/network/intel/be201/inputs/ibt-00a0-0291-pci.sfi",
+      "size": 997224,
+      "sha256": "6d417061ab9890658e33e1b7015a05a40d0fae0df7a4a6ab652a5bb6936b48cd",
+      "disposition": "relocated-explicit-whitelist",
+      "source_path": "common/resource-inputs/intel-be201/inputs/006-ibt-00a0-0291-pci.sfi"
+    },
+    {
+      "path": "common/network/intel/be201/inputs/ibt-00a0-0291-usb.ddc",
+      "size": 4,
+      "sha256": "e0fb10fe29f60607d6507ced3f697492d9611f62c4765feaee59c4bd4101d3e7",
+      "disposition": "relocated-explicit-whitelist",
+      "source_path": "common/resource-inputs/intel-be201/inputs/007-ibt-00a0-0291-usb.ddc"
+    },
+    {
+      "path": "common/network/intel/be201/inputs/ibt-00a0-0291-usb.sfi",
+      "size": 991052,
+      "sha256": "b0987a2b366dce2812e53ff0f3e04e48368424da90e16a2618d87b4127fec778",
+      "disposition": "relocated-explicit-whitelist",
+      "source_path": "common/resource-inputs/intel-be201/inputs/008-ibt-00a0-0291-usb.sfi"
+    },
+    {
+      "path": "common/network/intel/be201/build-recipe.json",
+      "size": 17916,
+      "sha256": "d23fafbae52da609cb1ba84fc4032640b8e127ebf9ad6c6f94cc043530ba1c6a",
+      "disposition": "relocated-explicit-whitelist",
+      "source_path": "common/resource-inputs/intel-be201/source.json"
+    },
+    {
+      "path": "common/network/intel/be201/licenses/LICENCE.ibt_firmware",
+      "size": 2040,
+      "sha256": "5181b0b51efc79d5acb2c9bb92042878fdbad97a92114d4ab5e32e2b5b52fce4",
+      "disposition": "relocated-explicit-whitelist",
+      "source_path": "common/resource-inputs/intel-be201/sources/000-LICENCE.ibt_firmware"
+    },
+    {
+      "path": "common/network/intel/be201/licenses/LICENCE.iwlwifi_firmware",
+      "size": 2046,
+      "sha256": "16d5040c7cf851fc693b7542e20870935b99802533ea1bfd231c377a2305e5c5",
+      "disposition": "relocated-explicit-whitelist",
+      "source_path": "common/resource-inputs/intel-be201/sources/001-LICENCE.iwlwifi_firmware"
+    },
+    {
+      "path": "common/network/intel/be201/provenance/firmware-source.json",
+      "size": 4512,
+      "sha256": "e820cc0d41fdb7ddbd73a8c8432ecc5f70b44e4a0148b26bc5a1e486f68b47d8",
+      "disposition": "relocated-explicit-whitelist",
+      "source_path": "common/resource-inputs/intel-be201/sources/002-provenance.json"
+    },
+    {
+      "path": "common/resource-inputs/intel-xevma-724/REBUILD.md",
+      "size": 3773,
+      "sha256": "d4902fe75d1665f5c9e90c36ee611ebd45cc23e726bb3127e4a5a156e5120de5",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/resource-inputs/intel-xevma-724/xevma-build.log",
+      "size": 726,
+      "sha256": "22c2efe22083460e472330831ec703eecb44c2b63d83fedf2dae24da0ac342d0",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/resource-inputs/intel-xevma-724/xevma-rebuild-inputs.json",
+      "size": 25585,
+      "sha256": "4a96af51b82259a07bc8a26d64984868aff018fdab174afc7b75a4addd100974",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/resource-inputs/intel-xevma-724/xevma-rebuild-proof.json",
+      "size": 5346,
+      "sha256": "4206fd49587e5706959eb8cca4ba847825b0041b4fd02f7079d9468062327045",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/resource-inputs/intel-xevma-724/xevmafix.ko",
+      "size": 397512,
+      "sha256": "10a473fca8031ab43206f7a9146413cf781355ddedd3ff5a66cf59bb5369461b",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "common/xevma/kmod_transform.py",
+      "size": 1048,
+      "sha256": "9b6372dfbc28d138c3def5286fc587135f9acf605ae9eaeaa63543d9742063d7",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "current-source-lock.json",
+      "size": 11891,
+      "sha256": "d987dc428d39eaf250e1f94b267d7b213533bbfaa301e05cb54a85ff0869b827",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "fingerprint-source-lock.json",
+      "size": 2604,
+      "sha256": "9f42a57dc5bd823e02d85b390a82780be8b937ad853215988ca39ea0b2e42232",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/oxp3-shared-base/opti031-inputs.json",
+      "size": 6364,
+      "sha256": "f8cf3f4007e1ff6f436b0b914bf10762fe3737c0ec013d2bacc36bcd222abfa6",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery-payload-report.json",
+      "size": 3023,
+      "sha256": "f411f6653fcf9b7e05a44d0c280365618978740cb918f749306d8c6f30ffda6f",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery/oxp3/000.bin",
+      "size": 2616,
+      "sha256": "1ea349b1a679a9859a918459dd55d39716934746c5c52783e314daa4505decb3",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery/oxp3/001.bin",
+      "size": 4432,
+      "sha256": "33dbd7a324656c28abcfad841c3ba324ed03aeee18321a02f4c7d275f829ff57",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery/oxp3/002.bin",
+      "size": 8463,
+      "sha256": "b4a0df256f978d7bd3c9fb1388a8da5df83767b068b9ca2ea96582bd40629e99",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery/oxp3/003.bin",
+      "size": 171,
+      "sha256": "a2f0853556e9387e7f1862a8d0a16fd2e8b8400eed67e595f63c3d68df1729b2",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery/oxp3/004.bin",
+      "size": 618,
+      "sha256": "d5771cac38919a517f3ff228de56add0700fdac9e3e7f4d92c461f8ee2fe4767",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery/oxp3/005.bin",
+      "size": 418,
+      "sha256": "df9acac75b4b2906c6c0d953460de16f6e7de30789ec74fdea00f2faffabef43",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery/oxp3/006.bin",
+      "size": 128,
+      "sha256": "98367b4ecf45d8a48c1349b9931cd192d55b462aed49b71f14d21f92d5ef1f48",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery/oxp3/007.bin",
+      "size": 947,
+      "sha256": "17012e3b6d0d6861ea4e66426686545c5ea18227ddb7617bc116dc99f7679bfb",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery/oxp3/008.bin",
+      "size": 11336,
+      "sha256": "2e73f21f74bccdd06bbfebd2693d1dc744e980843290674bcb87338accc353fb",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery/oxp3/009.bin",
+      "size": 96,
+      "sha256": "ad11a19b1957aa12eb6bcc63c2c65a85516011ec5517ae725275777d6a41b668",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery/oxp3/010.bin",
+      "size": 62,
+      "sha256": "b72b30577e44e59ec2850f7bfe79743ea6e4d10f0fb86e47b9d2f4f64a98772f",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery/x2-mini/000.bin",
+      "size": 837,
+      "sha256": "c53c91e39cf96f869bc5aec56338313087626edf2bc4466d1f31520e153f8d0e",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery/x2-mini/001.bin",
+      "size": 8463,
+      "sha256": "b4a0df256f978d7bd3c9fb1388a8da5df83767b068b9ca2ea96582bd40629e99",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery/x2-mini/002.bin",
+      "size": 171,
+      "sha256": "a2f0853556e9387e7f1862a8d0a16fd2e8b8400eed67e595f63c3d68df1729b2",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery/x2-mini/003.bin",
+      "size": 947,
+      "sha256": "17012e3b6d0d6861ea4e66426686545c5ea18227ddb7617bc116dc99f7679bfb",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery/x2-mini/004.bin",
+      "size": 11336,
+      "sha256": "2e73f21f74bccdd06bbfebd2693d1dc744e980843290674bcb87338accc353fb",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery/x2-mini/005.bin",
+      "size": 96,
+      "sha256": "ad11a19b1957aa12eb6bcc63c2c65a85516011ec5517ae725275777d6a41b668",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/battery/x2-mini/006.bin",
+      "size": 62,
+      "sha256": "b72b30577e44e59ec2850f7bfe79743ea6e4d10f0fb86e47b9d2f4f64a98772f",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/inputs.json",
+      "size": 9654,
+      "sha256": "089a7c31bd1e96a4b7396f40adbd142ce14af7abd5c1858ef9aba86a955ea7a0",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/microphone/oxp3/000.bin",
+      "size": 9440,
+      "sha256": "25074a70432dcd3be14f48b5e3133f063611ad0fd46805fbfa829c054b03c269",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/microphone/oxp3/001.bin",
+      "size": 364,
+      "sha256": "902ebd2f3a4caecdf9fc91be16360f1dd95df9dc9428b2aa6cf81be596e9317a",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/microphone/oxp3/002.bin",
+      "size": 36,
+      "sha256": "40b0db31f7f8f7f2fc96fa147a8ff10ed3316dff7316a1b83b7d59d8a34f7888",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/microphone/x2-mini/000.bin",
+      "size": 9440,
+      "sha256": "25074a70432dcd3be14f48b5e3133f063611ad0fd46805fbfa829c054b03c269",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/microphone/x2-mini/001.bin",
+      "size": 364,
+      "sha256": "902ebd2f3a4caecdf9fc91be16360f1dd95df9dc9428b2aa6cf81be596e9317a",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/shared-20261030/microphone/x2-mini/002.bin",
+      "size": 36,
+      "sha256": "40b0db31f7f8f7f2fc96fa147a8ff10ed3316dff7316a1b83b7d59d8a34f7888",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "records/x2-keyboard/runtime-source-lock.json",
+      "size": 4698,
+      "sha256": "0df9fbd4289a890db80e84e3a8d5036bb79129f851de4d83aed5360ddbb7fe7b",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "resource-build-inputs.json",
+      "size": 11504,
+      "sha256": "727e3b51d67e6967fa00a732f7f39d35a2fa9be372c681f9b2ccaac7ade4ef5c",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "resource-public-source-proof.json",
+      "size": 8927,
+      "sha256": "ed3ec2e75d2371dbcb4b19e6bb3e7d53abede0ac1e251c9f8fb5479e1a0bef2f",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "retained-build-inputs.json",
+      "size": 1096,
+      "sha256": "95f0e63c6ff3f7793e0179903807f2d11e1b319127e708e33e720c85a49235c4",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "scripts/build-complete-bridge.py",
+      "size": 5659,
+      "sha256": "22abb0b48e4378e1d0e9b9b51cd89517d24a69612a419196a7aa456fbc768794",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "scripts/build-current-opti.py",
+      "size": 36660,
+      "sha256": "50737e663a2dea8c21be720ae85f781970823da923aa5e0c9ee0b336805a79a6",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "scripts/build-fingerprint-overlay.py",
+      "size": 14311,
+      "sha256": "9493353672fee16f25c31de510f347c9b3216e23ba958a0a0cc73ff2c5b6714d",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "scripts/build-keyboard-runtime.py",
+      "size": 3643,
+      "sha256": "7d901b7750801c17ab6e4efb64fba9fd3fb95d5f474721636cea924c97a42e59",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "scripts/build-shared-base.py",
+      "size": 9640,
+      "sha256": "e4ef0c3baa39d0f4d9174e44551d196c226afa411dbbe9f41b89038155babe5f",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "scripts/build-upstream-repairs.py",
+      "size": 18594,
+      "sha256": "439c1a87d42774dcb5593f2aaed37bce6fa7f9bce112db56ea4c45dbb155a90e",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "scripts/build-x2-complete.py",
+      "size": 18351,
+      "sha256": "246ca33f9f0b43ecd5d1c6ada168e2fb381223e1bec8f4b41aa1242fa65a9df5",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "scripts/build-x2-hdr-overlay.py",
+      "size": 15538,
+      "sha256": "0fbeb08adfcbc40b7ccab5a0d3f806eea79354cfcc53f2c1c7dac57aeced3167",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "scripts/fingerprint_provenance.py",
+      "size": 2313,
+      "sha256": "607f96c809650fd4f4669e7f897ed02224a88b3b10cd0be565f4b169b1e3ef3f",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "scripts/prepare-current-inputs.py",
+      "size": 7013,
+      "sha256": "2bc8ec793af42306b230e316c17e3e5ee55db045961fe0bd8fcb803d66a60d01",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "scripts/prepare-fingerprint.py",
+      "size": 4941,
+      "sha256": "f62601456660c1a419f6afc008453f493764f3707f976395273bd0a2884c21aa",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "scripts/validate-fingerprint-native.py",
+      "size": 6086,
+      "sha256": "e62630c3b9008529224a4c235667bc99aa975d9e77b68f422564c855bb2267a5",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "toon-parser-lock.json",
+      "size": 2365,
+      "sha256": "f8314cd5f40ccbe494e0d2887ad504e43af9eab39ded46894a5389c273c1dbc8",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "upstream-source-lock.json",
+      "size": 4360,
+      "sha256": "099e3f4510db935acbc8fef45bb36296541a78d934050dd66051164b1569fcdc",
+      "disposition": "added-explicit-whitelist"
+    },
+    {
+      "path": "xevma-kmod-source-lock.json",
+      "size": 388,
+      "sha256": "74a3c7833d2b8127506b07fa0fbc56564913cb38595b241dbe9741a474267d17",
+      "disposition": "added-explicit-whitelist"
+    }
+  ]
+}

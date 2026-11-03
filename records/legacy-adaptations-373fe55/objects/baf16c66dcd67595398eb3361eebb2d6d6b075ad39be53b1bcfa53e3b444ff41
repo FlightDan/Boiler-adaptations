@@ -1,0 +1,36 @@
+--- a/oxpec.c
++++ b/oxpec.c
+@@ -51,6 +51,11 @@
+ 	oxp_g1_i,
+ 	oxp_g1_a,
+ };
++
++/* An explicitly reviewed fixed profile; empty retains upstream DMI detection. */
++static char *board_profile = "";
++module_param(board_profile, charp, 0444);
++MODULE_PARM_DESC(board_profile, "Reviewed EC profile: oxp3-g1i-v1 (empty: DMI)");
+ 
+ static enum oxp_board board;
+ static struct device *oxp_dev;
+@@ -986,11 +991,16 @@
+ {
+ 	const struct dmi_system_id *dmi_entry;
+ 
+-	dmi_entry = dmi_first_match(dmi_table);
+-	if (!dmi_entry)
+-		return -ENODEV;
+-
+-	board = (enum oxp_board)(unsigned long)dmi_entry->driver_data;
++	if (board_profile[0]) {
++		if (strcmp(board_profile, "oxp3-g1i-v1"))
++			return -EINVAL;
++		board = oxp_g1_i;
++	} else {
++		dmi_entry = dmi_first_match(dmi_table);
++		if (!dmi_entry)
++			return -ENODEV;
++		board = (enum oxp_board)(unsigned long)dmi_entry->driver_data;
++	}
+ 
+ 	/*
+ 	 * Have to check for AMD processor here because DMI strings are the same

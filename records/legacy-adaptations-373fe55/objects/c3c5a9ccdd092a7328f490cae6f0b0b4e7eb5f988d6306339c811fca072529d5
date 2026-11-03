@@ -1,0 +1,18 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:onexplayer-light"
+files[14]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  baseline/brands/onexplayer/oxp3/scripts/light/LICENSE,1569,64652b7b9cf04a6db179fe2d28f044d83eca118fbcdc6d8ce57680f9c78ef583
+  baseline/brands/onexplayer/oxp3/scripts/light/LICENSE-HHD,26518,6d9bb3b7fc818a8facc4cc296060a0883fef8710d6498f86165335846e82ee9d
+  baseline/brands/onexplayer/oxp3/scripts/light/LICENSE-HueSync,1569,64652b7b9cf04a6db179fe2d28f044d83eca118fbcdc6d8ce57680f9c78ef583
+  baseline/brands/onexplayer/oxp3/scripts/light/THIRD_PARTY_NOTICES.md,4967,1f2562cfab971bbb7a3ee6efafbb8e02b4da79e1cdc1bf4709bd8d9e32816cfd
+  baseline/brands/onexplayer/oxp3/scripts/light/dist/index.js,7523,de696025fc07b7d1b0b0e975122d86574ac23d40f758a8720e0bb4aee4894b45
+  baseline/brands/onexplayer/oxp3/scripts/light/light_control.py,12676,03f47da99bad10a1760f94a99e84a92cee2a5e2effade0089e4564097152ee09
+  baseline/brands/onexplayer/oxp3/scripts/light/main.py,803,5198ab5cb8a7a64b61e96540f6e105f9f9ef4e43408a6fc47453af1ab93c719a
+  baseline/brands/onexplayer/oxp3/scripts/light/package.toon,244,907858d793192e5fe6736aeaa90a5821ddd4745cdeb273879588b69858192d26
+  baseline/brands/onexplayer/oxp3/scripts/light/plugin.toon,239,61a381534bcc73d89702914eda749e5e08a8695d57b82948726c7ae8141e07c1
+  baseline/common/scripts/licenses/upstream-fixes-MIT.txt,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  devices/EC/onexplayer/light/resource.toon,2097,ee24001d2fe7790b6b0e6f768bb8b72b677cf52de66a9e6a1d3da2bade65c58a
+  locks/public-baseline.toon,32751,15dae171a0bbdf7423a117fb008e71e0f7737d2a3647ede1b1887bf051c549cf

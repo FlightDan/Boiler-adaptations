@@ -22,10 +22,12 @@ class CommonDeviceSourceTests(unittest.TestCase):
     def test_toon_codec_is_locked(self):
         catalog.validate_codec()
 
-    def test_unlocked_external_firmware_is_not_a_checked_in_payload(self):
+    def test_external_firmware_materialized_bytes_match_the_historical_lock(self):
         be201 = catalog.load(catalog.RESOURCES['resource:intel-be201-firmware'])
         self.assertTrue(all(row['availability'] == 'external-locked' for row in be201['files']))
-        self.assertFalse(any((ROOT/'common/network/intel/be201'/row['path']).exists() for row in be201['files']))
+        for row in be201['files']:
+            raw=(ROOT/'common/network/intel/be201'/row['path']).read_bytes()
+            self.assertEqual((len(raw),hashlib.sha256(raw).hexdigest()),(row['size'],row['sha256']))
 
     def test_bmi_source_closure_includes_the_header_and_service(self):
         bmi = catalog.load(catalog.RESOURCES['resource:bmi260-gyro'])

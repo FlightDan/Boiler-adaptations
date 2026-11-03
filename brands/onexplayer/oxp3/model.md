@@ -9,6 +9,7 @@
 <!-- BEGIN GENERATED INSTALL LIST -->
 | 组件 ID | 适配项目 | 建议 | 验证与适用边界 |
 | --- | --- | --- | --- |
+| fingerprint-unlock | 指纹解锁（实验功能） | 可选 | Default enabled for the confirmed BF63112 module; preserve user disable and Steam PIN fallback. Source: FlightDan/FingerprintUnlock-SteamOS@fde8fa62bbad0318a9a8be88cc77bb4c3b4f919e; public lock: common/fingerprint/public-bridge-lock.json.；依赖：decky |
 | slot-switch | KDE 槽位切换 / 系统回退 | 可选 | A/B 布局及系统工具满足时可选；真实切换与重启分别验证。 |
 | partition-mount | KDE 图形分区持久挂载 | 可选 | 共享 home/NTFS 布局核对后可选；本次归档基线不代表工作区后续 NTFS 修复。 |
 | refind | rEFInd · 双系统图形启动菜单 | 可选 | 独立启动管理器入口；脚本不归机型适配所有，核对 EFI 与双系统布局。 |
@@ -20,11 +21,11 @@
 | keyboard | KDE 屏幕键盘配置 | 可选 | 按 KDE 会话与目标软件检查；验证实际输入及恢复。 |
 | input | 背键驱动 · M1/L4、M2/R4、Home/L5 | 推荐 | 核对唯一 1a86:fe00 MCU 接口 02；另需原公开 hid-oxp 模块和 capability map。 |
 | multifunction | 多功能键映射为 R5 | 推荐 | 沿用现有按键模板；逐键验证实体键位；依赖：input |
-| gyro | BMI260 陀螺仪（新装需校准） | 推荐 | 需精确内核、BMI260 芯片识别、bmi270_core/固件及配套 InputPlumber；新装重新校准；依赖：input |
+| gyro | BMI260 陀螺仪（新装需校准） | 推荐 | Source reference only; verify BMI260 identity, kernel and InputPlumber compatibility before installation or calibration.；依赖：input |
 | xe-dsb | OXP3 显示兼容修复 · 暂停 DSB | 条件适用 | 仅 OXP3 对应显示问题；保留现有精确系统/内核限制。 |
-| gm7-resume | GM7 休眠恢复 · 自动匹配目标 SSD | 条件适用 | 只有实际 SSD 命中适用条件时安装；验证休眠与恢复。 |
+| gm7-resume | GM7 休眠恢复 · 自动匹配目标 SSD | 条件适用 | Apply only after matching the target SSD identity; verify installation and recovery. |
 | split-lock | Split-lock 报告洪泛修复 · 需要重启 | 条件适用 | 确认存在报告洪泛且启动文件受支持时使用；重启生效，按原事务恢复。 |
-| wifi | BE201 无线 c106 与蓝牙固件 | 条件适用 | 按实际无线芯片选择 Boiler 通用固件；不固定为所有机器均需 BE201。 |
+| wifi | BE201 无线 c106 与蓝牙固件 | 条件适用 | Source reference only; verify the actual wireless device and firmware compatibility. |
 | manager | SteamOS Manager 状态与错误修复 | 推荐 | 核对实际 Manager 接口和软件版本；不取消已有硬件检查。 |
 | native-tdp | 原生 TDP 10–40W 控制 | 条件适用 | 仅保留已公开常规 RAPL 实现；10–40W 不作为其他机型范围；依赖：manager |
 | overlay | CPU/GPU/APU 功耗与 PVRAM 叠加层 | 可选 | 按实际 CPU/GPU 接口验证读数，缺失指标保持缺失。 |

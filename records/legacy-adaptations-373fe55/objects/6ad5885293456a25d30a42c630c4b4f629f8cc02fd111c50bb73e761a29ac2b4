@@ -1,0 +1,20 @@
+[Unit]
+Description=ONEXPLAYER3 transactional CPU EPP and frequency settings
+After=systemd-udev-trigger.service
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/python3 -I /var/lib/oxp3-cpu/cpu_control.py apply
+ExecStop=/usr/bin/python3 -I /var/lib/oxp3-cpu/cpu_control.py restore
+ExecStopPost=/usr/bin/python3 -I /var/lib/oxp3-cpu/cpu_control.py restore
+TimeoutStartSec=15
+TimeoutStopSec=10
+RuntimeDirectory=oxp3-cpu
+RuntimeDirectoryMode=0700
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ReadWritePaths=/var/lib/oxp3-cpu /sys/devices/system/cpu/cpufreq /run/lock
+[Install]
+WantedBy=multi-user.target

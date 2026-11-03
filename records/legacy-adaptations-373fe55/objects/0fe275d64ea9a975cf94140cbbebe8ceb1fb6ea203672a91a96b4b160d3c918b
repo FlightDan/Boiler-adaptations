@@ -1,0 +1,35 @@
+"""Reverify all SDK signatures offline using captured distribution anchors."""
+import hashlib,json,subprocess
+from pathlib import Path
+m=json.loads(Path('/work/inputs.json').read_bytes())
+home=Path('/work/gnupg');home.mkdir(mode=0o700)
+g=['/usr/bin/gpg','--no-options','--batch','--no-autostart','--homedir',str(home)]
+def run(args):return subprocess.run(g+args,capture_output=True,text=True,timeout=60)
+for name in ('archlinux.gpg','holo.gpg'):
+ p=run(['--import','/work/keyrings/'+name])
+ if p.returncode:raise RuntimeError(p.stderr)
+for name in ('archlinux-trusted','holo-trusted'):
+ for line in Path('/work/keyrings/'+name).read_text().splitlines():
+  if not line.strip() or line.startswith('#'):continue
+  fingerprint=line.split(':')[0].strip()
+  if len(fingerprint)!=40 or any(c not in '0123456789ABCDEF' for c in fingerprint):raise RuntimeError('Anchor shape')
+  g.extend(['--trusted-key',fingerprint])
+ p=run(['--import-ownertrust','/work/keyrings/'+name])
+ if p.returncode:raise RuntimeError(p.stderr)
+revoked=set()
+for name in ('archlinux-revoked','holo-revoked'):
+ revoked.update(x.split(':')[0].strip() for x in Path('/work/keyrings/'+name).read_text().splitlines() if x.strip())
+proof=[]
+for row in m['packages']:
+ package=Path('/work/packages')/row['filename'];sig=Path(str(package)+'.sig')
+ with package.open('rb') as f:assert hashlib.file_digest(f,'sha256').hexdigest()==row['sha256']
+ assert hashlib.sha256(sig.read_bytes()).hexdigest()==row['signature_sha256']
+ p=run(['--status-fd','1','--verify',str(sig),str(package)])
+ status=[x.split() for x in p.stdout.splitlines() if x.startswith('[GNUPG:] ')]
+ valid=[x for x in status if x[1]=='VALIDSIG']
+ trusted=any(x[1] in ('TRUST_FULLY','TRUST_ULTIMATE') for x in status)
+ bad=any(x[1] in ('BADSIG','ERRSIG','NO_PUBKEY','REVKEYSIG','EXPKEYSIG','EXPSIG','KEYREVOKED') for x in status)
+ if p.returncode or len(valid)!=1 or not trusted or bad or valid[0][-1] in revoked:raise RuntimeError('PGP refused '+row['name']+' '+p.stderr)
+ proof.append(dict(name=row['name'],version=row['version'],sha256=row['sha256'],signer=valid[0][2],primary=valid[0][-1]))
+Path('/evidence/sdk-signatures.json').write_text(json.dumps(dict(packages=proof,passed=len(proof),recipe=m['sdk_recipe']),indent=2)+'\n')
+print('SDK_PGP_VERIFIED='+str(len(proof)),flush=True)

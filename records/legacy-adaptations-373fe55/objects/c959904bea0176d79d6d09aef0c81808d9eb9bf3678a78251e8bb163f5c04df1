@@ -1,0 +1,36 @@
+"""Render TOON source templates to a fresh external build input directory."""
+import argparse
+import json
+from pathlib import Path
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parent))
+from check import ROOT, check, parser, member, sha, resolved, filesystem
+
+def build(output):
+    check();toon=parser();output=filesystem(Path(output))
+    if output.exists() or resolved(output).is_relative_to(resolved(ROOT)):
+        raise ValueError('Choose a fresh output directory outside this source repository')
+    doc=toon.loads(member('locks/public-baseline.toon').read_text(encoding='utf-8'),strict=True)
+    rendered=[]
+    for row in doc['files']:
+        # Original paths were read from the verified inventory, but still constrain them.
+        name=row['original_path'];member(name)
+        raw=member(row['path']).read_bytes()
+        if row['conversion']=='json-to-toon-semantic-v1':
+            value=toon.loads(raw.decode(),strict=True)
+            raw=(json.dumps(value,ensure_ascii=False,indent=2,allow_nan=False)+'\n').encode()
+            if json.loads(raw)!=value:raise ValueError('Runtime template changed semantics')
+        rendered.append((name,raw,row['conversion']))
+    output.mkdir(parents=True)
+    for name,raw,_ in rendered:
+        path=output/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(raw)
+    proof=dict(schema_version=1,kind='BoilerPublicBaselineMaterialization',
+        source_commit=doc['source']['commit'],original_installer_executed=False,
+        json_templates='semantic-equivalence-not-original-byte-identity',
+        files=[dict(path=name,size=len(raw),sha256=sha(raw),conversion=conversion) for name,raw,conversion in rendered])
+    (output/'materialization.toon').write_text(toon.dumps(proof)+'\n',encoding='utf-8')
+    print('Rendered public build inputs:',len(rendered))
+
+if __name__=='__main__':
+    args=argparse.ArgumentParser();args.add_argument('--output',required=True)
+    build(args.parse_args().output)

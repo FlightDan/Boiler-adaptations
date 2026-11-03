@@ -1,0 +1,10 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:common-serial-console-policy"
+files[6]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  baseline/common/scripts/licenses/upstream-fixes-MIT.txt,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  common/system/serial-console-policy/resource.toon,806,62ce620b0435bca7b4656472b255a395a8322e29b13d51bb7f15fbfbf310cc50
+  common/system/serial-console-policy/templates/90-oxp3-console.conf,269,6ba2a99b25c22d8cad2e41a6fb5fedc679cd7ef8b3a08fef9871d0e125ed9432
+  locks/public-baseline.toon,32751,15dae171a0bbdf7423a117fb008e71e0f7737d2a3647ede1b1887bf051c549cf

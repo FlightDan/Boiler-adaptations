@@ -1,0 +1,10 @@
+kind: SelectedPublicComponentSources
+input:
+  path: inputs/public-installer/oxp3-steamos-installer-1.0.6-20261022-220437.zip
+  url: "https://github.com/FlightDan/OneXPlayer3-SteamOS/releases/download/v1.0.6%2Binstaller.20261022.220437/oxp3-steamos-installer-1.0.6-20261022-220437.zip"
+  name: oxp3-steamos-installer-1.0.6-20261022-220437.zip
+  size: 555684389
+  sha256: d8bee8bad14f4cd136c814ebcaa3299fa59202b6cdc6d26ec9c52af0e055f4d4
+component: xe-dsb
+files[1]{path,size,sha256,upstream_member}:
+  inputs/000-xe-oxp3.conf,112,1a1e2c951fec8a8a3c10977c78205e30d7052582c36c3e0700ffd03bd748b690,cache/integration/xe-dsb/000.bin

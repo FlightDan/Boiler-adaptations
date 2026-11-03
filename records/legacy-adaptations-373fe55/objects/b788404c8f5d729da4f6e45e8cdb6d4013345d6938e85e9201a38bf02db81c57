@@ -1,0 +1,251 @@
+Subject: [PATCH] TDP: query live properties and relay invalidations without GetAll caches
+
+Apply this delta after the original acknowledgement/error-propagation revision.
+The combined tdp-error-propagation.patch instead applies directly to v26.4.1;
+do not apply both files to the same tree.
+
+zbus 5.16.0 retains a failed initial GetAll as CachingResult::Cached{Err(e)}
+forever and stops its cache update task. Set bypasses that cache, allowing a
+successful write followed by a permanent old read error. Disable caching only
+for the TDP backend proxy so each getter performs a live Properties.Get.
+
+The generated value-based TDP notification relay has its own cached proxy.
+Disabling caching on a PropertyStream would suppress all events, so use a
+separate uncached PropertiesProxy receiving raw PropertiesChanged signals.
+Forward only TdpLimit invalidations, without fetching a possibly failing value.
+Annotate the session property as invalidates, which also disables the generic
+cached value relay for this one property. Replace/abort the TDP signal task on
+remote replacement/removal and abort it when the TDP service drops. Keep setter
+notification asynchronous to preserve interface-lock/channel ordering.
+
+Tests cover initial backend read/range failure, accepted Set15, recovery without
+recreating the service/backend, and a healthy cached client receiving an
+invalidation while the hardware getter fails then recovering to20. Hardware,
+range and channel errors remain errors; no requested value is returned as state.
+An external zbus client first initialized during an error can still poison its
+own cache; this patch does not modify unrelated clients or the zbus library.
+
+--- a/steamos-manager/src/power.rs
++++ b/steamos-manager/src/power.rs
+@@ -23,7 +23,8 @@
+ use tokio::net::unix::pipe;
+ use tokio::sync::mpsc::{UnboundedReceiver, UnboundedSender};
+ use tokio::sync::oneshot;
+-use tokio::task::JoinSet;
++use tokio::task::{JoinHandle, JoinSet};
++use tokio_stream::StreamExt;
+ use tracing::{debug, error, warn};
+ use zbus::names::OwnedBusName;
+ use zbus::zvariant::OwnedObjectPath;
+@@ -199,7 +200,9 @@
+ 
+ pub(crate) struct TdpManagerService {
+     proxy: RootManagerProxy<'static>,
++    system: Connection,
+     session: Connection,
++    signal_task: Option<JoinHandle<()>>,
+     channel: UnboundedReceiver<TdpManagerCommand>,
+     download_set: JoinSet<String>,
+     download_handles: HashMap<String, u32>,
+@@ -651,6 +654,7 @@
+                 TdpLimit1Proxy::builder(&self.connection)
+                     .path(path)?
+                     .destination(destination)?
++                    .cache_properties(zbus::proxy::CacheProperties::No)
+                     .build()
+                     .await?,
+             )
+@@ -820,7 +824,9 @@
+ 
+         Ok(TdpManagerService {
+             proxy,
++            system: system.clone(),
+             session: session.clone(),
++            signal_task: None,
+             channel,
+             download_set: JoinSet::new(),
+             download_handles: HashMap::new(),
+@@ -951,9 +957,61 @@
+         tokio::spawn(async move {
+             if let Ok(interface) = object_server.interface::<_, TdpLimit1>(MANAGER_PATH).await {
+                 let ctx = interface.signal_emitter();
+-                let _ = interface.get().await.tdp_limit_changed(ctx).await;
++                let _ = interface.get().await.tdp_limit_invalidate(ctx).await;
+             }
+         });
++        Ok(())
++    }
++
++    async fn set_proxy(&mut self, proxy: Option<(OwnedBusName, OwnedObjectPath)>) -> Result<()> {
++        let signal_task = if let Some((destination, path)) = &proxy {
++            // Raw signals do not populate a GetAll cache, which can permanently
++            // retain an initial hardware error and stop property change streams.
++            let properties = fdo::PropertiesProxy::builder(&self.system)
++                .destination(destination.clone())?
++                .path(path.clone())?
++                .cache_properties(zbus::proxy::CacheProperties::No)
++                .build()
++                .await?;
++            let mut signals = properties.receive_properties_changed().await?;
++            let session = self.session.clone();
++            Some(tokio::spawn(async move {
++                while let Some(signal) = signals.next().await {
++                    let args = match signal.args() {
++                        Ok(args) => args,
++                        Err(error) => {
++                            warn!("Invalid remote TDP PropertiesChanged signal: {error}");
++                            continue;
++                        }
++                    };
++                    if args.interface_name != "com.steampowered.SteamOSManager1.TdpLimit1"
++                        || (!args.changed_properties.contains_key("TdpLimit")
++                            && !args.invalidated_properties.contains(&"TdpLimit"))
++                    {
++                        continue;
++                    }
++                    let object_server = session.object_server();
++                    if let Ok(interface) = object_server.interface::<_, TdpLimit1>(MANAGER_PATH).await {
++                        let ctx = interface.signal_emitter();
++                        if let Err(error) = interface.get().await.tdp_limit_invalidate(ctx).await {
++                            error!("Failed to invalidate remote TDP limit: {error}");
++                        }
++                    }
++                }
++            }))
++        } else {
++            None
++        };
++        if let Err(error) = self.manager.set_proxy(proxy).await {
++            if let Some(task) = signal_task {
++                task.abort();
++            }
++            return Err(error);
++        }
++        if let Some(task) = self.signal_task.take() {
++            task.abort();
++        }
++        self.signal_task = signal_task;
+         Ok(())
+     }
+ 
+@@ -987,10 +1045,18 @@
+                 let _ = reply.send(self.download_handles.clone());
+             }
+             TdpManagerCommand::SetProxy(proxy, reply) => {
+-                let _ = reply.send(self.manager.set_proxy(proxy).await);
++                let _ = reply.send(self.set_proxy(proxy).await);
+             }
+         }
+         Ok(())
++    }
++}
++
++impl Drop for TdpManagerService {
++    fn drop(&mut self) {
++        if let Some(task) = self.signal_task.take() {
++            task.abort();
++        }
+     }
+ }
+ 
+--- a/steamos-manager/src/manager/user.rs
++++ b/steamos-manager/src/manager/user.rs
+@@ -1331,7 +1331,7 @@
+     context = Option<UnboundedSender<TdpManagerCommand>>,
+ )]
+ impl TdpLimit1 {
+-    #[zbus(property)]
++    #[zbus(property(emits_changed_signal = "invalidates"))]
+     async fn tdp_limit(&self) -> fdo::Result<u32> {
+         let (tx, rx) = oneshot::channel();
+         self.manager
+@@ -3523,7 +3523,7 @@
+ 
+     #[interface(name = "com.steampowered.SteamOSManager1.TdpLimit1")]
+     impl MockTdpLimit1 {
+-        #[zbus(property)]
++        #[zbus(property(emits_changed_signal = "invalidates"))]
+         async fn tdp_limit(&self) -> fdo::Result<u32> {
+             if self.fail_reads {
+                 return Err(fdo::Error::Failed(String::from("injected TDP read failure")));
+@@ -3693,6 +3693,80 @@
+         let error = proxy.tdp_limit_max().await.unwrap_err();
+         assert!(error.to_string().contains("injected TDP range failure"));
+         service.abort();
++    }
++
++    #[tokio::test]
++    async fn remote_tdp_limit1_recovers_after_initial_read_error() {
++        let mut test = start(TestConfig::none()).await.unwrap();
++        let service = setup_tdp_manager(&mut test).await.unwrap();
++        let new_conn = test.handle.new_connection().await.unwrap();
++        test_remote_interface_added::<TdpLimit1, _>(&test, &new_conn)
++            .await
++            .unwrap();
++        let proxy = TdpLimit1Proxy::builder(&new_conn)
++            .destination(test.connection.unique_name().unwrap())
++            .unwrap()
++            .cache_properties(CacheProperties::No)
++            .build()
++            .await
++            .unwrap();
++        let object_server = new_conn.object_server();
++        object_server
++            .at(
++                "/foo",
++                MockTdpLimit1 {
++                    limit: 10,
++                    min: 3,
++                    max: 35,
++                    fail_reads: true,
++                },
++            )
++            .await
++            .unwrap();
++        let remote = object_server
++            .interface::<_, MockTdpLimit1>("/foo")
++            .await
++            .unwrap();
++
++        assert!(proxy.tdp_limit().await.unwrap_err().to_string().contains("injected TDP read failure"));
++        assert!(proxy.tdp_limit_min().await.unwrap_err().to_string().contains("injected TDP range failure"));
++        proxy.set_tdp_limit(15).await.unwrap();
++        assert_eq!(remote.get().await.limit, 15);
++        remote.get_mut().await.fail_reads = false;
++        // The same Manager/backend proxy must recover without reconstruction.
++        assert_eq!(proxy.tdp_limit().await.unwrap(), 15);
++        assert_eq!(proxy.tdp_limit_min().await.unwrap(), 3);
++        assert_eq!(proxy.tdp_limit_max().await.unwrap(), 35);
++
++        // An ordinary cached client that starts healthy must receive invalidation
++        // even while the provider getter fails, then recover on a later signal.
++        let cached = TdpLimit1Proxy::builder(&new_conn)
++            .destination(test.connection.unique_name().unwrap())
++            .unwrap()
++            .build()
++            .await
++            .unwrap();
++        assert_eq!(cached.tdp_limit().await.unwrap(), 15);
++        let mut changes = cached.receive_tdp_limit_changed().await;
++        let wait = std::time::Duration::from_secs(5);
++        tokio::time::timeout(wait, changes.next()).await.unwrap().unwrap();
++
++        remote.get_mut().await.fail_reads = true;
++        remote.get().await.tdp_limit_invalidate(remote.signal_emitter()).await.unwrap();
++        tokio::time::timeout(wait, changes.next()).await.unwrap().unwrap();
++        assert!(cached.tdp_limit().await.unwrap_err().to_string().contains("injected TDP read failure"));
++
++        {
++            let mut remote = remote.get_mut().await;
++            remote.fail_reads = false;
++            remote.limit = 20;
++        }
++        remote.get().await.tdp_limit_invalidate(remote.signal_emitter()).await.unwrap();
++        tokio::time::timeout(wait, changes.next()).await.unwrap().unwrap();
++        assert_eq!(cached.tdp_limit().await.unwrap(), 20);
++        assert_eq!(proxy.tdp_limit().await.unwrap(), 20);
++        service.abort();
++        let _ = service.await;
+     }
+ 
+     #[tokio::test]

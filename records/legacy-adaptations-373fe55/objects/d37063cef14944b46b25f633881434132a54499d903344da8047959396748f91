@@ -1,0 +1,9 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:common-flathub-mirror"
+files[5]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  common/flatpak/flathub/resource.toon,612,5251963a538d80ee158c1a52e5c94904e3a485f13585a9b0d65fbff33ecb8e3a
+  locks/public-baseline.toon,32751,15dae171a0bbdf7423a117fb008e71e0f7737d2a3647ede1b1887bf051c549cf
+  baseline/brands/onexplayer/oxp3/scripts/flathub.flatpakrepo,4040,3371dd250e61d9e1633630073fefda153cd4426f72f4afa0c3373ae2e8fea03a

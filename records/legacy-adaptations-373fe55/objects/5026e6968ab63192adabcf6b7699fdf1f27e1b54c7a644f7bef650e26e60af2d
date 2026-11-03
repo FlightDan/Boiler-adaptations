@@ -1,0 +1,99 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Read-only startup capability check. stdin is the already observed full EDID.
+#include "utils/edid.h"
+#include "oxp3_gamma22_policy.h"
+#include <QByteArray>
+#include <QCryptographicHash>
+#include <QDir>
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QRegularExpression>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/utsname.h>
+#include <xf86drm.h>
+#include <xf86drmMode.h>
+#include <cstdio>
+#include <cstring>
+#include <span>
+
+static QByteArray readFile(const QString &path, qint64 limit)
+{
+    QFile file(path);
+    return file.open(QIODevice::ReadOnly) ? file.read(limit) : QByteArray();
+}
+static bool atLeast(const QByteArray &version, int major, int minor, int patch)
+{
+    const auto match=QRegularExpression(QStringLiteral("^(\\d+)\\.(\\d+)(?:\\.(\\d+))?")).match(QString::fromLatin1(version));
+    if (!match.hasMatch()) return false;
+    const auto a=match.captured(1).toInt(),b=match.captured(2).toInt(),c=match.captured(3).toInt();
+    return a>major || (a==major && (b>minor || (b==minor && c>=patch)));
+}
+int main(int argc,char **)
+{
+    if (argc!=1) return 2;
+    QFile input;if (!input.open(stdin,QIODevice::ReadOnly)) return 3;
+    QByteArray raw;
+    while (raw.size()<4097) { auto chunk=input.read(4097-raw.size());if (chunk.isEmpty()) break;raw+=chunk; }
+    if (!KWin::boilerCompleteEdid(std::span(reinterpret_cast<const uint8_t *>(raw.constData()),raw.size()))) return 4;
+    const KWin::Edid edid{QByteArrayView(raw)};
+    if (!edid.isValid()) return 5;
+    const QRegularExpression pattern(QStringLiteral("^(card[0-9]+)-(eDP-[0-9]+)$"));
+    QString card,connector;int connected=0;
+    const QDir sysfs(QStringLiteral("/sys/class/drm"));
+    for (const QString &name:sysfs.entryList(QDir::AllEntries|QDir::NoDotAndDotDot)) {
+        const auto match=pattern.match(name);if (!match.hasMatch())continue;
+        const QString base=sysfs.filePath(name);
+        if (readFile(base+QStringLiteral("/status"),128).trimmed()!="connected")continue;
+        ++connected;card=match.captured(1);connector=match.captured(2);
+        if (readFile(base+QStringLiteral("/edid"),4097)!=raw)return 6;
+    }
+    if (connected!=1)return 7;
+    const QByteArray node=QFile::encodeName(QStringLiteral("/dev/dri/")+card);
+    const int fd=::open(node.constData(),O_RDONLY|O_CLOEXEC);if(fd<0)return 8;
+    if (drmSetClientCap(fd,DRM_CLIENT_CAP_ATOMIC,1)!=0) { ::close(fd);return 8; }
+    drmVersionPtr version=drmGetVersion(fd);bool driverPolicy=version!=nullptr;
+    if (version) {
+        const QByteArray driver(version->name,version->name_len);
+        if (driver=="i915") { struct utsname kernel{};driverPolicy=uname(&kernel)==0 && atLeast(kernel.release,6,11,0); }
+        else if (driver=="nvidia-drm") driverPolicy=atLeast(readFile(QStringLiteral("/sys/module/nvidia/version"),128).trimmed(),565,57,1);
+        drmFreeVersion(version);
+    }
+    bool colorspace=false,metadata=false,found=false;
+    drmModeResPtr resources=drmModeGetResources(fd);
+    if (resources) {
+        for (int i=0;i<resources->count_connectors;i++) {
+            drmModeConnectorPtr output=drmModeGetConnector(fd,resources->connectors[i]);if(!output)continue;
+            const QString name=QStringLiteral("eDP-%1").arg(output->connector_type_id);
+            if (output->connector_type==DRM_MODE_CONNECTOR_eDP && output->connection==DRM_MODE_CONNECTED && name==connector) {
+                if (found) { drmModeFreeConnector(output);drmModeFreeResources(resources);::close(fd);return 9; }
+                found=true;
+                drmModeObjectPropertiesPtr props=drmModeObjectGetProperties(fd,output->connector_id,DRM_MODE_OBJECT_CONNECTOR);
+                if (props) {
+                    for (uint32_t p=0;p<props->count_props;p++) {
+                        drmModePropertyPtr prop=drmModeGetProperty(fd,props->props[p]);if(!prop)continue;
+                        if (!std::strcmp(prop->name,"HDR_OUTPUT_METADATA"))metadata=true;
+                        if (!std::strcmp(prop->name,"Colorspace")) {
+                            for (int e=0;e<prop->count_enums;e++)
+                                if (!std::strcmp(prop->enums[e].name,"BT2020_RGB") || !std::strcmp(prop->enums[e].name,"BT2020_YCC"))colorspace=true;
+                        }
+                        drmModeFreeProperty(prop);
+                    }
+                    drmModeFreeObjectProperties(props);
+                }
+            }
+            drmModeFreeConnector(output);
+        }
+        drmModeFreeResources(resources);
+    }
+    ::close(fd);
+    if (!found)return 10;
+    QJsonObject result{{"schema_version",1},{"connector",connector},
+        {"sha256",QString::fromLatin1(QCryptographicHash::hash(raw,QCryptographicHash::Sha256).toHex())},
+        {"valid_edid",true},{"native_colorimetry_present",edid.nativeColorimetry().has_value()},
+        {"pq",edid.supportsPQ()},{"bt2020",edid.supportsBT2020()},
+        {"colorspace",colorspace},{"hdr_metadata",metadata},{"driver_policy",driverPolicy}};
+    const QByteArray out=QJsonDocument(result).toJson(QJsonDocument::Compact)+'\n';
+    return std::fwrite(out.constData(),1,out.size(),stdout)==static_cast<std::size_t>(out.size())?0:11;
+}

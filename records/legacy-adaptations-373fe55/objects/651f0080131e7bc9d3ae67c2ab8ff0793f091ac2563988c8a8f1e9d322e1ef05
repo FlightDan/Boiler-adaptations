@@ -1,0 +1,47 @@
+schema_version: 1
+kind: BoilerModelResourceSource
+id: "device:oxp3"
+name: ONEXPLAYER 3
+hardware_matching:
+  mode: advisory-exact-dmi-v1
+  pairs[1]{manufacturer,model}:
+    ONE-NETBOOK,ONEXPLAYER 3
+parameters:
+resources[30]{id,default,optional}:
+  "resource:onexplayer-microphone",false,true
+  "resource:oxp3-speaker-route",false,true
+  "resource:intel-xevmafix-724",false,true
+  "resource:common-slot-switch",true,true
+  "resource:common-partition-mount",true,true
+  "resource:common-windows-reboot",true,true
+  "resource:onexplayer-light",true,true
+  "resource:common-serial-console-policy",false,true
+  "resource:onexplayer-battery-common",true,true
+  "resource:onexplayer-battery-charge-backend",true,true
+  "resource:common-charge-compatibility-guard",true,true
+  "resource:intel-be201-firmware",true,true
+  "resource:intel-g3e-public-cpu-controls",true,true
+  "resource:gamma22-hdr-game",true,true
+  "resource:gamma22-hdr-desktop",false,true
+  "resource:onexplayer-ec-fan-driver",true,true
+  "resource:onexplayer-fan",true,true
+  "resource:steamos-manager",true,true
+  "resource:onexplayer-legacy-runtime",true,true
+  "resource:gamescope-environment",true,true
+  "resource:intel-xe-dsb",true,true
+  "resource:common-intel-rapl",true,true
+  "resource:common-boot-fixes",true,true
+  "resource:onexplayer-input",true,true
+  "resource:bosch-bmi260-gyro",true,true
+  "resource:common-kde-keyboard",true,true
+  "resource:common-flathub-mirror",false,true
+  "resource:common-telemetry-overlay",false,true
+  "resource:common-opti2xmx",true,true
+  "resource:common-waydroid",false,true
+ec_profile:
+  board_profile: oxp3-g1i-v1
+hdr:
+  profile: oxp3
+  full_frame: 472
+  peak: 1100
+pending: []

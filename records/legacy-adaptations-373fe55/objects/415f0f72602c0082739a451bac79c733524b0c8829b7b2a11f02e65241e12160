@@ -1,0 +1,620 @@
+#!/usr/bin/python3
+"""Fixed KDE HDR trial. No display changes before a detached guard is ready."""
+from __future__ import annotations
+
+import argparse
+from contextlib import contextmanager
+import json
+import locale
+import math
+import os
+from pathlib import Path
+import re
+import selectors
+import signal
+import stat
+import subprocess
+import sys
+import tempfile
+import time
+import uuid
+
+# -I deliberately removes the script directory from sys.path.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from trusted_binding import load_binding
+
+BINDING = None
+PREFIX = Path('/opt/oxp3-desktop-gamma22/6.7.3-1.6')
+TIMEOUT = 10.0
+ACTIVE_PHASES = {'armed', 'enabled', 'visible', 'reverting', 'rollback_failed'}
+
+
+def uid():
+    return os.getuid() if hasattr(os, 'getuid') else None
+
+
+def check_path(path):
+    path = Path(path).absolute()
+    for item in (path, *path.parents):
+        if item.is_symlink() or getattr(item.lstat() if item.exists() else None, 'st_file_attributes', 0) & 0x400:
+            raise RuntimeError('Linked HDR state/configuration path refused')
+    return path
+
+
+def read_json(path, private=True):
+    path = check_path(path)
+    if not path.exists():
+        return None
+    info = path.stat()
+    if (not stat.S_ISREG(info.st_mode) or info.st_nlink != 1 or info.st_size > 1024 * 1024
+            or uid() is not None and (info.st_uid != uid() or info.st_mode & (0o077 if private else 0o022))):
+        raise RuntimeError('Unsafe HDR state/configuration file')
+    fd = os.open(path, os.O_RDONLY | getattr(os, 'O_NOFOLLOW', 0))
+    with os.fdopen(fd, encoding='utf-8') as stream:
+        return json.load(stream)
+
+
+def write_json(path, value, private=True):
+    path = check_path(path)
+    previous = path.stat() if path.exists() else None
+    if previous:
+        read_json(path, private)
+    fd, temporary = tempfile.mkstemp(prefix='.hdr-', dir=path.parent)
+    try:
+        with os.fdopen(fd, 'w', encoding='utf-8') as stream:
+            os.fchmod(stream.fileno(), stat.S_IMODE(previous.st_mode) if previous else 0o600) if hasattr(os, 'fchmod') else None
+            json.dump(value, stream, ensure_ascii=False, indent=2)
+            stream.write('\n')
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+        if os.name == 'posix':
+            directory = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+            try:
+                os.fsync(directory)
+            finally:
+                os.close(directory)
+    finally:
+        if os.path.exists(temporary):
+            os.unlink(temporary)
+
+
+class Journal:
+    def __init__(self, directory):
+        self.directory = check_path(directory)
+        self.path = self.directory / 'trial.json'
+
+    @contextmanager
+    def lock(self):
+        check_path(self.directory)
+        self.directory.mkdir(parents=True, exist_ok=True, mode=0o700)
+        info = self.directory.stat()
+        if uid() is not None and (info.st_uid != uid() or info.st_mode & 0o077):
+            raise RuntimeError('Private HDR state directory required')
+        lock = check_path(self.directory / 'trial.lock')
+        fd = os.open(lock, os.O_CREAT | os.O_RDWR | getattr(os, 'O_NOFOLLOW', 0), 0o600)
+        try:
+            info = os.fstat(fd)
+            if (not stat.S_ISREG(info.st_mode) or info.st_nlink != 1
+                    or uid() is not None and (info.st_uid != uid() or info.st_mode & 0o077)):
+                raise RuntimeError('Unsafe HDR trial lock')
+            if os.name == 'posix':
+                import fcntl
+                fcntl.flock(fd, fcntl.LOCK_EX)
+            else:  # Allows file/state regressions on the Windows build host.
+                import msvcrt
+                if os.fstat(fd).st_size == 0:
+                    os.write(fd, b'0')
+                os.lseek(fd, 0, os.SEEK_SET)
+                msvcrt.locking(fd, msvcrt.LK_LOCK, 1)
+            yield
+        finally:
+            os.close(fd)
+
+    def read(self):
+        value = read_json(self.path)
+        if value is None and not self.path.exists():
+            return None
+        required={'profile','bundle_sha256','generation','connector','edid_sha256','token','phase','original','deadline','boot','owner_pid','watchdog_ready'}
+        optional={'guard_pid','enable_requested','pattern_pid'}
+        if (not isinstance(value, dict) or not required.issubset(value) or set(value)-required-optional
+                or value.get('profile') != BINDING['profile']
+                or value.get('bundle_sha256') != BINDING['bundle_sha256']
+                or value.get('generation') != BINDING['generation']
+                or value.get('connector') != BINDING['connector']
+                or value.get('edid_sha256') != BINDING['edid_sha256']
+                or value.get('phase') not in ACTIVE_PHASES | {'confirmed', 'reverted'}
+                or not re.fullmatch('[0-9a-f]{32}', str(value.get('token', '')))
+                or type(value.get('deadline')) not in (int, float) or not math.isfinite(value['deadline'])
+                or type(value.get('owner_pid')) is not int or value['owner_pid'] <= 1
+                or ('pattern_pid' in value and (type(value['pattern_pid']) is not int or value['pattern_pid'] <= 1))
+                or ('guard_pid' in value and (type(value['guard_pid']) is not int or value['guard_pid'] <= 1))
+                or type(value.get('watchdog_ready')) is not bool
+                or ('enable_requested' in value and type(value['enable_requested']) is not bool)
+                or not isinstance(value.get('original'), dict)
+                or set(value['original']) != {'hdr', 'wcg'}
+                or any(type(flag) is not bool for flag in value['original'].values())
+                or not isinstance(value.get('boot'), str)
+                or not re.fullmatch(r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}',value['boot'])):
+            raise RuntimeError('Invalid HDR trial journal; preserve for recovery')
+        return value
+
+    def save(self, value):
+        write_json(self.path, value)
+
+
+class Trial:
+    def __init__(self, journal, backend, clock=time.monotonic, boot=None):
+        self.journal, self.backend, self.clock = journal, backend, clock
+        self.boot = boot if boot is not None else Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+
+    def begin(self):
+        original = self.backend.flags()
+        if not self.backend.persisted_matches(original):
+            raise RuntimeError('Saved HDR settings differ from the live output')
+        with self.journal.lock():
+            # Removal keeps a durable interlock outside the runtime tree. A
+            # successful deployment explicitly clears it; a login cannot.
+            if check_path(self.journal.directory / 'disabled.json').exists():
+                raise RuntimeError('HDR trial is disabled during component restore; reinstall it first')
+            old = self.journal.read()
+            if old and old['phase'] in ACTIVE_PHASES:
+                raise RuntimeError('An unconfirmed HDR trial needs recovery first')
+            value = dict(profile=BINDING['profile'], bundle_sha256=BINDING['bundle_sha256'],
+                         generation=BINDING['generation'], connector=BINDING['connector'], edid_sha256=BINDING['edid_sha256'],
+                         token=uuid.uuid4().hex, phase='armed',
+                         original=original, deadline=self.clock() + TIMEOUT,
+                         boot=self.boot, owner_pid=os.getpid(), watchdog_ready=False)
+            self.journal.save(value)
+            return value['token']
+
+    def guarded(self, token):
+        with self.journal.lock():
+            value = self.journal.read()
+            return bool(value and value['token'] == token and value['boot'] == self.boot
+                        and value['phase'] == 'armed' and value.get('watchdog_ready') is True
+                        and self.clock() < value['deadline'])
+
+    def arm_guard(self, token):
+        with self.journal.lock():
+            value = self.journal.read()
+            if (not value or value['token'] != token or value['boot'] != self.boot
+                    or value['phase'] != 'armed' or value.get('watchdog_ready')):
+                raise RuntimeError('Trial guard token/state changed')
+            value['watchdog_ready'] = True
+            value['guard_pid'] = os.getpid()
+            self.journal.save(value)
+
+    def request_enable(self, token):
+        with self.journal.lock():
+            value = self.journal.read()
+            if (not value or value['token'] != token or value['phase'] != 'armed'
+                    or not value.get('watchdog_ready') or value.get('enable_requested')
+                    or self.clock() >= value['deadline']):
+                raise RuntimeError('HDR recovery guard is unavailable or expired')
+            value['enable_requested'] = True
+            # Guard startup is outside the user's ten-second display trial.
+            # Only this first request may set the trial deadline.
+            value['deadline'] = self.clock() + TIMEOUT
+            self.journal.save(value)
+
+    def activated(self, token):
+        with self.journal.lock():
+            value = self.journal.read()
+            if (not value or value['token'] != token or value['phase'] != 'armed'
+                    or value.get('guard_pid') != os.getpid() or not value.get('enable_requested')
+                    or self.clock() >= value['deadline']):
+                raise RuntimeError('HDR activation was cancelled or expired')
+            value['phase'] = 'enabled'
+            self.journal.save(value)
+
+    def visible(self, token):
+        with self.journal.lock():
+            value = self.journal.read()
+            if (not value or value['token'] != token or value['phase'] != 'enabled'
+                    or not value.get('watchdog_ready') or self.clock() >= value['deadline']):
+                raise RuntimeError('HDR trial expired before the first HDR frame')
+            value['phase'] = 'visible'
+            self.journal.save(value)
+
+    def confirm(self, token):
+        # No subprocess or compositor IPC while holding the watchdog's lock.
+        if self.backend.flags() != {'hdr': True, 'wcg': True} or not self.backend.persisted_enabled() or not self.backend.output_status(active=True):
+            return False
+        with self.journal.lock():
+            value = self.journal.read()
+            if (not value or value['token'] != token or value['boot'] != self.boot
+                    or value['phase'] != 'visible' or not value.get('watchdog_ready')
+                    or self.clock() >= value['deadline']):
+                return False
+            try:
+                pattern=Path('/proc')/str(value['pattern_pid'])/'exe'
+                if pattern.resolve(strict=True)!=(PREFIX/'bin/oxp3-hdr-pattern').resolve(strict=True):return False
+            except (KeyError,OSError):return False
+            value['phase'] = 'confirmed'
+            self.journal.save(value)
+            return True
+
+    def cancel(self, token):
+        # The UI never performs display IPC, including on cancellation. Only
+        # the detached guard can enable/restore, so old UI work cannot race a
+        # later confirmed trial after the previous one becomes terminal.
+        with self.journal.lock():
+            value = self.journal.read()
+            if not value or value['token'] != token or value['phase'] in {'confirmed', 'reverted'}:
+                return
+            value['phase'] = 'reverting' if value.get('watchdog_ready') else 'reverted'
+            self.journal.save(value)
+
+    def rollback(self, token):
+        with self.journal.lock():
+            value = self.journal.read()
+            if not value or value['token'] != token or value['phase'] in {'confirmed', 'reverted'}:
+                return True
+            value['phase'] = 'reverting'
+            self.journal.save(value)
+        try:
+            self.backend.restore(value['original'])
+            success = True
+        except Exception:
+            success = False
+        with self.journal.lock():
+            current = self.journal.read()
+            if current and current['token'] == token and current['phase'] != 'confirmed':
+                current['phase'] = 'reverted' if success else 'rollback_failed'
+                self.journal.save(current)
+        return success
+
+    def restore_confirmed(self, token):
+        # A failed user-service start must leave confirmed state retryable.
+        with self.journal.lock():
+            value=self.journal.read()
+            if not value or value['token']!=token or value['phase']!='confirmed':
+                raise RuntimeError('Confirmed HDR restore token/state changed')
+            value['phase']='reverting'
+            self.journal.save(value)
+        return self.rollback(token)
+
+    def watchdog(self, token):
+        self.arm_guard(token)
+        last_check = 0.0
+        try:
+            while True:
+                with self.journal.lock():
+                    value = self.journal.read()
+                if not value or value['token'] != token or value['phase'] in {'confirmed', 'reverted'}:
+                    return
+                if value.get('guard_pid') != os.getpid():
+                    raise RuntimeError('HDR guard ownership changed')
+                if value['boot'] != self.boot or self.clock() >= value['deadline'] or value['phase'] == 'reverting':
+                    return
+                if self.clock() - last_check >= 0.5:
+                    last_check=self.clock()
+                    os.kill(value['owner_pid'],0)
+                    load_binding()
+                    if value['phase'] in {'enabled','visible'}:
+                        if self.backend.flags() != {'hdr':True,'wcg':True}:
+                            raise RuntimeError('Live HDR output changed during trial')
+                    if value.get('pattern_pid'):
+                        exe=Path('/proc')/str(value['pattern_pid'])/'exe'
+                        if exe.resolve(strict=True) != (PREFIX/'bin/oxp3-hdr-pattern').resolve(strict=True):
+                            raise RuntimeError('HDR pattern process exited')
+                if value['phase'] == 'armed' and value.get('enable_requested'):
+                    self.backend.enable()
+                    self.activated(token)
+                time.sleep(0.05)
+        finally:
+            # No display IPC happens after terminal 'reverted' is published.
+            # A delayed enable or exception is followed by restore in this
+            # same owner before another trial is allowed to start.
+            if not self.rollback(token):
+                raise RuntimeError('HDR rollback failed; startup recovery remains armed')
+
+
+def output_flags(value, require_internal_only=True):
+    connector = BINDING['connector']
+    if require_internal_only and any(item.get('name') != connector and item.get('enabled') is True for item in value.get('outputs', [])):
+        raise RuntimeError('Disconnect enabled external displays before the HDR trial / 请先断开已启用的外屏')
+    outputs = [item for item in value.get('outputs', []) if item.get('name') == connector]
+    if len(outputs) != 1 or not outputs[0].get('enabled', False):
+        raise RuntimeError('The bound internal eDP output must be enabled')
+    flags = {name: outputs[0].get(name) for name in ('hdr', 'wcg')}
+    if any(type(flag) is not bool for flag in flags.values()):
+        raise RuntimeError('Unknown KScreen HDR/WCG state')
+    return flags
+
+
+def saved_outputs(value):
+    if not isinstance(value, list):
+        raise RuntimeError('Invalid KWin output settings')
+    return [out for group in value if isinstance(group, dict) and group.get('name') == 'outputs'
+            for out in group.get('data', []) if isinstance(out, dict) and out.get('connectorName') == BINDING['connector']]
+
+
+def recover_startup(journal, config):
+    # Runs BEFORE KWin. Never depend on a working display/session for recovery.
+    disabled=check_path(journal.directory/'disabled.json').exists()
+    if not journal.path.exists() and not journal.path.is_symlink():
+        if disabled: raise RuntimeError('Desktop HDR is disabled pending explicit reinstall')
+        return
+    with journal.lock():
+        trial = journal.read()
+        if not trial or trial['phase']=='reverted' or (trial['phase']=='confirmed' and not disabled):
+            if disabled: raise RuntimeError('Desktop HDR is disabled pending explicit reinstall')
+            return
+        if trial['phase']=='armed' and not trial.get('enable_requested'):
+            trial['phase']='reverted'
+            journal.save(trial)
+            if disabled: raise RuntimeError('Desktop HDR is disabled pending explicit reinstall')
+            return
+        value = read_json(config, private=False)
+        if value is not None or Path(config).exists():
+            outputs = saved_outputs(value)
+            if len(outputs) != 1:
+                raise RuntimeError('Pending HDR trial has no internal output to restore')
+            for output in outputs:
+                pair={'hdr':output.get('highDynamicRange'),'wcg':output.get('wideColorGamut')}
+                if pair not in (trial['original'],{'hdr': True,'wcg': True}):
+                    raise RuntimeError('HDR settings changed externally; preserve them for review')
+                output['highDynamicRange'] = trial['original']['hdr']
+                output['wideColorGamut'] = trial['original']['wcg']
+            write_json(config, value, private=False)
+            verified=saved_outputs(read_json(config,private=False))
+            if len(verified)!=1 or {'hdr':verified[0].get('highDynamicRange'),'wcg':verified[0].get('wideColorGamut')}!=trial['original']:
+                raise RuntimeError('Could not verify restored HDR settings')
+        else:
+            raise RuntimeError('Pending HDR trial has no saved configuration to restore')
+        trial['phase'] = 'reverted'
+        journal.save(trial)
+    if disabled: raise RuntimeError('Desktop HDR is disabled pending explicit reinstall')
+
+def disable_trial(journal, home):
+    """Persist the removal interlock, then let an armed guard finish rollback."""
+    with journal.lock():
+        write_json(journal.directory/'disabled.json',dict(kind='BoilerDesktopHdrDisabledV1',generation=BINDING['generation']))
+        value=journal.read()
+        confirmed=bool(value and value['phase']=='confirmed')
+        if value and value['phase'] in ACTIVE_PHASES:
+            if not value.get('watchdog_ready') and not value.get('enable_requested'):
+                value['phase']='reverted'
+            else:
+                value['phase']='reverting'
+            journal.save(value)
+    if confirmed:
+        detached_guard(value['token'],home,restore=True)
+    deadline=time.monotonic()+12
+    while True:
+        with journal.lock(): value=journal.read()
+        if not value or value['phase']=='reverted' or (value['phase']=='confirmed' and not confirmed):return
+        if value['phase']=='rollback_failed' or time.monotonic()>=deadline:
+            raise RuntimeError('Desktop HDR trial requires recovery before removal')
+        time.sleep(.05)
+
+
+class KDE:
+    def __init__(self, home):
+        self.config = home / '.config/kwinoutputconfig.json'
+
+    def command(self, *args, timeout=1.5):
+        result = subprocess.run(args, capture_output=True, text=True, timeout=timeout, check=True)
+        return result.stdout
+
+    def flags(self, require_internal_only=True):
+        return output_flags(json.loads(self.command('/usr/bin/kscreen-doctor', '-j')), require_internal_only)
+
+    def restore(self, flags):
+        load_binding()
+        current=self.flags(require_internal_only=False)
+        if current not in (flags, {'hdr':True,'wcg':True}):
+            raise RuntimeError('Live HDR state changed externally; preserve it for review')
+        outputs=saved_outputs(read_json(self.config,private=False))
+        if len(outputs)!=1:
+            raise RuntimeError('Persisted internal output is unavailable')
+        saved={'hdr':outputs[0].get('highDynamicRange'),'wcg':outputs[0].get('wideColorGamut')}
+        if saved not in (flags, {'hdr':True,'wcg':True}):
+            raise RuntimeError('Persisted HDR state changed externally; preserve it for review')
+        self.command('/usr/bin/kscreen-doctor', *[
+            'output.'+BINDING['connector']+'.' + key + ('.enable' if flags[key] else '.disable') for key in ('hdr', 'wcg')])
+        self.command('/usr/bin/kscreen-doctor', '--dpms', 'on')
+        if self.flags(require_internal_only=False) != flags:
+            raise RuntimeError('KDE has not restored the previous display state')
+        deadline = time.monotonic() + 0.5
+        while not self.persisted_matches(flags):
+            if time.monotonic() >= deadline:
+                raise RuntimeError('KDE has not saved restored settings; startup recovery remains armed')
+            time.sleep(0.05)
+
+    def enable(self):
+        self.flags()  # Recheck hotplug at the point of activation.
+        load_binding()
+        self.command('/usr/bin/kscreen-doctor', 'output.'+BINDING['connector']+'.hdr.enable', 'output.'+BINDING['connector']+'.wcg.enable')
+        if self.flags() != {'hdr': True, 'wcg': True}:
+            raise RuntimeError('KDE did not enable HDR/WCG')
+
+    def persisted_enabled(self):
+        self.flags()  # A new external screen cannot be used to confirm the internal one.
+        return self.persisted_matches({'hdr': True, 'wcg': True})
+
+    def persisted_matches(self, flags):
+        outputs = saved_outputs(read_json(self.config, private=False))
+        return len(outputs)==1 and all(out.get('highDynamicRange') is flags['hdr'] and out.get('wideColorGamut') is flags['wcg'] for out in outputs)
+
+    def output_status(self, active=False):
+        load_binding()
+        support=self.command('/usr/bin/qdbus6','org.kde.KWin','/KWin','supportInformation')
+        rows=[]
+        for line in support.splitlines():
+            if line.startswith('Boiler HDR output v2: '):
+                rows.append(json.loads(line.removeprefix('Boiler HDR output v2: ')))
+        matches=[row for row in rows if row.get('connector')==BINDING['connector'] and row.get('edid_sha256')==BINDING['edid_sha256']]
+        if len(matches)!=1: return False
+        row=matches[0]
+        if (row.get('schema')!=2 or row.get('profile')!=BINDING['profile'] or row.get('policy')!=BINDING['policy']
+                or row.get('full_frame')!=BINDING['full_frame'] or row.get('peak')!=BINDING['peak']
+                or row.get('eligible') is not True or row.get('hdr_capable') is not True or row.get('wcg_capable') is not True
+                or row.get('mode_native') is not True): return False
+        if BINDING['profile']=='x2-mini' and (row.get('native_colorimetry_present') is not True or row.get('color_source')!='edid-native'):
+            return False
+        if BINDING['profile']=='oxp3' and ('OXP3_GAMMA22_POLICY_EDID_ONLY_V2' not in support
+                or 'OXP3 Gamma22 HDR mapping: enabled (1100/472; EDID-only-v2)' not in support): return False
+        if active and (row.get('active') is not True or row.get('transfer')!='gamma22' or row.get('container_matches_policy') is not True): return False
+        return True
+
+    def check(self):
+        if os.environ.get('XDG_SESSION_TYPE') != 'wayland' or not any(
+                name.casefold() in {'kde', 'plasma'} for name in os.environ.get('XDG_CURRENT_DESKTOP', '').split(':')):
+            raise RuntimeError('Run this test in the KDE Wayland desktop / 请在 KDE Wayland 桌面运行')
+        for tool in ('kdialog', 'kscreen-doctor', 'qdbus6', 'systemd-run'):
+            if not os.access('/usr/bin/' + tool, os.X_OK):
+                raise RuntimeError('Required KDE tool missing: ' + tool)
+        if not self.output_status():
+            raise RuntimeError('The bound desktop HDR output is not eligible or is not in a native mode')
+        if not os.access(PREFIX / 'bin/oxp3-hdr-pattern', os.X_OK):
+            raise RuntimeError('HDR test pattern renderer missing / 缺少 HDR 测试图程序')
+        self.flags()
+
+
+def detached_guard(token, home, *, restore=False):
+    runtime=os.environ.get('XDG_RUNTIME_DIR','')
+    if not runtime or not Path(runtime).is_absolute():
+        raise RuntimeError('User runtime directory is unavailable')
+    info=Path(runtime).stat()
+    if not stat.S_ISDIR(info.st_mode) or info.st_uid!=uid() or info.st_mode & 0o077:
+        raise RuntimeError('User runtime directory does not belong to this user')
+    required = {'XDG_RUNTIME_DIR': runtime}
+    for name in ('DBUS_SESSION_BUS_ADDRESS', 'WAYLAND_DISPLAY'):
+        value = os.environ.get(name, '')
+        if not value or any(ord(char) < 32 for char in value):
+            raise RuntimeError('KDE session environment missing')
+        required[name] = value
+    # A detached service (not a scope) survives closing/crashing the dialog.
+    subprocess.run(['/usr/bin/systemd-run', '--user', '--quiet', '--collect',
+                    '--property=Type=exec', '--expand-environment=no', '--unit=boiler-desktop-hdr-' + ('restore-' if restore else '') + token,
+                    '--setenv=HOME=' + str(home),
+                    *['--setenv=' + key + '=' + value for key, value in required.items()],
+                    '/usr/bin/python3', '-I', '-B', str(Path(__file__).resolve()), '--restore-guard' if restore else '--watchdog', token],
+                   check=True, timeout=2, capture_output=True)
+
+
+def stop(process):
+    if process and process.poll() is None:
+        process.terminate()
+        try:
+            process.wait(timeout=0.3)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            process.wait(timeout=0.3)
+
+
+def run_trial(home, journal):
+    backend = KDE(home)
+    backend.check()
+    zh = (locale.getlocale()[0] or '').startswith('zh')
+    title = '桌面 HDR 测试' if zh else 'Desktop HDR Trial'
+    notice = ('3 秒后切换 HDR。若黑屏请勿操作，10 秒后自动恢复。' if zh else
+              'Switching to HDR in 3 seconds. If the screen goes black, do nothing; it will revert after 10 seconds.')
+    subprocess.run(['/usr/bin/kdialog', '--title', title, '--passivepopup', notice, '3'], check=True, timeout=4)
+    time.sleep(3)
+    trial = Trial(journal, backend)
+    token = trial.begin()
+    pattern = dialog = None
+    try:
+        detached_guard(token, home)
+        guard_wait = time.monotonic() + 1
+        while not trial.guarded(token):
+            if time.monotonic() >= guard_wait:
+                raise RuntimeError('Independent HDR recovery task did not become ready')
+            time.sleep(0.02)
+        trial.request_enable(token)
+        while True:
+            with journal.lock():
+                current = journal.read()
+            if current['phase'] == 'enabled':
+                break
+            if current['phase'] != 'armed' or time.monotonic() >= current['deadline']:
+                raise RuntimeError('HDR activation was cancelled or expired')
+            time.sleep(0.02)
+        pattern = subprocess.Popen([str(PREFIX / 'bin/oxp3-hdr-pattern'), '10', 'trial', BINDING['profile']],
+                                   stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, bufsize=0)
+        with journal.lock():
+            current=journal.read()
+            if not current or current['token']!=token or current['phase']!='enabled':
+                raise RuntimeError('Trial changed before pattern startup')
+            current['pattern_pid']=pattern.pid
+            journal.save(current)
+        with selectors.DefaultSelector() as selector:
+            selector.register(pattern.stdout, selectors.EVENT_READ)
+            buffer = b''
+            while b'FIRST_PRESENT_OK\n' not in buffer:
+                with journal.lock():
+                    current = journal.read()
+                if pattern.poll() is not None or time.monotonic() >= current['deadline']:
+                    raise RuntimeError('A real HDR test frame was not presented before timeout')
+                if selector.select(0.05):
+                    buffer += os.read(pattern.stdout.fileno(), 4096)
+                    if len(buffer) > 65536:
+                        raise RuntimeError('Unexpected HDR pattern output')
+        trial.visible(token)
+        if not backend.output_status(active=True) or not backend.persisted_enabled():
+            raise RuntimeError('The actual HDR output state did not become active')
+        text = ('画面、四个 HDR 色块和亮度都正常吗？\n未确认会在切换后 10 秒自动恢复。' if zh else
+                'Are the picture, four HDR patches and brightness correct?\nReverts 10 seconds after switching unless confirmed.')
+        dialog = subprocess.Popen(['/usr/bin/kdialog', '--title', title, '--warningyesno', text,
+                                   '--yes-label', '确认并保存' if zh else 'Confirm and save',
+                                   '--no-label', '恢复原设置' if zh else 'Restore previous settings', '--defaultno'])
+        while dialog.poll() is None:
+            with journal.lock():
+                current = journal.read()
+            if pattern.poll() is not None or current['phase'] != 'visible' or time.monotonic() >= current['deadline']:
+                return False
+            time.sleep(0.03)
+        return dialog.returncode == 0 and pattern.poll() is None and trial.confirm(token)
+    finally:
+        stop(dialog)
+        stop(pattern)
+        # A failed/late confirmation never cancels the independent recovery job.
+        trial.cancel(token)
+
+
+def main():
+    global BINDING
+    parser = argparse.ArgumentParser(description=__doc__)
+    actions = parser.add_mutually_exclusive_group()
+    actions.add_argument('--recover-startup', action='store_true')
+    actions.add_argument('--watchdog')
+    actions.add_argument('--disable', action='store_true')
+    actions.add_argument('--restore-guard')
+    args = parser.parse_args()
+    if os.name != 'posix' or uid() == 0:
+        raise RuntimeError('Run as the KDE desktop user, without sudo')
+    BINDING=load_binding()
+    home = Path(BINDING['account']['home'])
+    journal = Journal(home / '.local/state/boiler-desktop-hdr')
+    if args.recover_startup:
+        recover_startup(journal, home / '.config/kwinoutputconfig.json')
+    elif args.disable:
+        disable_trial(journal,home)
+    elif args.watchdog:
+        Trial(journal, KDE(home)).watchdog(args.watchdog)
+    elif args.restore_guard:
+        if not Trial(journal,KDE(home)).restore_confirmed(args.restore_guard):
+            raise RuntimeError('Desktop HDR output restoration failed')
+    else:
+        def interrupted(_signum, _frame):
+            raise KeyboardInterrupt()
+        signal.signal(signal.SIGTERM, interrupted)
+        result = run_trial(home, journal)
+        if result:
+            subprocess.run(['/usr/bin/kdialog', '--passivepopup', 'HDR 已确认并保存 / HDR confirmed and saved', '3'], timeout=4)
+        return 0 if result else 1
+    return 0
+
+
+if __name__ == '__main__':
+    try:
+        raise SystemExit(main())
+    except Exception as error:
+        print(str(error), file=sys.stderr)
+        if not any(flag in sys.argv for flag in ('--watchdog', '--recover-startup', '--disable', '--restore-guard')):
+            subprocess.run(['/usr/bin/kdialog', '--error', str(error)], timeout=15, check=False)
+        raise SystemExit(2)

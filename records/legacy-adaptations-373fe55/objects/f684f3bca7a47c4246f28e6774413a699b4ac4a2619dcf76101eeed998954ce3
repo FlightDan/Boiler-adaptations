@@ -1,0 +1,13 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:common-intel-rapl"
+files[9]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  baseline/brands/onexplayer/oxp3/scripts/controls/rapl/provider.py,22758,11af7da8d69a59b3e6413380a6516468da2d50248043cf6a93cf813381f2116b
+  common/CPU/Intel/rapl/files/boiler-intel-rapl.service,471,05ba6273a690f6c285f02e8e6c9c1b9c0671d2ec11d3772523f163b9498a02ee
+  common/CPU/Intel/rapl/files/provider.py,23089,44741aee85a943fa025e9846e01733322f756a283c300ff4744fdddd201ac14c
+  common/CPU/Intel/rapl/files/rapl-dbus.conf,443,417feed6044e9df6ee9d1b3c11bfc923d753299859ba641b6ebafeaf402e5719
+  common/CPU/Intel/rapl/files/rapl.toml,128,be8e8a35d5f109cb0ce6d50e99dec39bf043a7a60aae9ccd78afa58cebff2bbd
+  common/CPU/Intel/rapl/resource.toon,2034,feab5309d7c17da4e10dc158e08290270ffeb7a928f7fd81aa7fb95d9736a484
+  locks/public-baseline.toon,32751,15dae171a0bbdf7423a117fb008e71e0f7737d2a3647ede1b1887bf051c549cf

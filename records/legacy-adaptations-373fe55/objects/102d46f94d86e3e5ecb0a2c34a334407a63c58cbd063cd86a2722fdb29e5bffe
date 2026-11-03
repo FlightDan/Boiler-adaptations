@@ -1,0 +1,27 @@
+schema_version: 1
+id: "oxp3:xevmafix"
+version: 2026.10.29+kernel7.2.4.1
+default: false
+name:
+  zh: OXP3 xe 大量映射休眠恢复修复（可选）
+  en: OXP3 xe large-mapping resume workaround (optional)
+description:
+  zh: 仅限精确 7.2.4 内核和已记录 SteamOS 3.10 build。使用可回退虚拟连续内存分配规避大量 GPU 映射恢复时的单块分配上限。已完成官方 ELF 和离线构建核验，尚无本组件实机加载及休眠验收；已加载模块需重启移除。
+  en: Only for the exact 7.2.4 kernel and recorded SteamOS 3.10 build. Uses virtually contiguous allocation for large GPU mapping rebind arrays. Official ELF and offline build verified; physical loading and suspend acceptance remain pending. An active module requires reboot to remove.
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+  device_ids[1]: oxp3
+  os_versions[1]: "3.10"
+  kernels[1]: 7.2.4-valve1-1-neptune-72-g5ab4af5e2eb9
+files[10]{source,target,mode}:
+  xevmafix.ko,usr/lib/modules/7.2.4-valve1-1-neptune-72-g5ab4af5e2eb9/extra/xevmafix.ko,420
+  load.py,usr/lib/boiler/oxp3/xevmafix/load.py,420
+  boiler-oxp3-xevmafix.service,usr/lib/systemd/system/boiler-oxp3-xevmafix.service,420
+  90-boiler-oxp3-xevmafix.conf,etc/systemd/system/multi-user.target.d/90-boiler-oxp3-xevmafix.conf,420
+  LICENSE,usr/share/licenses/boiler-oxp3-xevmafix/GPL-2.0,420
+  xevmafix.c,usr/share/doc/boiler-oxp3-xevmafix/xevmafix.c,420
+  Makefile,usr/share/doc/boiler-oxp3-xevmafix/Makefile,420
+  README.md,usr/share/doc/boiler-oxp3-xevmafix/README.md,420
+  UPSTREAM_LICENSE,usr/share/doc/boiler-oxp3-xevmafix/UPSTREAM_LICENSE,420
+  module-lock.json,usr/share/doc/boiler-oxp3-xevmafix/module-lock.json,420

@@ -1,0 +1,11 @@
+[Unit]
+Description=ONEXPLAYER3 exact-kernel fan driver
+After=systemd-udev-trigger.service
+Before=oxp3-fan.service
+[Service]
+ExecCondition=/usr/bin/python3 -I -B /usr/local/lib/oxp3-integration/integration_runtime.py guard
+Type=oneshot
+ExecStart=/usr/bin/python3 -I /var/lib/oxp3-fan/load-fan-module.py
+RemainAfterExit=yes
+[Install]
+WantedBy=multi-user.target

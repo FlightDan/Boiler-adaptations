@@ -1,0 +1,76 @@
+schema_version: 1
+kind: BoilerResourceSource
+id: "resource:intel-xevmafix-724"
+version: 2026.10.29+kernel7.2.4.model-advisory.1
+dependencies: []
+external_component_dependencies: []
+hardware_requires:
+  display_driver[1]: xe
+  kernel[1]: 7.2.4-valve1-1-neptune-72-g5ab4af5e2eb9
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+  os_versions[1]: "3.10"
+  kernels[1]: 7.2.4-valve1-1-neptune-72-g5ab4af5e2eb9
+install_kind: files-v1
+verify:
+  kind: sha256-v1
+restore:
+  kind: transaction-backup-v1
+renderer: files-v1
+source_lock: locks/resources/intel-xevmafix-724.toon
+recipe:
+  payload[10]:
+    - source: devices/GPU/Intel/xe/xevmafix-724/artifacts/xevmafix.ko
+      renderer: identity-v1
+      target: usr/lib/modules/7.2.4-valve1-1-neptune-72-g5ab4af5e2eb9/extra/xevmafix.ko
+      mode: 420
+      scope: root-slots
+    - source: devices/GPU/Intel/xe/xevmafix-724/src/load.py
+      renderer: identity-v1
+      target: usr/lib/boiler/oxp3/xevmafix/load.py
+      mode: 420
+      scope: root-slots
+    - source: devices/GPU/Intel/xe/xevmafix-724/upstream/boiler-oxp3-xevmafix.service
+      renderer: identity-v1
+      target: usr/lib/systemd/system/boiler-oxp3-xevmafix.service
+      mode: 420
+      scope: root-slots
+    - source: devices/GPU/Intel/xe/xevmafix-724/upstream/90-boiler-oxp3-xevmafix.conf
+      renderer: identity-v1
+      target: etc/systemd/system/multi-user.target.d/90-boiler-oxp3-xevmafix.conf
+      mode: 420
+      scope: root-slots
+    - source: devices/GPU/Intel/xe/xevmafix-724/upstream/LICENSE
+      renderer: identity-v1
+      target: usr/share/licenses/boiler-oxp3-xevmafix/GPL-2.0
+      mode: 420
+      scope: root-slots
+    - source: devices/GPU/Intel/xe/xevmafix-724/upstream/xevmafix.c
+      renderer: identity-v1
+      target: usr/share/doc/boiler-oxp3-xevmafix/xevmafix.c
+      mode: 420
+      scope: root-slots
+    - source: devices/GPU/Intel/xe/xevmafix-724/upstream/Makefile
+      renderer: identity-v1
+      target: usr/share/doc/boiler-oxp3-xevmafix/Makefile
+      mode: 420
+      scope: root-slots
+    - source: devices/GPU/Intel/xe/xevmafix-724/upstream/README.md
+      renderer: identity-v1
+      target: usr/share/doc/boiler-oxp3-xevmafix/README.md
+      mode: 420
+      scope: root-slots
+    - source: devices/GPU/Intel/xe/xevmafix-724/upstream/UPSTREAM_LICENSE
+      renderer: identity-v1
+      target: usr/share/doc/boiler-oxp3-xevmafix/UPSTREAM_LICENSE
+      mode: 420
+      scope: root-slots
+    - source: devices/GPU/Intel/xe/xevmafix-724/upstream/metadata.zip
+      renderer: locked-archive-member-v1
+      target: usr/share/doc/boiler-oxp3-xevmafix/module-lock.json
+      mode: 420
+      scope: root-slots
+      member: module-lock.json
+  license_files[2]: LICENSE,baseline/common/scripts/licenses/upstream-fixes-MIT.txt
+  install_details:

@@ -1,0 +1,11 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:intel-xe-dsb"
+files[7]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  devices/display/intel/xe-dsb/inputs/000-xe-oxp3.conf,112,1a1e2c951fec8a8a3c10977c78205e30d7052582c36c3e0700ffd03bd748b690
+  devices/display/intel/xe-dsb/licenses/project-AGPL-3.0.txt,35184,e0eedba615d5cd1b986afb6c5b3a4b1ae33713e7e9dc74d19daec5e3221f9d2e
+  devices/display/intel/xe-dsb/licenses/upstream-fixes-MIT.txt,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  devices/display/intel/xe-dsb/resource.toon,844,e262a5fa863ba5194258adb21b42667cde191349939679d8fe97bfb41aedd195
+  devices/display/intel/xe-dsb/source-lock.toon,635,959567f92be74a7bdbcf96f8e539d3c09a88a3fc1eb9ce52fed2c8990cb8dc24

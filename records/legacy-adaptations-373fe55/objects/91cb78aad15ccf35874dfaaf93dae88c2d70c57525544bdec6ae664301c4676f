@@ -1,0 +1,16 @@
+import json
+from pathlib import Path
+import subprocess
+import sys
+
+state=Path('/run/oxp3-fan-sleep.json')
+if sys.argv[1] == 'pre':
+    active=subprocess.run(['systemctl','is-active','--quiet','oxp3-fan.service']).returncode==0
+    state.write_text(json.dumps({'active':active}))
+    if active:
+        subprocess.run(['systemctl','stop','oxp3-fan.service'],check=True,timeout=12)
+elif state.exists():
+    active=json.loads(state.read_text())['active']
+    if active:
+        subprocess.run(['systemctl','start','oxp3-fan.service'],check=True,timeout=15)
+    state.unlink()

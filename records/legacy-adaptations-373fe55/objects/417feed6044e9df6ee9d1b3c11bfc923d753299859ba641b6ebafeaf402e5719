@@ -1,0 +1,5 @@
+<busconfig>
+<policy context="default"><deny own="org.onexplayer.SteamOSManager.PowerControl"/><deny send_destination="org.onexplayer.SteamOSManager.PowerControl"/></policy>
+<policy user="root"><allow own="org.onexplayer.SteamOSManager.PowerControl"/><allow send_destination="org.onexplayer.SteamOSManager.PowerControl"/></policy>
+<policy user="deck"><allow send_destination="org.onexplayer.SteamOSManager.PowerControl"/></policy>
+</busconfig>

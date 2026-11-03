@@ -1,0 +1,6 @@
+schema_version: 1
+kind: WaydroidOfficialRuntimeDependencyCandidates
+status: verified-target-official-keyrings
+packages[2]{name,filename,stored_filename,version,url,size,sha256,signature_sha256}:
+  lxc,"lxc-1:7.0.0-1-x86_64.pkg.tar.zst",lxc-1_7.0.0-1-x86_64.pkg.tar.zst,"1:7.0.0-1","https://steamdeck-packages.steamos.cloud/archlinux-mirror/extra-main/os/x86_64/lxc-1%3A7.0.0-1-x86_64.pkg.tar.zst",852702,9ae2c4353e8dde664790e0515ee873865a6773a6a10565917b80bed6a473495e,90e5ae9860319b6764487e8452e396812bb36870e7a842c8adb6a0c7dac4c50d
+  dnsmasq,dnsmasq-2.93-1-x86_64.pkg.tar.zst,dnsmasq-2.93-1-x86_64.pkg.tar.zst,2.93-1,"https://steamdeck-packages.steamos.cloud/archlinux-mirror/extra-main/os/x86_64/dnsmasq-2.93-1-x86_64.pkg.tar.zst",510774,443d70d2606549270b1ef52183926714e515f81413db33ff96006e23866ad790,a44acb59ae744b567568c3c34d2f7a73c7896a4e95ee54091220deddbe79d4e8
