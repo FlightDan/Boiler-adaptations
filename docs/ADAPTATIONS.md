@@ -2,19 +2,20 @@
 
 这里按品牌、机型整理已有公开适配源码，并记录应该选择哪些组件。
 
-- [ONEXPLAYER 3 安装清单](brands/onexplayer/oxp3/model.md)
-- [ONEXPLAYER X2 Mini / Mini PRO 安装清单](brands/onexplayer/x2-mini/model.md)
-- [跨品牌共用源码说明](common/components.md)
-- [ONEXPLAYER 共用源码说明](brands/onexplayer/common/components.md)
+- [ONEXPLAYER 3 安装清单](../brands/onexplayer/oxp3/model.md)
+- [ONEXPLAYER X2 Mini / Mini PRO 安装清单](../brands/onexplayer/x2-mini/model.md)
+- [跨品牌共用源码说明](../common/components.md)
+- [ONEXPLAYER 共用源码说明](../brands/onexplayer/common/components.md)
 
 ```text
 common/scripts/                       跨品牌辅助源码
-brands/onexplayer/common/scripts/     同品牌输入、陀螺仪源码
+brands/onexplayer/common/scripts/     同品牌输入源码
+common/sensors/bosch/bmi260/gyro/      跨机型共用陀螺仪源码
 brands/onexplayer/oxp3/                OXP3 清单和专属源码
 brands/onexplayer/x2-mini/             X2 Mini 清单和专属源码
 adaptations.json                      源码目录索引
 source-plan.json                      明确的公开源码导入白名单
-source-lock.json                      生成的来源、大小、SHA-256 库存
+source-lock.json                      不可变历史来源、大小、SHA-256 库存
 ```
 
 每个机型包含 `model.md`、`manifest.json` 和 `scripts/`。机型 manifest 的种类是
@@ -43,9 +44,8 @@ python -m unittest discover -s tests -p 'test_adaptations.py' -v
 python scripts/adaptations.py prepare --source-checkout /explicit/public/OneXPlayer3-SteamOS
 ```
 
-该命令重新提取源码、生成 `source-lock.json`，同步机型来源字段并刷新两份 MD 的安装表及来源段落。库存不能手填
-哈希代替提取。删除或移动白名单项时，应同时明确处理旧源码文件；检查器拒绝遗漏库存的脚本。
+该命令先从公开 Git 对象重建库存并与不可变的 `source-lock.json` 完整比对；一致后才写入源码，同步机型来源字段并刷新两份 MD 的安装表及来源段落。BMI260 的历史路径通过迁移记录映射到共用资源，准备器恢复共用路径而不重建旧路径。库存不能手填哈希代替提取；检查器拒绝遗漏库存的脚本。
 
 驱动、固件、插件归档、KWin 和其他原生运行时继续由既有准备和发布流程提供。
 后续若将这些源码接成可执行机型包，再同步安装器、维护器、最终载荷和实机验收。
-本次整理状态见 [整理记录](docs/RELEASE_0.1.0-layout.1.md)。
+本次整理状态见 [整理记录](RELEASE_0.1.0-layout.1.md)。
