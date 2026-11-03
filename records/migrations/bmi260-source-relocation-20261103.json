@@ -93,7 +93,7 @@
   "license_records": "common/sensors/bosch/bmi260/gyro/source.toon",
   "scope": "Source-only deduplication; no device package or runtime payload is built or published.",
   "acceptance": {
-    "source_checks": "Two source checks and 34 regression tests passed; independent review found a new-model TOON validation issue, which was fixed and rechecked.",
+    "source_checks": "Two source checks and 35 regression tests passed. Independent review fixed historical source hash verification and retained inventory-based sources for other gyroscopes. Non-BMI260 shared TOON support remains outside this migration.",
     "installation_maintenance_recovery": "Source-only relocation; no payload produced. Existing binding journal, dependency and recovery limits remain; integration requires separate verification before release.",
     "package_download_and_release": "Not applicable: no release requested.",
     "hardware": "Not performed; source checks do not establish device compatibility or calibration."

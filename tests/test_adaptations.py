@@ -149,7 +149,7 @@ class AdaptationCollectionTests(unittest.TestCase):
                     collection.check(root)
 
     def test_third_model_gyro_toon_is_validated(self):
-        for case in ('valid', 'no-gyro', 'missing', 'wrong', 'duplicate', 'identity', 'source-only'):
+        for case in ('valid', 'no-gyro', 'other-gyro', 'other-gyro-uninventoried', 'missing', 'wrong', 'duplicate', 'identity', 'source-only'):
             with self.subTest(case=case), tempfile.TemporaryDirectory() as temporary:
                 root = Path(temporary)
                 self.copy_collection(root)
@@ -165,7 +165,9 @@ class AdaptationCollectionTests(unittest.TestCase):
                 if case == 'no-gyro':
                     model['components'] = [item for item in model['components'] if item['id'] != 'gyro']
                 else:
-                    next(item for item in model['components'] if item['id'] == 'gyro')['sources'] = [toon]
+                    sources = ([('brands/onexplayer/common/scripts/input_profile.py' if case == 'other-gyro' else 'unreviewed-gyro.py')]
+                               if case in ('other-gyro', 'other-gyro-uninventoried') else [toon])
+                    next(item for item in model['components'] if item['id'] == 'gyro')['sources'] = sources
                 (root/manifest).write_text(json.dumps(model, ensure_ascii=False), encoding='utf-8')
                 collection.guide(root, model, write=True)
                 catalog = json.loads((root/'adaptations.json').read_text(encoding='utf-8'))
@@ -183,9 +185,9 @@ class AdaptationCollectionTests(unittest.TestCase):
                     reference = reference.replace('device:test-model', 'device:x2-mini')
                 elif case == 'source-only':
                     reference = reference.replace('source_only: true', 'source_only: false')
-                if case not in ('missing', 'no-gyro'):
+                if case not in ('missing', 'no-gyro', 'other-gyro', 'other-gyro-uninventoried'):
                     (root/toon).write_text(reference, encoding='utf-8')
-                if case in ('valid', 'no-gyro'):
+                if case in ('valid', 'no-gyro', 'other-gyro'):
                     self.assertEqual(collection.check(root)['models'], 3)
                 else:
                     with self.assertRaises(ValueError):
@@ -219,6 +221,23 @@ class AdaptationCollectionTests(unittest.TestCase):
                 path.write_text(json.dumps(record), encoding='utf-8')
                 with self.assertRaisesRegex(ValueError, 'relocation metadata'):
                     collection.check(root)
+
+    def test_historical_source_hashes_match_migration_record(self):
+        for name in ('source-plan.json', 'source-lock.json'):
+            for mutation in ('record-hash', 'file-bytes'):
+                with self.subTest(name=name, mutation=mutation), tempfile.TemporaryDirectory() as temporary:
+                    root = Path(temporary)
+                    self.copy_collection(root)
+                    if mutation == 'record-hash':
+                        path = root/collection.RELOCATION
+                        record = json.loads(path.read_text(encoding='utf-8'))
+                        record['historical_source_sha256'][name] = '0'*64
+                        path.write_text(json.dumps(record), encoding='utf-8')
+                    else:
+                        path = root/name
+                        path.write_bytes(path.read_bytes() + b'\n')
+                    with self.assertRaisesRegex(ValueError, 'Historical source bytes differ'):
+                        collection.check(root)
 
     def test_prepare_preserves_lock_and_never_recreates_old_paths(self):
         with tempfile.TemporaryDirectory() as temporary:

@@ -92,6 +92,10 @@ GYRO_FILES = frozenset(('gyro_binding.py', 'Makefile', 'bmi270.h', 'inputplumber
 
 def relocations(root, lock):
     record = read(root/RELOCATION)
+    historical_hashes = {name: hashlib.sha256(local(root, name).read_bytes()).hexdigest()
+                         for name in ('source-plan.json', 'source-lock.json')}
+    if record.get('historical_source_sha256') != historical_hashes:
+        raise ValueError('Historical source bytes differ from relocation record')
     if (record.get('kind') != 'BoilerSourceRelocation' or record.get('schema_version') != 1
             or record.get('source') != lock['source']
             or record.get('repository_baseline') != '5c79ead752e21970303f0a2d03b810a1ee77ac43'):
@@ -241,14 +245,18 @@ def check(root=ROOT):
             for dependency in item['dependencies']:
                 if dependency not in components or components[dependency]['recommendation'] == 'excluded':
                     raise ValueError('Missing or excluded dependency: '+dependency)
-            if item['id'] == 'gyro':
-                expected_toon = str(PurePosixPath(name).parent / 'common-device-sources.toon')
+            expected_toon = str(PurePosixPath(name).parent / 'common-device-sources.toon')
+            bmi_gyro = (item['id'] == 'gyro' and
+                        (name in ('brands/onexplayer/oxp3/manifest.json', 'brands/onexplayer/x2-mini/manifest.json')
+                         or expected_toon in item['sources']
+                         or 'common/sensors/bosch/bmi260/gyro/source.toon' in item['sources']))
+            if bmi_gyro:
                 if item['sources'] != [expected_toon]:
                     raise ValueError('Gyro must reference its own model TOON: ' + name)
                 local(root, expected_toon)
                 validate_gyro_reference(common, expected_toon, model)
             for path in item['sources']:
-                if item['id'] != 'gyro' and path not in inventory:
+                if not bmi_gyro and path not in inventory:
                     raise ValueError('Uninventoried component source: '+path)
             if item['recommendation'] == 'pending' and item['sources']:
                 raise ValueError('Pending implementation must not claim an existing script')
