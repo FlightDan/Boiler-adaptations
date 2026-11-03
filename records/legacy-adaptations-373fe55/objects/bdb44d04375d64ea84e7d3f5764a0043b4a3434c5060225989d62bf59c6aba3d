@@ -1,0 +1,83 @@
+kind: FixedEcProfileOfflineBuild
+schema_version: 1
+kernel: 7.2.4-valve1-1-neptune-72-g5ab4af5e2eb9
+board_profile: oxp3-g1i-v1
+source:
+  path: sources/005-oxpec-profile.c
+  sha256: ec6f58f18e2bb2a1a013d5ca647d01a91a42ada2ccc3437f2ab59a34e67fa86f
+patch:
+  path: sources/006-profile.patch
+  sha256: baf16c66dcd67595398eb3361eebb2d6d6b075ad39be53b1bcfa53e3b444ff41
+module:
+  path: compiled/oxpec-profile.ko
+  size: 472736
+  sha256: a819b435f1214252d1d0b15b039baa00d31642495075e864b3153299ecd6e372
+  srcversion: 5E1470CE1EB3B89D6E8C5BD
+toolchain_source_lock_sha256: 8bb5ee26ae6bcd2bfa8ecf57cb18f9d6819b95f595a76b5bd857a8ae15db6f41
+build_environment:
+  KBUILD_BUILD_TIMESTAMP: "2026-10-30 00:00:00 UTC"
+  KBUILD_BUILD_USER: boiler
+  KBUILD_BUILD_HOST: offline-audit
+packages[60]{path,size,sha256}:
+  arch-pkgs/headers.pkg.tar.zst,43158779,c038a1443e0baf0b33d869747e027056beb28f4a619e235fa624403a1918de6a
+  arch-pkgs/acl-2.4.0-1-x86_64.pkg.tar.zst,150821,dca9ec50cf51243b86a67367a55e78b1851d31240b1edaf9c011f8511765d999
+  arch-pkgs/attr-2.6.0-1-x86_64.pkg.tar.zst,74207,0db32b421f67000950f7b55b531291ce8c13985c5444425b22dce94d485daed1
+  arch-pkgs/bash-5.3.15-1-x86_64.pkg.tar.zst,2002014,2c14ce3c72790ec6b344267b39f04f921bbb34f0c1399460e71492547f6b6c65
+  arch-pkgs/binutils-2.46.1+r3+g046eeeef4721-1-x86_64.pkg.tar.zst,8545424,c756dd783468214029026fe9157306e5d2f5191e5af2a9162ca57d696db5ef8b
+  arch-pkgs/brotli-1.2.0-1-x86_64.pkg.tar.zst,407149,4a0c95d5967476d0efdaf76d344b61e3eee02cd7920a315e457f3fd96311b7ec
+  arch-pkgs/bzip2-1.0.8-6-x86_64.pkg.tar.zst,59786,8779003d659c441b952095c19907603a738c1366f25cc51be3fd139fa4e95748
+  arch-pkgs/coreutils-9.11-2-x86_64.pkg.tar.zst,3062677,8d6668fba51085e680b1510f16ff43d32fbfdd068e78b2000783a4dab1c15513
+  arch-pkgs/curl-8.21.0-1-x86_64.pkg.tar.zst,1341008,67f9275b591d3cc12c2c54bc38727363575d2d8c665aa4e3c26bf60b0856867b
+  arch-pkgs/diffutils-3.12-2-x86_64.pkg.tar.zst,350156,53830e09d46ceccde48a0fc1dcee026902e2a639a1b8a5e2a091d2a9d90b6967
+  arch-pkgs/e2fsprogs-1.47.4-1-x86_64.pkg.tar.zst,1296838,a78971bbbe0ae89d15a0cbbc952e64462edc5a6f991c1bb9cefd0539ca548bd4
+  arch-pkgs/elfutils-0.195-1-x86_64.pkg.tar.zst,649766,d5cda303f8a4dfa86ba2428f188e87d71d1b46832117f5589a31f7e71b116c87
+  arch-pkgs/expat-2.8.2-1-x86_64.pkg.tar.zst,132140,7df6034eb09e2c7fc6300c2d7588ee9a6c5954e2f775461fbb6521ba51ddfe37
+  arch-pkgs/findutils-4.11.0-1-x86_64.pkg.tar.zst,539114,76ac56a7f03039d163306701e5c02777b9b7170ad5388e66e46c363dd2792edf
+  arch-pkgs/gawk-5.4.1-1-x86_64.pkg.tar.zst,1553071,875761229b80b29078cd1fafc35a07add9ac4c2dbb9a429bd0b72ddcc14a31bd
+  arch-pkgs/gc-8.2.12-1-x86_64.pkg.tar.zst,241204,f81f6053b8986150529ad125827f00cc8f7652f827cea34fe3f0e97ce078434e
+  arch-pkgs/gcc-16.1.1+r346+g4e03491b401d-4-x86_64.pkg.tar.zst,60617995,346a52cc965b67f362d5b6701ec339eb43df8e68f8167a491a30847d15545a48
+  arch-pkgs/gcc-libs-16.1.1+r346+g4e03491b401d-4-x86_64.pkg.tar.zst,2710,e2f27ea47272a08d5b317c86d0eb567a53922892d4bdc1061f3e2821a18672b6
+  arch-pkgs/glibc-2.43+r37+gfdf10644d6ee-1-x86_64.pkg.tar.zst,10814843,213332b0d5b712c20a12dd61d96ba4c21f192df63d454a94ad5cef2b7864e8d1
+  arch-pkgs/gmp-6.3.0-3-x86_64.pkg.tar.zst,453294,2969061e117d2a8c19d89427b0b88e1c956a6269bc0602087d41aecd15097064
+  arch-pkgs/grep-3.12-2-x86_64.pkg.tar.zst,241270,9dd8a5dad99e8d388b1fb1406919de218d30c7e49924f615a12d3f2deaaecfe2
+  arch-pkgs/guile-3.0.11-1-x86_64.pkg.tar.zst,8798834,dbc4c775e0474a5ac8784aab95a77f6fd23ebc930abea34c7a5e0f83dd00873d
+  arch-pkgs/icu-78.3-1-x86_64.pkg.tar.zst,12272670,118fe41efa6c550f3fe67893946dcea2c6cbb5272299a6ddf4160fb17f3e4bb0
+  arch-pkgs/jansson-2.15.0-1-x86_64.pkg.tar.zst,90651,d58e6b36a8a8dcd81ae4a943b859d9b7b9d72c77455aef4f82226aa8909dadb0
+  arch-pkgs/json-c-0.19-1-x86_64.pkg.tar.zst,64992,a2ebb9395bfc18a29abd21b6dd756519114e4e6241d6321588ada285ded4d63f
+  arch-pkgs/keyutils-1.6.3-4-x86_64.pkg.tar.zst,104718,e3e5d4226bb7d213a6baddb997bf679a2b1106d95b5c2845b79bf8df1c3ef5fe
+  arch-pkgs/krb5-1.22.2-1-x86_64.pkg.tar.zst,1407071,38dcaf86512559c47e9b084ce78f417b5e8b0634feb8cb80b5edeab2c40b704f
+  arch-pkgs/libbpf-1.7.0-1-x86_64.pkg.tar.zst,273925,07ca39704fd534fcb4f520550cdddad5c113521f87035fb66f66a50a6d843257
+  arch-pkgs/libcap-2.78-1-x86_64.pkg.tar.zst,854184,3e984fe1d323b1c5a5fc60fef005776a4882fbca913d6fe3c41ad11128929ed1
+  arch-pkgs/libelf-0.195-1-x86_64.pkg.tar.zst,659429,e7faf9dc2d9dab8975a4a95ce0804c45b3fe69c1551ccb4c05c52003cb2e75c1
+  arch-pkgs/libffi-3.7.1-1-x86_64.pkg.tar.zst,54112,f6b3e945f965f1faeb66362392a341e47cfaef25a45dc75046ce7af0b2f10b1a
+  arch-pkgs/libgcc-16.1.1+r346+g4e03491b401d-4-x86_64.pkg.tar.zst,81875,722979b963615931feb6aaba3cbd15376b04ef0ec17ec1f0c557edaa5d16c358
+  arch-pkgs/libgomp-16.1.1+r346+g4e03491b401d-4-x86_64.pkg.tar.zst,236378,b4a8c0795fe74492a34b0b878659977908bf253af519e86f669b5cc6b5080d6d
+  arch-pkgs/libidn2-2.3.8-1-x86_64.pkg.tar.zst,135360,1749bdd4c395913df18c57fdd42820d3de88738b7163b7aa254d13e3da7b1d9d
+  arch-pkgs/libisl-0.28-1-x86_64.pkg.tar.zst,980886,e72fd1165d674f440ff9882b514c999423098a5852ea41fa692db65f391c98c1
+  arch-pkgs/libmpc-1.4.1-1-x86_64.pkg.tar.zst,94077,880bdba957ebe5136449c7b61821e92628d7bdd43f370e5a0818d229372d3851
+  arch-pkgs/libnghttp2-1.69.0-1-x86_64.pkg.tar.zst,96754,18846de3571b98cf657098e2f77d9c9b38d6af0c0497cff665f8b80472d0c62a
+  arch-pkgs/libnghttp3-1.17.0-1-x86_64.pkg.tar.zst,84225,1eb7cfbfb83fc660756a92be13d7f541c0a2f79818d50c958a187a13caf16633
+  arch-pkgs/libngtcp2-1.24.0-1-x86_64.pkg.tar.zst,227295,3a3c8694d416d104643681aa7c2bb2589068cee52bd11f7f1ab2ecfa9ec50cb0
+  arch-pkgs/libpsl-0.21.5-2-x86_64.pkg.tar.zst,88860,e07925c2487bd7deffdd57808b19561e80a4cb25a33e51dbd94efb673bc81944
+  arch-pkgs/libssh2-1.11.1-6-x86_64.pkg.tar.zst,265565,567bd99e4935704167dad4bf3baa9828ca029247dab1696af6c28fccf04c5bc8
+  arch-pkgs/libstdc++-16.1.1+r346+g4e03491b401d-4-x86_64.pkg.tar.zst,883060,90790e8d6b126891a2159139330c2e8464b47f0beeb604e6cb9b2b7c4542c3a8
+  arch-pkgs/libtool-2.6.2-1-x86_64.pkg.tar.zst,439424,a341443892cec624da4ca7920cdde0caa3f4feca0c99d3dd8f69a9390e66995a
+  arch-pkgs/libunistring-1.4.2-1-x86_64.pkg.tar.zst,746290,582625bc02e710b587f4ed319e5c7ad29fd5d4d424b6384f125fc094f07ce590
+  arch-pkgs/libverto-0.3.2-6-x86_64.pkg.tar.zst,19195,d0965b1b256e330e300c2bc3c699afa24f2d800dc476541039d452b606309496
+  arch-pkgs/libxcrypt-4.5.2-1-x86_64.pkg.tar.zst,94258,7d324b88963786491391468203701efd2c812798a9c3fbcc4ff8a4ddb2d9f276
+  arch-pkgs/libxml2-2.15.3-1-x86_64.pkg.tar.zst,789927,51807c20a300bf85db48ae7f2f8967bec291439764b29279e3297dff3247ed4f
+  arch-pkgs/linux-api-headers-7.1-1-x86_64.pkg.tar.zst,1576198,a6edb1e19a58c43abb93b38e70eb327b2e8b0c15aa74abf31a187c0ee6a5d732
+  arch-pkgs/lz4-1_1.10.0-2-x86_64.pkg.tar.zst,160028,c6200c776440678fe8c26adae6c104194b425d9393a9e3fc09f934363f0c39a6
+  arch-pkgs/make-4.4.1-3-x86_64.pkg.tar.zst,529562,b03efac9175b986a5f29302336fb1271874464644de3191e6a40079eb8cc5276
+  arch-pkgs/mpfr-4.2.2-1-x86_64.pkg.tar.zst,447319,e765082b2c3260550887ccf34f6f0d24289fc5ca8c0949eb5c2e9937272ea80f
+  arch-pkgs/ncurses-6.6-2-x86_64.pkg.tar.zst,1226662,9b80390fd681121443a45a51b74e2e2ade245ce22af8769915d63165b727e27c
+  arch-pkgs/openssl-3.6.3-1-x86_64.pkg.tar.zst,5750527,85fdbdd57b6773a9b94d4d54c39deecd808aac6bc48d6d42c36ce712283665b3
+  arch-pkgs/pcre2-10.47-1-x86_64.pkg.tar.zst,1698422,54e0d8c998d2748f47fead1926b04357719bdd00fa1cea84901c3af501aab002
+  arch-pkgs/readline-8.3.003-1-x86_64.pkg.tar.zst,419558,a4e861378069dcb15c6fbd52a1f5d9ed01b4bce5fb208268c7c182341f5f3960
+  arch-pkgs/sed-4.10-1-x86_64.pkg.tar.zst,254411,6cd7348dd89a6fafcd39e4ae6b0eea02ccfed03474f24d461cc50ec41137a979
+  arch-pkgs/xxhash-0.8.3-1-x86_64.pkg.tar.zst,100356,3d48ff40b744aa4503cd5638f620c2c39a12d27967d1db3ab46bf18ff4b2fd80
+  arch-pkgs/xz-5.8.3-1-x86_64.pkg.tar.zst,896293,03b9eefeb02c27c4f30fce4481cb5bd2922c0391f628665911c156970285d5d9
+  arch-pkgs/zlib-1_1.3.2-3-x86_64.pkg.tar.zst,84690,41cf0bb5df14e18f7fb868a97da3feb7c4127fba99bb332ad54b14322faac1b1
+  arch-pkgs/zstd-1.5.7-3-x86_64.pkg.tar.zst,527400,d4cf0049137124c8a025eedfad267a3e8a02310c9efb9d1ae4a61aa1d02789fc
+module_loaded: false
+hardware_accepted: false

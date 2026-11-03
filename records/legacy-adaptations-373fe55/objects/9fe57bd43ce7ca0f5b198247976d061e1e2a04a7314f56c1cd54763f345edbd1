@@ -1,0 +1,46 @@
+Subject: [PATCH] platform/x86: oxpec: release ACPI global lock after EC read errors
+
+The preserved oxpec.upstream.c from the named Valve-tag mirror returns directly
+when ec_read() fails, bypassing the acquired ACPI global lock's release. Battery
+extension registration/uevents and ordinary hwmon reads can reach this path; a
+read-only module trial can therefore leave the global lock held. Module exit
+contains no corresponding recovery.
+
+Route every acquired read-helper path through the existing unlock operation,
+return the original ec_read status after a successful release, and initialize
+that status to retain zero-length read behavior. Acquisition failure still
+returns without release, and release failure retains the existing -EBUSY result.
+The write helper already attempts release after ec_write success or failure and
+is unchanged. This patch is separate from the seven-line OXP3 DMI mapping; the
+preserved mirror source is unchanged. No EC register/value policy is changed.
+
+--- a/oxpec.c
++++ b/oxpec.c
+@@ -310,7 +310,7 @@
+ static int read_from_ec(u8 reg, int size, long *val)
+ {
+ 	u8 buffer;
+-	int ret;
++	int ret = 0;
+ 	int i;
+ 
+ 	if (!lock_global_acpi_lock())
+@@ -320,15 +320,16 @@
+ 	for (i = 0; i < size; i++) {
+ 		ret = ec_read(reg + i, &buffer);
+ 		if (ret)
+-			return ret;
++			goto out_unlock;
+ 		*val <<= i * 8;
+ 		*val += buffer;
+ 	}
+ 
++out_unlock:
+ 	if (!unlock_global_acpi_lock())
+ 		return -EBUSY;
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static int write_to_ec(u8 reg, u8 value)

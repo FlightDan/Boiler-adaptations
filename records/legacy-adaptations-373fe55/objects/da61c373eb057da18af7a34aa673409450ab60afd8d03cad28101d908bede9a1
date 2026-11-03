@@ -1,0 +1,18 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:intel-g3e-public-cpu-controls"
+files[14]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  baseline/brands/onexplayer/oxp3/scripts/controls/cpu/cpu-plugin-index.js,12203,a1cd67a64fc69b4f279b17ffe8fc5948b37fb7f4a233a10745fa01698492fa44
+  baseline/brands/onexplayer/oxp3/scripts/controls/cpu/cpu-plugin-main.py,1911,36e6ceacda689a4856486c5fe2fd541094b4f603b8282b79886ad7519f30736b
+  baseline/brands/onexplayer/oxp3/scripts/controls/cpu/cpu_control.py,6473,7dabf1846c473fbd3a17f4453e835fd5116d74abe6d0e3aee528bc74dcaa4872
+  baseline/brands/onexplayer/oxp3/scripts/controls/cpu/deploy-cpu.py,3236,3120cfd39c794d5475ee400acb90cb000842269fef71388c31783221913e9352
+  baseline/brands/onexplayer/oxp3/scripts/controls/cpu/power_control.py,4266,d5c5efd2f847d443bbff04dd30a3af847576d867eebcfb9b25c94d8e2b31654f
+  devices/CPU/Intel/G3E/resource.toon,1064,c61893b23ba5c48361ccc9cf4128994350cfe3f9a753e3f803cb095e748e4b44
+  devices/CPU/Intel/G3E/telemetry-schema.toon,199,d0964ed9658fe6d53fd09c3f03a7cb97ca742f5780fcd7802d518759a98fa51f
+  devices/CPU/Intel/G3E/templates/config.toon,77,8efb724c6d79b39f978d638c8a0864ed08b74cfa6d8f703236dc1fa0e813bac1
+  devices/CPU/Intel/G3E/templates/oxp3-cpu.service,651,6ad5885293456a25d30a42c630c4b4f629f8cc02fd111c50bb73e761a29ac2b4
+  devices/CPU/Intel/G3E/templates/package.toon,43,942129f3f3c0f2afdf50a1d59b6af34d84ac34b52734ae776e1b99c5dc6a9a77
+  devices/CPU/Intel/G3E/templates/plugin.toon,75,da4e9f0e5c1b4f179383ffc37bf281106f2230930248e368c76512ecd7e57653
+  locks/public-baseline.toon,32751,15dae171a0bbdf7423a117fb008e71e0f7737d2a3647ede1b1887bf051c549cf

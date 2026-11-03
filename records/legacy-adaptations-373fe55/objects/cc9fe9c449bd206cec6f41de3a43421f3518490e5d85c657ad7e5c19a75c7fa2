@@ -1,0 +1,47 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Software-only decoder/color semantics; never a panel or optical measurement.
+#include "utils/edid.h"
+#include "core/colorspace.h"
+#include "oxp3_gamma22_policy.h"
+#include <QCoreApplication>
+#include <array>
+#include <cassert>
+#include <cstdint>
+#include <iostream>
+#include <span>
+
+static std::array<uint8_t,128> makeEdid(const std::array<unsigned,8> &xy)
+{
+    std::array<uint8_t,128> v{};
+    const uint8_t header[]{0,255,255,255,255,255,255,0};
+    for (unsigned i=0;i<8;i++) v[i]=header[i];
+    v[8]=0x04;v[9]=0x43;v[10]=0xd2;v[11]=0x04; // synthetic ABC / non-SDC panel
+    v[18]=1;v[19]=4;v[20]=0x80;v[21]=30;v[22]=17;v[23]=120;
+    for (unsigned i=0;i<8;i++) { assert(xy[i]<1024);v[27+i]=xy[i]>>2; }
+    v[25]=((xy[0]&3)<<6)|((xy[1]&3)<<4)|((xy[2]&3)<<2)|(xy[3]&3);
+    v[26]=((xy[4]&3)<<6)|((xy[5]&3)<<4)|((xy[6]&3)<<2)|(xy[7]&3);
+    unsigned sum=0;for (auto byte:v) sum+=byte;v[127]=uint8_t(-sum);
+    return v;
+}
+
+int main(int argc,char **argv)
+{
+    QCoreApplication app(argc,argv);
+    auto first=makeEdid({655,338,307,614,154,61,320,337});
+    auto second=makeEdid({690,320,270,660,140,50,320,337});
+    assert(KWin::boilerCompleteEdid(first) && KWin::boilerCompleteEdid(second));
+    KWin::Edid a{first.data(),uint32_t(first.size())},b{second.data(),uint32_t(second.size())};
+    assert(a.isValid() && b.isValid());
+    auto gamutA=a.nativeColorimetry(),gamutB=b.nativeColorimetry();
+    assert(gamutA && gamutB && !(*gamutA==*gamutB));
+    for (const auto &gamut : {*gamutA,*gamutB}) {
+        KWin::ColorDescription out(gamut,KWin::TransferFunction(KWin::TransferFunction::gamma22,0.0005,700),
+            203,0.0005,475,700,gamut,KWin::Colorimetry::BT709);
+        assert(out.transferFunction().type==KWin::TransferFunction::gamma22);
+        assert(out.containerColorimetry()==gamut && out.masteringColorimetry()==gamut);
+        assert(out.maxAverageLuminance()==475 && out.maxHdrLuminance()==700);
+    }
+    assert(!KWin::oxp3Gamma22Panel(true,true,first));
+    auto damaged=first;damaged[32]^=1;assert(!KWin::boilerCompleteEdid(damaged));
+    std::cout << "Distinct parsed native gamuts and X2 475/700 software color semantics passed\n";
+}

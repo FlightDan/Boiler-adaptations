@@ -1,0 +1,37 @@
+import asyncio
+import importlib.util
+import json
+from pathlib import Path
+import subprocess
+import time
+
+spec=importlib.util.spec_from_file_location('oxp3_fan','/var/lib/oxp3-fan/fan.py')
+fan=importlib.util.module_from_spec(spec)
+spec.loader.exec_module(fan)
+
+class Plugin:
+    async def get_status(self):
+        config=json.loads(fan.CONFIG.read_text())
+        try:
+            status=json.loads(fan.STATUS.read_text())
+            if time.monotonic()-status.get('time',0)>4:
+                status={'error':'风扇服务未运行'}
+        except (OSError,ValueError):
+            status={'error':'风扇服务未运行'}
+        return {'config':config,'status':status}
+
+    async def configure(self, config):
+        fan.validate(config)
+        fan.atomic(fan.CONFIG, config)
+        def restart_if_needed():
+            if subprocess.run(['systemctl','is-active','--quiet','oxp3-fan.service']).returncode:
+                subprocess.run(['systemctl','reset-failed','oxp3-fan.service'],check=True)
+                subprocess.run(['systemctl','start','oxp3-fan.service'],check=True,timeout=12)
+        restart_if_needed()
+        return await self.get_status()
+
+    async def _main(self):
+        pass
+
+    async def _unload(self):
+        fan.atomic(fan.CONFIG, {'mode':'auto'})

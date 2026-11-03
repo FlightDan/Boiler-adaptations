@@ -1,0 +1,49 @@
+"""Read the fixed installed root-owned desktop binding for this desktop user."""
+import json
+import hashlib
+import os
+from pathlib import Path
+import pwd
+import stat
+import sys
+
+PREFIX=Path('/opt/oxp3-desktop-gamma22/6.7.3-1.6')
+LIBEXEC=PREFIX/'libexec/boiler-desktop-hdr'
+
+def protected(path):
+    path=Path(path)
+    for item in (path,*path.parents):
+        info=item.lstat()
+        if stat.S_ISLNK(info.st_mode) or info.st_uid!=0 or info.st_mode & 0o022:
+            raise ValueError('Unprotected desktop HDR runtime path')
+    info=path.stat()
+    if not stat.S_ISREG(info.st_mode) or info.st_nlink!=1:
+        raise ValueError('Desktop HDR runtime member is not a regular file')
+    return path
+
+def load_binding():
+    for name in ('__init__.py','desktop_hdr_panel.py','hdr_live_panel.py'):
+        protected(LIBEXEC/'boiler_desktop'/name)
+    sys.path.insert(0,str(LIBEXEC))
+    from boiler_desktop.desktop_hdr_panel import validate_binding,probe_internal_edp
+    path=protected(PREFIX/'share/boiler-desktop-hdr/panel-binding.json')
+    if path.stat().st_size>20000: raise ValueError('Oversized desktop binding')
+    binding=validate_binding(json.loads(path.read_bytes()))
+    profile_file=protected(PREFIX/'share/boiler-desktop-hdr/profile.json')
+    if profile_file.stat().st_size>4096:raise ValueError('Oversized desktop profile')
+    profile=json.loads(profile_file.read_bytes())
+    expected_profile=dict(kind='BoilerDesktopHdrProfileV1',schema_version=1,profile=binding['profile'],
+        full_frame=binding['full_frame'],peak=binding['peak'],policy=binding['policy'])
+    if profile!=expected_profile or any(type(profile[k]) is not int for k in ('schema_version','full_frame','peak')):
+        raise ValueError('Installed desktop profile differs from binding')
+    account=pwd.getpwuid(os.getuid())
+    expected=binding['account']
+    if os.getuid()==0 or (account.pw_name,account.pw_uid,account.pw_gid,account.pw_dir)!=(expected['name'],expected['uid'],expected['gid'],expected['home']):
+        raise ValueError('Desktop account differs from installed binding')
+    manifest=protected(PREFIX/'share/boiler-desktop-hdr/native-inventory.json')
+    if manifest.stat().st_size>1048576 or hashlib.sha256(manifest.read_bytes()).hexdigest()!=binding['bundle_sha256']:
+        raise ValueError('Desktop native inventory differs from installed binding')
+    observed=probe_internal_edp()
+    if observed['edid']!=binding['edid'] or observed['connector']!=binding['connector']:
+        raise ValueError('Internal panel differs from installed binding')
+    return binding

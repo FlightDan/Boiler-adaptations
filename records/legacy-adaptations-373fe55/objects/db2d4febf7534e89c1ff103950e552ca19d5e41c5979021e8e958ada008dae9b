@@ -1,0 +1,56 @@
+"""Read-only per-game XMX review token; invoked by the fixed Decky adapter."""
+import hashlib,json,os
+from pathlib import Path
+
+
+def _state(path,*,owner=True):
+ path=Path(path)
+ if path.is_symlink():raise RuntimeError('Game plan refuses symlink file: '+str(path))
+ if not path.exists():return dict(kind='absent')
+ info=path.stat()
+ if not path.is_file() or (owner and info.st_uid!=os.getuid()):raise RuntimeError('Game plan requires safe regular files: '+str(path))
+ h=hashlib.sha256()
+ with path.open('rb') as stream:
+  for chunk in iter(lambda:stream.read(1024*1024),b''):h.update(chunk)
+ return dict(kind='file',sha256=h.hexdigest(),size=info.st_size,mode=info.st_mode&0o777)
+
+
+def plan(manager,appid,executable,route,old_launch):
+ if not isinstance(appid,int) or isinstance(appid,bool) or appid<=0 or route not in ('native','opti') or not isinstance(old_launch,str):raise ValueError('Invalid fixed XMX review request')
+ info=manager.inspect_game(appid)
+ if executable not in info['executables'] or Path(executable).is_absolute() or '..' in Path(executable).parts or '\\' in executable:raise RuntimeError('Executable is not in the current Steam game inventory')
+ game=Path(info['game']);prefix=Path(info['prefix']);rt=manager.runtime();rt.no_symlink_parents(game/executable);rt.no_symlink_parents(prefix/'placeholder')
+ package,sr,ready=manager.dependencies()
+ if not ready:raise RuntimeError('Managed runtime is not ready')
+ relative=[lib['path'] for lib in info['libraries']]+(info['optis'] if route=='opti' else [])
+ if any(Path(p).is_absolute() or '..' in Path(p).parts or '\\' in p for p in relative):raise RuntimeError('Game plan path escapes game directory')
+ targets=[game/p for p in relative]+[game/executable,rt.prefix_dll_path(prefix),prefix/rt.OWNER_REL]
+ inputs=[Path(package)/'igdext64.dll',Path(sr)]
+ items=[]
+ for target in sorted(set(targets),key=str):
+  rt.no_symlink_parents(target);items.append(dict(path=str(target),state=_state(target)))
+ for target in sorted(set(inputs),key=str):
+  rt.no_symlink_parents(target);items.append(dict(path=str(target),state=_state(target,owner=False)))
+ changes=[str(p) for p in sorted(set(targets),key=str) if p!=game/executable]
+ value=dict(kind='BoilerOptiGameReview',schema_version=1,appid=appid,game_name=info.get('name',''),executable=executable,route=route,launch=old_launch,game=str(game),prefix=str(prefix),package=str(package),changes=changes,files=items)
+ raw=json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode();return dict(plan=value,sha256=hashlib.sha256(raw).hexdigest())
+
+
+def verify(manager,appid,executable,route,old_launch,reviewed_sha256):
+ current=plan(manager,appid,executable,route,old_launch)
+ if current['sha256']!=reviewed_sha256:raise RuntimeError('Game changed since review; inspect and confirm the new plan')
+ return current['plan']
+
+
+def opti_changes(info,executable,launch,version,fsr,changes,previous,rt):
+ game=Path(info['game']);rows=[]
+ for name,value in sorted(changes.items()):
+  path=Path(name)
+  if not path.is_absolute() or not path.is_relative_to(game) or '..' in path.parts:raise RuntimeError('Opti change escapes the selected game')
+  rt.no_symlink_parents(path)
+  after=dict(kind='absent') if value is None else dict(kind='file',size=len(value),sha256=hashlib.sha256(value).hexdigest())
+  rows.append(dict(path=str(path),before=_state(path),after=after))
+ old=json.dumps(previous,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode()
+ value=dict(kind='BoilerOptiInstallReview',schema_version=1,appid=info['appid'],game_name=info['name'],executable=executable,launch=launch,version=version,fsr=fsr,changes=rows,previous_sha256=hashlib.sha256(old).hexdigest())
+ raw=json.dumps(value,sort_keys=True,separators=(',',':'),ensure_ascii=False,allow_nan=False).encode()
+ return dict(plan=value,sha256=hashlib.sha256(raw).hexdigest())

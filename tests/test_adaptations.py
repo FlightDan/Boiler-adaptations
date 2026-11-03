@@ -15,10 +15,9 @@ spec.loader.exec_module(collection)
 
 class AdaptationCollectionTests(unittest.TestCase):
     def copy_collection(self, destination):
-        for name in ('adaptations.json', 'source-plan.json', 'source-lock.json'):
-            shutil.copyfile(ROOT/name, destination/name)
-        for name in ('common', 'brands', 'licenses', 'records', 'vendor'):
-            shutil.copytree(ROOT/name, destination/name)
+        inventory=json.loads((ROOT/'model-source-files.json').read_bytes())
+        for name in ['model-source-files.json','records/installer-adaptation-source-import-20261104.json']+[row['path'] for row in inventory['files']]:
+            target=destination/name; target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(ROOT/name,target)
 
     def update_model(self, root, transform):
         path = root/'brands/onexplayer/x2-mini/manifest.json'
@@ -31,15 +30,15 @@ class AdaptationCollectionTests(unittest.TestCase):
         self.assertEqual(result['models'], 2)
         self.assertFalse(result['installable'])
         models = {model['id']: model for _, model in collection.records(ROOT)}
-        self.assertEqual(len(models['guide:oxp3']['components']), 28)
+        self.assertEqual(len(models['guide:oxp3']['components']), 29)
         x2 = {item['id']: item for item in models['guide:x2-mini']['components']}
         self.assertEqual(x2['pl4-175w']['status'], 'implementation_missing')
         self.assertEqual(x2['pl4-175w']['sources'], [])
         self.assertEqual(x2['desktop-hdr']['status'], 'external_runtime_required')
         self.assertEqual(len(x2['desktop-hdr']['sources']), 4)
         self.assertEqual(x2['hdr']['sources'], [])
-        self.assertTrue(all(x2[name]['recommendation'] == 'excluded'
-                            for name in ('xe-dsb', 'fan-driver', 'charging', 'oxp3-light', 'legacy-runtime')))
+        self.assertTrue(x2['fingerprint-unlock']['default'])
+        self.assertEqual(x2['gyro']['sources'], ['brands/onexplayer/x2-mini/common-device-sources.toon'])
 
     def test_tampered_source_fails_inventory_check(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -62,14 +61,14 @@ class AdaptationCollectionTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             self.copy_collection(root)
-            self.update_model(root, lambda model: model['components'][0].update(notes='Changed recommendation'))
+            self.update_model(root, lambda model: model['components'][1].update(notes='Changed recommendation'))
             with self.assertRaisesRegex(ValueError, 'Guide differs'):
                 collection.check(root)
 
     def test_missing_dependencies_and_runtime_defaults_are_rejected(self):
         for change, message in (
-            (lambda model: model['components'][0].update(dependencies=['missing-component']), 'dependency'),
-            (lambda model: model['components'][0].update(default=True), 'installation defaults'),
+            (lambda model: model['components'][1].update(dependencies=['missing-component']), 'dependency'),
+            (lambda model: model['components'][1].update(default=True), 'installation defaults'),
             (lambda model: model.update(installable=True), 'not a DevicePackage'),
         ):
             with self.subTest(message=message), tempfile.TemporaryDirectory() as temporary:
@@ -83,7 +82,7 @@ class AdaptationCollectionTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             self.copy_collection(root)
-            self.update_model(root, lambda model: model['components'][0].update(sources=['private-or-missing.py']))
+            self.update_model(root, lambda model: model['components'][1].update(sources=['private-or-missing.py']))
             with self.assertRaisesRegex(ValueError, 'Uninventoried component source'):
                 collection.check(root)
 
@@ -162,6 +161,7 @@ class AdaptationCollectionTests(unittest.TestCase):
                 model = json.loads((root/'brands/onexplayer/x2-mini/manifest.json').read_text(encoding='utf-8'))
                 model['id'] = 'guide:test-model'
                 model['guide'] = guide
+                next(item for item in model['components'] if item['id']=='fingerprint-unlock')['default'] = False
                 if case == 'no-gyro':
                     model['components'] = [item for item in model['components'] if item['id'] != 'gyro']
                 else:

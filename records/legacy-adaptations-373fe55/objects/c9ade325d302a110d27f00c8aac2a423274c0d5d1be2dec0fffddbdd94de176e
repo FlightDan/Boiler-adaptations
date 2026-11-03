@@ -1,0 +1,46 @@
+schema_version: 1
+kind: BoilerResourceSource
+id: "resource:gamma22-hdr-desktop"
+version: 1.0.0-desktop-hdr.pending
+dependencies: []
+external_component_dependencies: []
+hardware_requires:
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+  os_versions[1]: "3.10"
+  kernels[1]: 7.2.4-valve1-1-neptune-72-g5ab4af5e2eb9
+install_kind: gamma22-hdr-desktop-v1
+verify:
+  kind: sha256-v1
+restore:
+  kind: transaction-backup-v1
+renderer: fixed-desktop-hdr-v1
+source_lock: locks/resources/gamma22-hdr-desktop.toon
+recipe:
+  native_manifest: devices/display/kwin/gamma22-hdr/native-manifest.toon
+  runtime_sources[9]{source,output,size,sha256}:
+    devices/display/kwin/gamma22-hdr/runtime/boiler-kwin-launch,payload/desktop/runtime/boiler-kwin-launch,8689,62b3a9d853072c8dbf73af384fa7781cb10666bd8d96af56331622b53db5056e
+    devices/display/kwin/gamma22-hdr/runtime/trusted_binding.py,payload/desktop/runtime/trusted_binding.py,2580,02cc0a62d724af1784433b22b49b7fbf0af021e7de29cc19296aba9ab8c41afc
+    devices/display/kwin/gamma22-hdr/runtime/hdr_trial.py,payload/desktop/runtime/hdr_trial.py,31443,415f0f72602c0082739a451bac79c733524b0c8829b7b2a11f02e65241e12160
+    devices/display/kwin/gamma22-hdr/runtime/90-boiler-desktop-hdr.conf,payload/desktop/runtime/90-boiler-desktop-hdr.conf,224,8b9ff8c0cc20683fe176255a6cea15be929dca36b114e741093edb09b23c88a1
+    devices/display/kwin/gamma22-hdr/runtime/boiler-desktop-hdr.desktop,payload/desktop/runtime/boiler-desktop-hdr.desktop,243,119cef6f1ae2a77962c639b5d2eb43c0e784b6928fe939cbecd6766bd77e241e
+    devices/display/kwin/gamma22-hdr/runtime/boiler_desktop/__init__.py,payload/desktop/runtime/boiler_desktop/__init__.py,0,e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+    devices/display/kwin/gamma22-hdr/runtime/boiler_desktop/desktop_hdr_panel.py,payload/desktop/runtime/boiler_desktop/desktop_hdr_panel.py,4514,644038da137b459492cde07e10a4be05981cda681664ade05425e9fc6076ddc9
+    devices/display/kwin/gamma22-hdr/runtime/boiler_desktop/hdr_live_panel.py,payload/desktop/runtime/boiler_desktop/hdr_live_panel.py,1222,14f830cf9faa41577c68ad0481702dc7a362fdb476c8dd2a9b62dd44fa464277
+    devices/display/kwin/gamma22-hdr/runtime/unbound.toon,payload/desktop/panel-binding.json,70,27bf75263d2d8c619f7795999dab6d935d8b195fd9428f8700c84818d1ac2783
+  license_sources[14]{source,output,size,sha256}:
+    devices/display/kwin/gamma22-hdr/licenses/KWin/BSD-3-Clause.txt,licenses/desktop-kwin/BSD-3-Clause.txt,1480,e11af671c491efac2f94c1d752bea92f4308ca2450c7d11e582e4b48c40e4de1
+    devices/display/kwin/gamma22-hdr/licenses/KWin/CC0-1.0.txt,licenses/desktop-kwin/CC0-1.0.txt,7048,a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499
+    devices/display/kwin/gamma22-hdr/licenses/KWin/GPL-2.0-only.txt,licenses/desktop-kwin/GPL-2.0-only.txt,17623,d1cf0896da7045d841fe45b0991cf35540bac1a17b5d11f4afcf8fcb950246b5
+    devices/display/kwin/gamma22-hdr/licenses/KWin/GPL-2.0-or-later.txt,licenses/desktop-kwin/GPL-2.0-or-later.txt,17622,606aa26338f69ce178f1cbc648b7574aec4b5bbaeb20f4df36ff49010cb8fbbd
+    devices/display/kwin/gamma22-hdr/licenses/KWin/GPL-3.0-only.txt,licenses/desktop-kwin/GPL-3.0-only.txt,34470,2ca9503d76d1ffab14f599b4741382eec11face60ad1f0d7a41897809003a286
+    devices/display/kwin/gamma22-hdr/licenses/KWin/GPL-3.0-or-later.txt,licenses/desktop-kwin/GPL-3.0-or-later.txt,34470,2ca9503d76d1ffab14f599b4741382eec11face60ad1f0d7a41897809003a286
+    devices/display/kwin/gamma22-hdr/licenses/KWin/LGPL-2.0-only.txt,licenses/desktop-kwin/LGPL-2.0-only.txt,24774,de588a8b1c41fe73ffe1201f9d12c718a988ed8e1302929625a6e7c2bced7461
+    devices/display/kwin/gamma22-hdr/licenses/KWin/LGPL-2.0-or-later.txt,licenses/desktop-kwin/LGPL-2.0-or-later.txt,24774,de588a8b1c41fe73ffe1201f9d12c718a988ed8e1302929625a6e7c2bced7461
+    devices/display/kwin/gamma22-hdr/licenses/KWin/LGPL-2.1-only.txt,licenses/desktop-kwin/LGPL-2.1-only.txt,25911,211f1b738d1b864bab2648bee9b55becd39fd2d6aa49c1196e7d87b41db4bc07
+    devices/display/kwin/gamma22-hdr/licenses/KWin/LGPL-2.1-or-later.txt,licenses/desktop-kwin/LGPL-2.1-or-later.txt,25967,fa6f36630bb1e0c571d34b2bbdf188d08495c9dbf58f28cac112f303fc1f58fb
+    devices/display/kwin/gamma22-hdr/licenses/KWin/LGPL-3.0-only.txt,licenses/desktop-kwin/LGPL-3.0-only.txt,7431,476b03829862ab7e3ed920f87fad3de3c995f7dd93c26476eb40f0117de43fdc
+    devices/display/kwin/gamma22-hdr/licenses/KWin/LicenseRef-KDE-Accepted-GPL.txt,licenses/desktop-kwin/LicenseRef-KDE-Accepted-GPL.txt,662,ef839531eb65b0168f9aed14047c84be13e9ea38801a73bc18abe24dc93e6ac9
+    devices/display/kwin/gamma22-hdr/licenses/KWin/LicenseRef-KDE-Accepted-LGPL.txt,licenses/desktop-kwin/LicenseRef-KDE-Accepted-LGPL.txt,665,d9f25707d20e804f15005be46527366b0604bd739754d144a83d3983d94a9a6a
+    devices/display/kwin/gamma22-hdr/licenses/KWin/MIT.txt,licenses/desktop-kwin/MIT.txt,1108,8f25018489d6fe0dec34a352314c38dc146247b7de65735790f4398a92afa84b

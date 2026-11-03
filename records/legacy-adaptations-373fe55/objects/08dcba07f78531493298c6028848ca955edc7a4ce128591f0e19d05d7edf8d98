@@ -1,0 +1,37 @@
+pkgname=libgbinder
+pkgver="${WAYDROID_LIBGBINDER_VERSION:?WAYDROID_LIBGBINDER_VERSION is required}"
+pkgrel="${WAYDROID_LIBGBINDER_PKGREL:?WAYDROID_LIBGBINDER_PKGREL is required}"
+pkgdesc='GLib-style interface to Binder'
+arch=('x86_64')
+url='https://github.com/mer-hybris/libgbinder'
+license=('BSD-3-Clause')
+depends=('libglibutil' 'glib2')
+options=('!debug')
+source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/$pkgver.tar.gz")
+sha256sums=("${WAYDROID_LIBGBINDER_SHA256:?WAYDROID_LIBGBINDER_SHA256 is required}")
+
+if [[ -n "${WAYDROID_LIBGBINDER_PATCH:-}" ]]; then
+    source+=("$WAYDROID_LIBGBINDER_PATCH")
+    sha256sums+=(
+        "${WAYDROID_LIBGBINDER_PATCH_SHA256:?WAYDROID_LIBGBINDER_PATCH_SHA256 is required when a patch is selected}"
+    )
+fi
+
+prepare() {
+    cd "$pkgname-$pkgver"
+
+    if [[ -n "${WAYDROID_LIBGBINDER_PATCH:-}" ]]; then
+        patch -Np1 -i "../$WAYDROID_LIBGBINDER_PATCH"
+    fi
+}
+
+build() {
+  cd "$pkgname-$pkgver"
+  make release pkgconfig KEEP_SYMBOLS=1
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  make DESTDIR="$pkgdir" LIBDIR=usr/lib install-dev
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

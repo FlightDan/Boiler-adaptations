@@ -1,0 +1,25 @@
+"""Standalone integrity and scope checks for the installer-source archive."""
+import importlib.util
+from pathlib import Path
+import unittest
+ROOT=Path(__file__).resolve().parents[1]
+spec=importlib.util.spec_from_file_location('archive_check',ROOT/'tools/check.py')
+module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+class InstallerSourceArchiveChecks(unittest.TestCase):
+    def test_archive_classification(self):
+        module.check(); toon=module.parser()
+        doc=toon.loads((ROOT/'locks/installer-e18/classification.toon').read_text(encoding='utf-8'),strict=True)
+        self.assertEqual('1fc2b490c93a43770042f565bda467622ed12e80',doc['installer_source_commit'])
+        self.assertEqual(300,len(doc['files']))
+        self.assertEqual(300,len({row['source_path'] for row in doc['files']}))
+        self.assertEqual('archival-only-not-active-resource',doc['scope'])
+        self.assertTrue(all(len(row['source_sha256'])==64 for row in doc['files']))
+        self.assertEqual(30,sum(row['action'] in ('review-additive-device-source','review-provenance') for row in doc['files']))
+    def test_archived_member_tamper_rejected(self):
+        import shutil,tempfile
+        with tempfile.TemporaryDirectory() as temp:
+            clone=Path(temp)/'repo';shutil.copytree(ROOT,clone,ignore=shutil.ignore_patterns('.git','__pycache__'))
+            spec=importlib.util.spec_from_file_location('archive_copy_check',clone/'tools/check.py');check=importlib.util.module_from_spec(spec);spec.loader.exec_module(check)
+            path=clone/'locks/installer-e18/classification.toon';path.write_bytes(path.read_bytes()+b'\n')
+            with self.assertRaisesRegex(ValueError,'Imported source differs'):check.check()
+if __name__=='__main__':unittest.main()

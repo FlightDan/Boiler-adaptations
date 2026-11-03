@@ -1,0 +1,7 @@
+# KWin desktop HDR fixed-prefix build
+
+The reviewed generation was built from the corresponding KWin 6.7.3 source archive SHA-256 `4bf7ce54a38a65e06890e593d0f3e69f9aedbc4b2e71c8a0522e489d8dbf1c23`. Publish that full archive with these supplementary source files and the native output archive SHA-256 `9a612934745583aa581a502190b3a32f3d089c6a41ba0caed910f03e13f157a5`. The build is not represented as reproducible from this directory alone: the exact independently verified SteamOS SDK package closure, signature evidence, build inputs and dependencies are required.
+
+`build-recipe.sh` is the actual recorded recipe for the 20261031T190930 export; `CMakeCache.txt` is its recorded configuration. It configures `/work/kwin-6.7.3` with CMake install prefix `/opt/oxp3-desktop-gamma22/6.7.3-1.6`, lib/libexec in `lib`, Qt plugins in `lib/qt6/plugins`, QML in `lib/qt6/qml`, and BUILD_TESTING=OFF; it builds with four jobs and installs through DESTDIR. It builds the linked EDID/interface probes and Wayland presentation pattern, pins the runtime RPATH to that prefix's lib, writes the exact package compatibility list and runs policy, EDID, color, ELF and `ldd -r` checks. Paths in the recorded recipe describe the original isolated build environment and must be prepared equivalently; do not run it against a live installation.
+
+Software checks and the resulting native archive do not establish physical HDR presentation or calibration. A public, immutable location for the complete corresponding source and native archive remains required before release.

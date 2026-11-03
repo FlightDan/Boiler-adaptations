@@ -1,0 +1,17 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:steamos-manager"
+files[13]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  common/system/steamos-manager/inputs/000-steamos-manager,8086912,1bbd4280708049e24ab63fbe508da70fe8033a46b10e54d245eb310f6f96f9b3
+  common/system/steamos-manager/inputs/001-steamosctl,4192032,542794eb6c65e169fd0d2b307f59c7d4f25fd85369a2aab62901561b75fadaa4
+  common/system/steamos-manager/licenses/Valve-steamos-manager-MIT.txt,1128,f53dcc321aae90730a5d8b831de34eca141ad277f352ab3f8ad5f860060cef77
+  common/system/steamos-manager/licenses/project-AGPL-3.0.txt,35184,e0eedba615d5cd1b986afb6c5b3a4b1ae33713e7e9dc74d19daec5e3221f9d2e
+  common/system/steamos-manager/licenses/upstream-fixes-MIT.txt,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  common/system/steamos-manager/resource.toon,867,94914fd0f5f8786f8332a85d481cd0ee3db6750b40c2d76e2ddd692b3e733df7
+  common/system/steamos-manager/source-lock.toon,1230,0aeb8b56a7456a1a3ae88f4e8fda11ac8eaf0eaca32e8495a75db7de79433868
+  common/system/steamos-manager/sources/001-tdp-error-propagation.patch,19246,3e43315ccb226f24adf9f83962356ff09769fe571e551322065459794ab537e0
+  common/system/steamos-manager/sources/002-tdp-live-state-cache.patch,10671,b788404c8f5d729da4f6e45e8cdb6d4013345d6938e85e9201a38bf02db81c57
+  common/system/steamos-manager/sources/Valve-source-provenance.toon,409,d5b679558cc81bbee1b160e996ab4ff54a822b02922ef35d14b62b801ee6d740
+  common/system/steamos-manager/sources/steamos-manager-v26.4.1.tar,962560,0191e09b05324aab8fe4dfd7e133e8e702fc1a633d29484ed0a367216ad35817

@@ -1,0 +1,4 @@
+[Service]
+UnsetEnvironment=LD_LIBRARY_PATH KWIN_OXP3_GAMMA22_HDR KWIN_X2MINI_HDR_PROFILE KWIN_BOILER_HDR_PANEL_SHA256 KWIN_BOILER_HDR_CONNECTOR
+ExecStart=
+ExecStart=/opt/oxp3-desktop-gamma22/6.7.3-1.6/bin/boiler-kwin-launch

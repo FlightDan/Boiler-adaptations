@@ -1,0 +1,51 @@
+kind: SelectedPublicComponentSources
+input:
+  path: inputs/public-installer/oxp3-steamos-installer-1.0.6-20261022-220437.zip
+  url: "https://github.com/FlightDan/OneXPlayer3-SteamOS/releases/download/v1.0.6%2Binstaller.20261022.220437/oxp3-steamos-installer-1.0.6-20261022-220437.zip"
+  name: oxp3-steamos-installer-1.0.6-20261022-220437.zip
+  size: 555684389
+  sha256: d8bee8bad14f4cd136c814ebcaa3299fa59202b6cdc6d26ec9c52af0e055f4d4
+component: oxp3-fan
+files[9]:
+  - path: inputs/000-fan.py
+    size: 5396
+    sha256: 5ed6af94055a22454ad28a43feff257383918c21804460da5287658399ab9f9c
+    upstream_member: cache/integration/oxp3-fan/000.bin
+  - path: inputs/001-fan-sleep.py
+    size: 573
+    sha256: 91cb78aad15ccf35874dfaaf93dae88c2d70c57525544bdec6ae664301c4676f
+    upstream_member: cache/integration/oxp3-fan/001.bin
+  - path: inputs/002-oxp3-fan.service
+    size: 657
+    sha256: 02b89441b6bea018cefb267fafee516d18fdcaf813e70918110f1e87c6be2f10
+    upstream_member: cache/integration/oxp3-fan/002.bin
+  - path: inputs/003-oxp3-fan-sleep.service
+    size: 383
+    sha256: 9b9dd741066cb0dce1a2b7f5c763d1519f8ad658badf83846ddbff1aefcf700e
+    upstream_member: cache/integration/oxp3-fan/003.bin
+  - path: inputs/004-main.py
+    size: 1286
+    sha256: 147cc10a5448d36de7c3a88ccfeb4007174d732121177d0c750805d778689b4d
+    upstream_member: cache/integration/oxp3-fan/004.bin
+  - path: inputs/005-index.js
+    size: 2880
+    sha256: a585fb60b5fdb86af7840f56d6bcf4ef6694a9d89a78c01601582705f64ce746
+    upstream_member: cache/integration/oxp3-fan/005.bin
+  - path: inputs/006-plugin.toon
+    size: 75
+    sha256: e625511574039c87650cb05b944ed13a0512921cbef4d9048430af27e1b7dd6e
+    upstream_member: cache/integration/oxp3-fan/006.bin
+    upstream_size: 92
+    upstream_sha256: a580c7e3f59aba11fb3a31b320f9b54a8dfddebda66f50817086c1bfdfd9cd42
+    source_renderer: toon-json-v1
+  - path: inputs/007-package.toon
+    size: 43
+    sha256: e12c4e2a63946b1e788f702cc3c88543ba65966a766bb7c55d10a362c4eee992
+    upstream_member: cache/integration/oxp3-fan/007.bin
+    upstream_size: 58
+    upstream_sha256: 981eec19690b0f4bc891aaf7ac90bd82ec3357857689eb23987c4f4020235a1c
+    source_renderer: toon-json-v1
+  - path: inputs/008-90-oxp3-fan.conf
+    size: 36
+    sha256: 0225bd230191522b2e095d756861477b17fe981b67b78e399a244bbe4bf29f9c
+    upstream_member: cache/integration/oxp3-fan/sleep-target.conf

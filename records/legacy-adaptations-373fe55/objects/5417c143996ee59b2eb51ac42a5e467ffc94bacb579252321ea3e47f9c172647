@@ -1,0 +1,8 @@
+[Unit]
+Description=Boiler read-only overlay telemetry
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 -I -B /var/lib/oxp3-overlay-telemetry/telemetry.py collect
+Restart=on-failure
+[Install]
+WantedBy=default.target

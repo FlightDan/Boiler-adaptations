@@ -1,0 +1,28 @@
+// Compatible with the installed Decky API v2 and native Steam React/UI.
+const R = window.SP_REACT;
+const U = window.DFL;
+const api = window.__DECKY_SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED_deckyLoaderAPIInit.connect(2, "OXP3 Fan");
+const statusCall = api.callable("get_status");
+const configureCall = api.callable("configure");
+const h=R.createElement;
+// Use the same browser locale as Decky Loader; every non-Chinese locale falls back to English.
+const tr=(en,zh)=>/^zh(?:[-_]|$)/i.test(globalThis.navigator?.language||"")?(zh||en):en;
+function Content(){
+  const [data,setData]=R.useState(null);
+  const [error,setError]=R.useState("");
+  const [busy,setBusy]=R.useState(false);
+  const [values,setValues]=R.useState([35,40,55,70,90]);
+  const refresh=async()=>{try{setData(await statusCall());}catch(e){setError(String(e));}};
+  R.useEffect(()=>{let live=true;const poll=async()=>{try{const d=await statusCall();if(live)setData(d);}catch(e){if(live)setError(String(e));}};poll();const id=setInterval(poll,2000);return()=>{live=false;clearInterval(id);};},[]);
+  const apply=async(mode)=>{setBusy(true);setError("");try{const config={mode};if(mode==="custom")config.points=[...values.map((v,i)=>[40+i*10,v]),[85,100]];setData(await configureCall(config));}catch(e){setError(String(e));}finally{setBusy(false);}};
+  const names={auto:tr("Firmware auto","固件自动"),balanced:tr("Balanced curve","均衡曲线"),performance:tr("Performance curve","高散热曲线"),custom:tr("Custom curve","自定义曲线")};
+  const s=data?.status||{};
+  return h(U.PanelSection,{title:tr("ONEXPLAYER 3 fan","ONEXPLAYER 3 风扇")},
+    h(U.PanelSectionRow,null,h("div",null,`${names[data?.config?.mode]||tr("Reading…","读取中")} · ${s.rpm??"—"} RPM · ${s.temperature??"—"}°C`)),
+    h(U.PanelSectionRow,null,h("div",{style:{fontSize:12,opacity:.8}},tr("Full speed at 85°C. Speed decreases are delayed. Stopping control restores firmware auto.","85°C 全速；降低转速有延迟。停止控制后恢复至固件自动。"))),
+    ...["auto","balanced","performance"].map(mode=>h(U.PanelSectionRow,{key:mode},h(U.ButtonItem,{disabled:busy,layout:"below",onClick:()=>apply(mode)},names[mode]))),
+    ...values.map((v,i)=>h(U.PanelSectionRow,{key:i},h(U.SliderField,{label:tr(`${40+i*10}°C fan speed`,`${40+i*10}°C 风速`),value:v,min:35,max:100,step:5,showValue:true,disabled:busy,onChange:n=>setValues(old=>old.map((x,j)=>i===j?n:x))}))),
+    h(U.PanelSectionRow,null,h(U.ButtonItem,{disabled:busy,layout:"below",onClick:()=>apply("custom")},tr("Apply custom curve","应用自定义曲线"))),
+    (error||s.error)?h(U.PanelSectionRow,null,h("div",{style:{color:"#ffb4b4"}},error||s.error)):null);
+}
+export default ()=>({title:h("div",null,tr("OXP3 Fan","OXP3 风扇")),content:h(Content),icon:h("span",null,"✺"),onDismount(){}});

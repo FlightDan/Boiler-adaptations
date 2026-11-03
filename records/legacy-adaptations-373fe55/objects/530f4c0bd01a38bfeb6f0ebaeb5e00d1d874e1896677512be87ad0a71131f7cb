@@ -1,0 +1,21 @@
+schema_version: 1
+id: "oxp3:speaker-route"
+version: 2026.10.29
+name:
+  zh: OXP3 扬声器路由与初始化恢复
+  en: OXP3 speaker route and initialization recovery
+description:
+  zh: 在启动会话及休眠恢复后，确认 ALC245 耳机孔为空时修复误选的耳机路由；近期有 Speaker UCM 初始化失败日志时重选原扬声器配置。需要实际声音与耳机插拔验收。
+  en: "After session start and resume, repairs a mistaken headphones route only when the ALC245 jack is empty. Retries the unchanged speaker profile after a recent Speaker UCM initialization failure. Physical audio and headset acceptance remain required."
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+  device_ids[1]: oxp3
+  os_versions[1]: "3.10"
+files[6]{source,target,mode}:
+  speaker_route.py,usr/local/lib/oxp3-speaker-route/speaker_route.py,420
+  oxp3-speaker-route.service,etc/systemd/user/oxp3-speaker-route.service,420
+  90-oxp3-speaker-route.conf,etc/systemd/user/default.target.d/90-oxp3-speaker-route.conf,420
+  oxp3-speaker-resume.service,etc/systemd/system/oxp3-speaker-resume.service,420
+  20-oxp3-speaker-resume.conf,etc/systemd/system/sleep.target.d/20-oxp3-speaker-resume.conf,420
+  UPSTREAM_LICENSE,usr/share/licenses/boiler-oxp3-speaker-route/LICENSE,420

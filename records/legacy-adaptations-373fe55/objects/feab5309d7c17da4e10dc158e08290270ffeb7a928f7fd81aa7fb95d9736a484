@@ -1,0 +1,42 @@
+schema_version: 1
+kind: BoilerResourceSource
+id: "resource:common-intel-rapl"
+version: 0.1.0+public72.live1
+dependencies[1]: "resource:steamos-manager"
+external_component_dependencies: []
+hardware_requires:
+  rapl_interfaces[1]: true
+  python_dbus_runtime[1]: true
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+  os_versions[1]: "3.10"
+install_kind: files-v1
+verify:
+  kind: sha256-v1
+restore:
+  kind: transaction-backup-v1
+renderer: fixed-public-rapl-v1
+source_lock: locks/resources/common-intel-rapl.toon
+recipe:
+  name: Intel RAPL power control
+  payload:
+    files[4]{path,size,sha256}:
+      common/CPU/Intel/rapl/files/provider.py,23089,44741aee85a943fa025e9846e01733322f756a283c300ff4744fdddd201ac14c
+      common/CPU/Intel/rapl/files/boiler-intel-rapl.service,471,05ba6273a690f6c285f02e8e6c9c1b9c0671d2ec11d3772523f163b9498a02ee
+      common/CPU/Intel/rapl/files/rapl-dbus.conf,443,417feed6044e9df6ee9d1b3c11bfc923d753299859ba641b6ebafeaf402e5719
+      common/CPU/Intel/rapl/files/rapl.toml,128,be8e8a35d5f109cb0ce6d50e99dec39bf043a7a60aae9ccd78afa58cebff2bbd
+  license_files[1]: LICENSE
+  provenance:
+    public_commit: 72f864e0498c10366493c74608c5ffed62cc99ca
+    source: baseline/brands/onexplayer/oxp3/scripts/controls/rapl/provider.py
+    source_sha256: 11af7da8d69a59b3e6413380a6516468da2d50248043cf6a93cf813381f2116b
+    transform: absent-legacy-sync-unit-v1
+    default_power_write: false
+    source_schema: repository-source-to-pool-v1
+  install_details:
+    files[4]{source,target,scope,mode}:
+      common/CPU/Intel/rapl/files/provider.py,usr/local/lib/boiler-rapl/provider.py,root-slots,420
+      common/CPU/Intel/rapl/files/boiler-intel-rapl.service,etc/systemd/system/boiler-intel-rapl.service,root-slots,420
+      common/CPU/Intel/rapl/files/rapl-dbus.conf,etc/dbus-1/system.d/org.onexplayer.SteamOSManager.PowerControl.conf,root-slots,420
+      common/CPU/Intel/rapl/files/rapl.toml,etc/steamos-manager/remotes.d/boiler-intel-rapl.toml,root-slots,420

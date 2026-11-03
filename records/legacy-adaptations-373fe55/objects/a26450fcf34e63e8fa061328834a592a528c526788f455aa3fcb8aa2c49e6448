@@ -1,0 +1,25 @@
+"""Materialize the reviewed shell build recipe into a new, isolated directory."""
+import re, shutil, sys
+from pathlib import Path
+from protocol.resource_pool import decoder
+
+source=Path(__file__).resolve().parent
+if len(sys.argv)!=2:raise SystemExit('usage: materialize-build.py NEW_OUTPUT_DIRECTORY')
+output=Path(sys.argv[1]).absolute()
+if output.exists():raise SystemExit('use a new output directory')
+output.mkdir(parents=True)
+target=output/'maintainer'
+shutil.copytree(source/'build',target)
+for path in sorted(target.rglob('*.lock.toon')):
+    value=decoder().loads(path.read_text(encoding='utf-8'),strict=True)
+    if set(value)!={'kind','shell_contents'} or value['kind']!='UpstreamPackageBuildLock':raise ValueError('invalid source build lock')
+    destination=path.with_suffix('');destination.write_text(value['shell_contents'],encoding='utf-8',newline='\n')
+    path.unlink()
+fingerprint=decoder().loads((source/'target-fingerprint.toon').read_text(encoding='utf-8'),strict=True)
+if fingerprint.get('kind')!='WaydroidTargetBuildFingerprint' or fingerprint.get('schema_version')!=1:raise ValueError('invalid target fingerprint')
+lines=[]
+for row in fingerprint['fields']:
+    if set(row)!={'name','value'} or not re.fullmatch('[A-Z][A-Z0-9_]*',row['name']) or not re.fullmatch('[A-Za-z0-9+_.:-]+',row['value']):raise ValueError('invalid target fingerprint field')
+    lines.append(row['name']+'='+row['value'])
+(output/'target-fingerprint.env').write_text('\n'.join(lines)+'\n',encoding='utf-8',newline='\n')
+print('Materialized reviewed build recipe:',output)

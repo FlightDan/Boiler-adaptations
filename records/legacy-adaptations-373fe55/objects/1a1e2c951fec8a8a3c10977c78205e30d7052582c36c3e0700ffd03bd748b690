@@ -1,0 +1,2 @@
+# OXP3 accepted display workaround. Re-enabling DSB is a separate later hardware trial.
+options xe enable_dsb=0

@@ -1,0 +1,10 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:common-charge-compatibility-guard"
+files[6]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  baseline/common/scripts/licenses/upstream-fixes-MIT.txt,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  common/system/charge-compatibility-guard/resource.toon,821,f8c9cccb5e0be8c72a682640dcac634988a776adbafffa44e4f2aaeb5503c6b2
+  common/system/charge-compatibility-guard/src/charge_guard.py,2842,a5c4b028df4ff3e6a36861950f8270f6aee90e0e51f89ec74402f7ec84c5d59d
+  locks/public-baseline.toon,32751,15dae171a0bbdf7423a117fb008e71e0f7737d2a3647ede1b1887bf051c549cf

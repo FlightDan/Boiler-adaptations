@@ -1,0 +1,32 @@
+"""Run fixed stdin EDID probe against synthetic inputs; no display mutation."""
+import hashlib,json,subprocess,sys
+from pathlib import Path
+
+def edid(coords):
+    b=bytearray(128);b[:8]=bytes.fromhex('00ffffffffffff00');b[8:12]=bytes.fromhex('0443d204')
+    b[18:24]=bytes((1,4,128,30,17,120))
+    for i,value in enumerate(coords):b[27+i]=value>>2
+    b[25]=sum((coords[i]&3) << (6-2*i) for i in range(4))
+    b[26]=sum((coords[i+4]&3) << (6-2*i) for i in range(4))
+    b[127]=-sum(b)%256
+    return bytes(b)
+
+def main():
+    probe=Path(sys.argv[1]); assert probe.is_absolute()
+    values=[edid((655,338,307,614,154,61,320,337)),edid((690,320,270,660,140,50,320,337))]
+    for raw in values:
+        run=subprocess.run([str(probe)],input=raw,capture_output=True,timeout=5,check=True)
+        result=json.loads(run.stdout)
+        assert result==dict(schema_version=1,sha256=hashlib.sha256(raw).hexdigest(),valid_edid=True,native_colorimetry_present=True)
+    no_gamut=edid((0,0,0,0,0,0,0,0))
+    run=subprocess.run([str(probe)],input=no_gamut,capture_output=True,timeout=5,check=True)
+    assert json.loads(run.stdout)==dict(schema_version=1,sha256=hashlib.sha256(no_gamut).hexdigest(),valid_edid=True,native_colorimetry_present=False)
+    bad=bytearray(values[0]);bad[30]^=1
+    for raw in (b'',values[0][:-1],bytes(bad),b'X'*4097):
+        run=subprocess.run([str(probe)],input=raw,capture_output=True,timeout=5)
+        assert run.returncode!=0 and not run.stdout
+    run=subprocess.run([str(probe),'--filename=/tmp/unused'],input=values[0],capture_output=True,timeout=5)
+    assert run.returncode!=0 and not run.stdout
+    print('Fixed stdin probe: distinct complete synthetic EDIDs, no native gamut, bad checksum/length, empty, excessive and argument rejection passed')
+
+if __name__=='__main__':main()

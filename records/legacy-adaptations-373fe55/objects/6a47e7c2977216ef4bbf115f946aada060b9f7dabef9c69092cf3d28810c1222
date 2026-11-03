@@ -1,0 +1,18 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:onexplayer-battery-charge-backend"
+files[14]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  baseline/common/scripts/licenses/upstream-fixes-MIT.txt,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  devices/EC/onexplayer/battery/charge-backend/patches/oxp3-battery.service.patch,493,60d230449cd312aa62a57062d0d59e1bbc19af90f3fd2e9cdc4e3af2d22b4ae2
+  devices/EC/onexplayer/battery/charge-backend/resource.toon,1700,c599c2b7d75f6f85fcc12c69e3ccee73e4f85cc4018d69c616cdc58d227d2efd
+  devices/EC/onexplayer/battery/charge-backend/src/battery_control.py,2616,1ea349b1a679a9859a918459dd55d39716934746c5c52783e314daa4505decb3
+  devices/EC/onexplayer/battery/charge-backend/src/battery_provider.py,4432,33dbd7a324656c28abcfad841c3ba324ed03aeee18321a02f4c7d275f829ff57
+  devices/EC/onexplayer/battery/charge-backend/templates/battery-dbus.conf,418,df9acac75b4b2906c6c0d953460de16f6e7de30789ec74fdea00f2faffabef43
+  devices/EC/onexplayer/battery/charge-backend/templates/oxp3-battery.service,610,82eb172c677dd7deab714be2f3b93347e751bd484c14e737aaa4b68b397fcabb
+  devices/EC/onexplayer/battery/charge-backend/templates/oxp3-battery.toml,128,98367b4ecf45d8a48c1349b9931cd192d55b462aed49b71f14d21f92d5ef1f48
+  devices/EC/onexplayer/battery/charge-backend/upstream/oxp3-battery.service,618,d5771cac38919a517f3ff228de56add0700fdac9e3e7f4d92c461f8ee2fe4767
+  locks/public-00d26ea-metadata.zip,2910,884b14f5e8b2ed9fb025688410c7fb3d735c110c3f0d8fa41516a700341ea4de
+  locks/public-00d26ea-provenance.toon,6063,aa6f37bc5899333b1314b66b4997cf6a9defc6d6ef3c37c467de213005202d4e
+  locks/public-baseline.toon,32751,15dae171a0bbdf7423a117fb008e71e0f7737d2a3647ede1b1887bf051c549cf

@@ -1,0 +1,31 @@
+schema_version: 1
+kind: BoilerResourceSource
+id: "resource:onexplayer-input"
+version: 0.78.0-localtest.20261031.activation2.r5
+dependencies: []
+external_component_dependencies: []
+hardware_requires:
+  input_usb_vid[1]: 1a86
+  input_usb_pid[1]: fe00
+  input_usb_interface[1]: "02"
+  input_usb_mcu_unique[1]: true
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+  os_versions[1]: "3.10"
+  kernels[1]: 7.2.4-valve1-1-neptune-72-g5ab4af5e2eb9
+install_kind: boiler-input-runtime-v1
+verify:
+  kind: input-live-state-v1
+restore:
+  kind: input-live-transaction-v1
+renderer: fixed-input-r5-v1
+source_lock: locks/resources/onexplayer-input.toon
+recipe:
+  archive: devices/input/onexplayer/source-bundle/input-source-r5.tar.gz
+  archive_size: 88166653
+  archive_sha256: e8b2c16dac9b7d21d66fe30f1f947219dc573a39cc2f08ce2f4ef99fdc1101e9
+  variant: r5
+  native_build_sha256: 7e978f5b796d6ec3b7edf15279d98036a01e793a945df41ffbc7e21d84fc6d73
+  native_artifact_type: retained-source-built-runtime
+  resources[2]: "resource:onexplayer-input","resource:bosch-bmi260-gyro"

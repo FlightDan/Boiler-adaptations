@@ -1,0 +1,30 @@
+schema_version: 1
+kind: BoilerResourceSource
+id: "resource:oxp3-speaker-route"
+version: 2026.10.29+owned-oneshot.2
+dependencies: []
+external_component_dependencies: []
+hardware_requires:
+  speaker_route_layout[1]: onexplayer-public-20261029
+  audio_session_tools[1]: true
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+  os_versions[1]: "3.10"
+install_kind: files-v1
+verify:
+  kind: sha256-v1
+restore:
+  kind: transaction-backup-v1
+renderer: files-v1
+source_lock: locks/resources/oxp3-speaker-route.toon
+recipe:
+  payload[6]{source,renderer,target,mode,scope}:
+    devices/Audio/onexplayer/speaker-route/src/speaker_route.py,identity-v1,usr/local/lib/oxp3-speaker-route/speaker_route.py,420,root-slots
+    devices/Audio/onexplayer/speaker-route/src/oxp3-speaker-route.service,identity-v1,etc/systemd/user/oxp3-speaker-route.service,420,root-slots
+    devices/Audio/onexplayer/speaker-route/upstream/90-oxp3-speaker-route.conf,identity-v1,etc/systemd/user/default.target.d/90-oxp3-speaker-route.conf,420,root-slots
+    devices/Audio/onexplayer/speaker-route/src/oxp3-speaker-resume.service,identity-v1,etc/systemd/system/oxp3-speaker-resume.service,420,root-slots
+    devices/Audio/onexplayer/speaker-route/upstream/20-oxp3-speaker-resume.conf,identity-v1,etc/systemd/system/sleep.target.d/20-oxp3-speaker-resume.conf,420,root-slots
+    devices/Audio/onexplayer/speaker-route/upstream/UPSTREAM_LICENSE,identity-v1,usr/share/licenses/boiler-oxp3-speaker-route/LICENSE,420,root-slots
+  license_files[2]: LICENSE,baseline/common/scripts/licenses/upstream-fixes-MIT.txt
+  install_details:

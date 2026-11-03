@@ -1,0 +1,23 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:oxp3-speaker-route"
+files[19]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  baseline/common/scripts/licenses/upstream-fixes-MIT.txt,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  devices/Audio/onexplayer/speaker-route/patches/oxp3-speaker-resume.service.patch,340,a18ffb52b2ef79697c6546659950544bcfabed8d1b45de5b523a522771bb4058
+  devices/Audio/onexplayer/speaker-route/patches/oxp3-speaker-route.service.patch,389,3c8e1155d0a3e735dd005544276c437070fa8942e88e62777d1409eaeec2c75a
+  devices/Audio/onexplayer/speaker-route/patches/speaker_route.py.patch,333,636967265f109fd5a376ec892e091ca191178ed9c24bd55039b885baefa241e2
+  devices/Audio/onexplayer/speaker-route/resource.toon,1630,533a6f2758d190dd59898f541cf04f79418100aa38ec10dd794ee5263e6b9175
+  devices/Audio/onexplayer/speaker-route/source-provenance.toon,1803,9e92fa56310fa42e7e8d83d7340161c3095f5dfd617704d07e7c97e51424f29c
+  devices/Audio/onexplayer/speaker-route/src/oxp3-speaker-resume.service,286,47abf9b74fc5c44cf48dcb0715c5e1600997477241653ee5b1b1eec55a7ce344
+  devices/Audio/onexplayer/speaker-route/src/oxp3-speaker-route.service,271,8a2be6bae7fd718c422dfd2eaebd40f5098b3a33a78aaa333e8e6f22a75c36da
+  devices/Audio/onexplayer/speaker-route/src/speaker_route.py,5602,bc6b72125dc68c9dd15dec8600f9a506be2c7e99170023f0c08c26e7a158330a
+  devices/Audio/onexplayer/speaker-route/upstream/20-oxp3-speaker-resume.conf,41,bb9d378a3b1b5fa783d668c982a6e94779a5a289170d4fa00531475302031601
+  devices/Audio/onexplayer/speaker-route/upstream/90-oxp3-speaker-route.conf,40,7a36e2ef341e6eec0aef1a63b92954452ad98ff0ba090b1e9b0d3e5543b3bde1
+  devices/Audio/onexplayer/speaker-route/upstream/UPSTREAM_LICENSE,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  devices/Audio/onexplayer/speaker-route/upstream/metadata.zip,1741,995edd3fbcab787bc22ec6e890bc7a18122243eea0b4a38dcdd1f41b3fd1ba44
+  devices/Audio/onexplayer/speaker-route/upstream/oxp3-speaker-resume.service,284,efe98f22d45c43988e848ec5db406feffe1d7e1b9734d5956663b9b75f3d05d9
+  devices/Audio/onexplayer/speaker-route/upstream/oxp3-speaker-route.service,221,327dade2d73ab6da60572967d8e14b7a3bb7377c147c4fb4efa386183b989324
+  devices/Audio/onexplayer/speaker-route/upstream/speaker_route.py,5510,b47f916aa80036d5730c0df26deac7aedcd8f9af14cc615058d9f6432e9c7739
+  locks/public-baseline.toon,32751,15dae171a0bbdf7423a117fb008e71e0f7737d2a3647ede1b1887bf051c549cf

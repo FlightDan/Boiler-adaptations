@@ -1,0 +1,28 @@
+schema_version: 1
+kind: BoilerUpstreamRepairSources
+upstream:
+  repository: HHHHanasak1/onexplayer3-steamos-setup
+  tag: "20261029"
+  commit: e72e814da1944da3792076689995b6fe961f5768
+  license: MIT; xevma module declares GPL
+files[20]{path,size,sha256}:
+  brands/onexplayer/oxp3/current/upstream-20261029/dock_input.py,1782,6c98018c8106924cfb5036c32b162a4155a3a06bd420246b8767cfa3cddbfeb1
+  brands/onexplayer/oxp3/current/upstream-20261029/speaker_route.py,5510,b47f916aa80036d5730c0df26deac7aedcd8f9af14cc615058d9f6432e9c7739
+  brands/onexplayer/oxp3/current/upstream-20261029/install.json,1580,e99f5e6240d8271ef41b7055026d8915d697ac2992a8524ca50fd1b6fe8c6490
+  brands/onexplayer/oxp3/current/upstream-20261029/oxp3-speaker-route.service,221,327dade2d73ab6da60572967d8e14b7a3bb7377c147c4fb4efa386183b989324
+  brands/onexplayer/oxp3/current/upstream-20261029/90-oxp3-speaker-route.conf,40,7a36e2ef341e6eec0aef1a63b92954452ad98ff0ba090b1e9b0d3e5543b3bde1
+  brands/onexplayer/oxp3/current/upstream-20261029/oxp3-speaker-resume.service,284,efe98f22d45c43988e848ec5db406feffe1d7e1b9734d5956663b9b75f3d05d9
+  brands/onexplayer/oxp3/current/upstream-20261029/20-oxp3-speaker-resume.conf,41,bb9d378a3b1b5fa783d668c982a6e94779a5a289170d4fa00531475302031601
+  brands/onexplayer/oxp3/current/upstream-20261029/UPSTREAM_LICENSE,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  brands/onexplayer/oxp3/current/upstream-20261029/PROVENANCE.json,1347,198409b82781c0d7885de76c667cceee81411dacb9191d1c95caffc1b61782d2
+  brands/onexplayer/oxp3/current/xevma-20261029/90-boiler-oxp3-xevmafix.conf,42,ba2a8b4edebc640910521643e7962d09546a043cd8f539fcb1b504047e503132
+  brands/onexplayer/oxp3/current/xevma-20261029/boiler-oxp3-xevmafix.service,218,4e05053564db612fab03dd7c838aa85b7472c4dc3791a5bee5f1162acc6641e8
+  brands/onexplayer/oxp3/current/xevma-20261029/install.json,2187,bb427afb8db3152dec0b2cb79ff47631a06dc183582c2156c6f69736936fe76e
+  brands/onexplayer/oxp3/current/xevma-20261029/LICENSE,18600,8780e78a1a737e127f25a65f6d95269bffd36158dc261114de7859b490bfc5aa
+  brands/onexplayer/oxp3/current/xevma-20261029/load.py,2330,bf49070cb295c872c3059480cc0a393c77bc1b129ffdaba05e12e90ec78dc646
+  brands/onexplayer/oxp3/current/xevma-20261029/Makefile,20,1cd3b948f78e7622583dd6d30a6f076e54a8b9ae680ffae38e06409a987dcb4a
+  brands/onexplayer/oxp3/current/xevma-20261029/README.md,2300,3382fb696e004bc00ddabb8729ca16ba2b32f6e5be0b6ca244ced88f4cc74b00
+  brands/onexplayer/oxp3/current/xevma-20261029/UPSTREAM_LICENSE,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  brands/onexplayer/oxp3/current/xevma-20261029/UPSTREAM_README.md,3528,bc478f9e972bc5ace5d594d337e5e16c83e7fd9b6729321ebb084471877638c7
+  brands/onexplayer/oxp3/current/xevma-20261029/xevmafix.c,5135,ff2c89af58171028f23d4e23b613c0c346a02708b668a142f216d93c9ac1d9c5
+  brands/onexplayer/oxp3/current/xevma-20261029/module-lock.json,26919,8bb5ee26ae6bcd2bfa8ecf57cb18f9d6819b95f595a76b5bd857a8ae15db6f41

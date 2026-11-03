@@ -1,12 +1,12 @@
 [Boiler Installer](https://github.com/FlightDan/Boiler-installer) · [中文](../README.md)
 
-# Boiler Devices
+# Boiler Adaptations
 
 This repository collects device and model adaptations for Boiler. Browse the existing models, reuse shared hardware components, or contribute an adaptation of your own.
 
 | Documentation | Models |
 | --- | --- |
-| [How TOON works](TOON.en.md)<br>[Build a device package and installer](BUILD.en.md)<br>[Brand and model adaptation reference](ADAPTATIONS.md) (Chinese) | [ONEXPLAYER 3](../brands/onexplayer/oxp3/model.md)<br>[ONEXPLAYER X2 Mini / Mini PRO](../brands/onexplayer/x2-mini/model.md) |
+| [How TOON works](TOON.en.md)<br>[Build a device package and installer](BUILD.en.md)<br>[Device index and signatures](REGISTRY.en.md)<br>[Brand and model adaptation reference](ADAPTATIONS.md) (Chinese) | [ONEXPLAYER 3](../brands/onexplayer/oxp3/model.md)<br>[ONEXPLAYER X2 Mini / Mini PRO](../brands/onexplayer/x2-mini/model.md) |
 
 <details>
 <summary>Contribute an adaptation</summary>
@@ -30,6 +30,6 @@ This repository uses [AGPL-3.0](../LICENSE). Some sources and resources use othe
 <details>
 <summary>Signatures and trust</summary>
 
-I keep and control the signing private key locally. The current device index is unsigned and intended for development. When device packages are published, I sign the official device index; the installer verifies it with a trusted public key and uses the index to check the packages.
+I keep and control the signing private key locally. The installer verifies a signed device index with a trusted public key, then uses that index to check packages. The [published signed catalog](https://github.com/FlightDan/Boiler-adaptations/releases/tag/catalog-v0.1.0-preview.1) and the development index in the repository root are maintained separately; see [Device index and signatures](REGISTRY.en.md).
 
 </details>

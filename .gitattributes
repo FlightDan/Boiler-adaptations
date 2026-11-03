@@ -1,10 +1,3 @@
-* text eol=lf
-# Preserve the supplementary license document's exact inventoried bytes.
-licenses/GPL-2.0.txt -text
-# Preserve hash-locked common source, notice and decoder bytes through Git.
-common/gpu/intel/xe/xevmafix-724/** -text
-common/network/intel/be201/** -text
-common/audio/realtek/alc245/speaker-route/** -text
-common/sensors/bosch/bmi260/gyro/** -text
-common/ssd/acer/gm7/** -text
-vendor/** -text
+# Canonical source inventories bind exact Git and worktree bytes.
+# Generators write LF explicitly; Git must not normalize locked or archived bytes.
+* -text

@@ -1,0 +1,19 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:onexplayer-fan"
+files[15]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  devices/EC/onexplayer/fan/inputs/000-fan.py,5396,5ed6af94055a22454ad28a43feff257383918c21804460da5287658399ab9f9c
+  devices/EC/onexplayer/fan/inputs/001-fan-sleep.py,573,91cb78aad15ccf35874dfaaf93dae88c2d70c57525544bdec6ae664301c4676f
+  devices/EC/onexplayer/fan/inputs/002-oxp3-fan.service,657,02b89441b6bea018cefb267fafee516d18fdcaf813e70918110f1e87c6be2f10
+  devices/EC/onexplayer/fan/inputs/003-oxp3-fan-sleep.service,383,9b9dd741066cb0dce1a2b7f5c763d1519f8ad658badf83846ddbff1aefcf700e
+  devices/EC/onexplayer/fan/inputs/004-main.py,1286,147cc10a5448d36de7c3a88ccfeb4007174d732121177d0c750805d778689b4d
+  devices/EC/onexplayer/fan/inputs/005-index.js,2880,a585fb60b5fdb86af7840f56d6bcf4ef6694a9d89a78c01601582705f64ce746
+  devices/EC/onexplayer/fan/inputs/006-plugin.toon,75,e625511574039c87650cb05b944ed13a0512921cbef4d9048430af27e1b7dd6e
+  devices/EC/onexplayer/fan/inputs/007-package.toon,43,e12c4e2a63946b1e788f702cc3c88543ba65966a766bb7c55d10a362c4eee992
+  devices/EC/onexplayer/fan/inputs/008-90-oxp3-fan.conf,36,0225bd230191522b2e095d756861477b17fe981b67b78e399a244bbe4bf29f9c
+  devices/EC/onexplayer/fan/licenses/project-AGPL-3.0.txt,35184,e0eedba615d5cd1b986afb6c5b3a4b1ae33713e7e9dc74d19daec5e3221f9d2e
+  devices/EC/onexplayer/fan/licenses/upstream-fixes-MIT.txt,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  devices/EC/onexplayer/fan/resource.toon,1854,d7a86ace8c970bd84de211a54b658993348f9cefbe6b4a16e535efc7a9b35723
+  devices/EC/onexplayer/fan/source-lock.toon,2441,f6f84727b161c7b3873296fdddd7854c3cd6a81176d1225fa6a15d54b57c93cb

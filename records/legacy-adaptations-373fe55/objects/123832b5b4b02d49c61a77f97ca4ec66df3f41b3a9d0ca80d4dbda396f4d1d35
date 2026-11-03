@@ -1,0 +1,129 @@
+"""Decky RPC boundary. No root flag, shell RPC or writes on plugin load."""
+import asyncio
+from pathlib import Path
+import sys
+
+sys.path.insert(0, str(Path(__file__).parent))
+from manager import Manager
+
+
+class Plugin:
+    async def _main(self):
+        if hasattr(self, 'manager'):
+            return
+        self.manager = Manager()
+        self.lock = asyncio.Lock()
+        self.install_active = False
+
+    async def _unload(self):
+        # Active launchers and backups are independent of the plugin directory.
+        pass
+
+    async def _uninstall(self):
+        # Do not restore files behind a running game or discard retained backups.
+        pass
+
+    async def _call(self, name, *args):
+        if not hasattr(self, 'manager'):
+            await self._main()
+        if (name in ('opti_install', 'review_opti_install', 'opti_agility', 'review_opti_agility', 'runtime_install', 'fsr_prepare', 'review_fsr_prepare', 'fsr_import') and self.lock.locked()) or (name not in ('inventory', 'inspect_game', 'runtime_status', 'fsr_status', 'opti_cache_status') and (self.install_active or self.manager.progress.snapshot()['running'])):
+            return {'ok': False, 'error': 'Opti 操作仍在进行，请等待完成。'}
+        async with self.lock:
+            installing = name in ('opti_install', 'review_opti_install', 'opti_agility', 'review_opti_agility', 'runtime_install', 'fsr_prepare', 'review_fsr_prepare', 'fsr_import')
+            if installing: self.install_active = True
+            try:
+                return {'ok': True, 'data': await asyncio.to_thread(getattr(self.manager, name), *args)}
+            except Exception as error:
+                message = str(error)
+                if name in ('settings_preflight', 'opti_settings', 'opti_restore_settings') and any(
+                        phrase in message for phrase in ('Game is running', 'Prefix is in use', 'Cannot establish prefix idle state')):
+                    message = '游戏正在运行，请先退出游戏再更改设置。'
+                elif 'Game is running' in message or 'Prefix is in use' in message:
+                    message = '游戏仍在运行。请从 Steam 退出游戏，再操作 XMX 开关。'
+                return {'ok': False, 'error': message}
+            finally:
+                if installing: self.install_active = False
+
+    async def operation_progress(self):
+        if not hasattr(self, 'manager'):
+            await self._main()
+        # Download work owns the ordinary RPC lock; snapshots must bypass it.
+        return {'ok': True, 'data': self.manager.progress.snapshot()}
+
+    async def inventory(self):
+        return await self._call('inventory')
+
+    async def runtime_status(self):
+        return await self._call('runtime_status')
+
+    async def opti_cache_status(self):
+        return await self._call('opti_cache_status')
+
+    async def runtime_install(self):
+        return await self._call('runtime_install')
+
+    async def fsr_status(self):
+        return await self._call('fsr_status')
+
+    async def fsr_import(self, path):
+        return await self._call('fsr_import', path)
+
+    async def review_fsr_prepare(self, appid, executable, actual, source):
+        return await self._call('review_fsr_prepare', appid, executable, actual, source)
+
+    async def fsr_prepare(self, appid, executable, actual, source, reviewed_sha256):
+        return await self._call('fsr_prepare', appid, executable, actual, source, reviewed_sha256)
+
+    async def inspect_game(self, appid):
+        return await self._call('inspect_game', appid)
+
+    async def review_enable(self, appid, executable, route, old_launch):
+        return await self._call('review_enable', appid, executable, route, old_launch)
+
+    async def enable(self, appid, executable, route, old_launch, reviewed_sha256):
+        return await self._call('enable', appid, executable, route, old_launch, reviewed_sha256)
+
+    async def confirm_launch(self, appid, actual):
+        return await self._call('confirm_launch', appid, actual)
+
+    async def restore(self, appid, actual):
+        return await self._call('restore', appid, actual)
+
+    async def review_opti_install(self, appid, executable, actual, version, source):
+        return await self._call('review_opti_install', appid, executable, actual, version, source)
+
+    async def review_opti_agility(self, appid, executable, actual, source):
+        return await self._call('review_opti_agility', appid, executable, actual, source)
+
+    async def opti_agility(self, appid, executable, actual, source, reviewed_sha256):
+        return await self._call('opti_agility', appid, executable, actual, source, reviewed_sha256)
+
+    async def opti_install(self, appid, executable, actual, version, source, reviewed_sha256):
+        return await self._call('opti_install', appid, executable, actual, version, source, reviewed_sha256)
+
+    async def opti_migrate(self, appid, executable, actual):
+        return await self._call('opti_migrate', appid, executable, actual)
+
+    async def opti_rollback(self, appid, actual):
+        return await self._call('opti_rollback', appid, actual)
+
+    async def opti_uninstall(self, appid, actual):
+        return await self._call('opti_uninstall', appid, actual)
+
+    async def opti_confirm(self, appid, actual):
+        return await self._call('opti_confirm', appid, actual)
+
+    async def opti_toggle(self, appid, enabled, actual):
+        return await self._call('opti_toggle', appid, enabled, actual)
+
+    async def opti_settings(self, appid, settings, reset=False):
+        return await self._call('opti_settings', appid, settings, reset)
+
+    async def settings_preflight(self, appid):
+        return await self._call('settings_preflight', appid)
+
+    async def opti_restore_settings(self, appid):
+        return await self._call('opti_restore_settings', appid)
+
+    async def opti_panel(self, appid):
+        return await self._call('opti_panel', appid)

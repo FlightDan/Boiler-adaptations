@@ -1,0 +1,24 @@
+schema_version: 1
+kind: BoilerResourceSource
+id: "resource:common-telemetry-overlay"
+version: 0.1.0+source-overlay.20261031
+dependencies: []
+external_component_dependencies: []
+hardware_requires:
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+install_kind: boiler-telemetry-overlay-v1
+verify:
+  kind: sha256-v1
+restore:
+  kind: transaction-backup-v1
+renderer: fixed-telemetry-overlay-v1
+source_lock: locks/resources/common-telemetry-overlay.toon
+recipe:
+  collector: common/telemetry/overlay/files/telemetry.py
+  system_unit: common/telemetry/overlay/files/boiler-overlay-read.service
+  user_unit: common/telemetry/overlay/files/oxp3-overlay-telemetry.service
+  resume_hook: common/telemetry/overlay/files/boiler-overlay-resume
+  schema: devices/CPU/Intel/G3E/telemetry-schema.toon
+  license_files[1]: LICENSE

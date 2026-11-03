@@ -1,0 +1,140 @@
+"""OXP3 fan-only controller using the standard oxpec hwmon interface."""
+import fcntl
+import json
+import os
+from pathlib import Path
+import signal
+import socket
+import sys
+import time
+
+CONFIG = Path('/var/lib/oxp3-fan/config.json')
+STATUS = Path('/run/oxp3-fan/status.json')
+PRESETS = {'balanced': [[40,35],[50,40],[60,55],[70,70],[80,90],[85,100]],
+           'performance': [[40,45],[50,55],[60,70],[70,85],[80,100],[85,100]]}
+
+def hwmon():
+    found = [p for p in Path('/sys/class/hwmon').glob('hwmon*') if (p/'name').read_text().strip() == 'oxp_ec']
+    if len(found) != 1:
+        raise RuntimeError('OXP3 fan sensor unavailable')
+    return found[0]
+
+def automatic():
+    p = hwmon()/'pwm1_enable'
+    p.write_text('2\n')
+    if int(p.read_text()) != 2:
+        raise RuntimeError('EC automatic mode readback failed')
+
+def validate(data):
+    mode = data.get('mode')
+    if mode not in ('auto','balanced','performance','custom'):
+        raise ValueError('Unknown fan mode')
+    if mode == 'custom':
+        points = data.get('points')
+        if not isinstance(points,list) or not 2 <= len(points) <= 8:
+            raise ValueError('Custom curve requires 2..8 points')
+        last_t, last_p = -1, -1
+        for point in points:
+            if not isinstance(point,list) or len(point) != 2:
+                raise ValueError('Invalid curve point')
+            t,p = point
+            if isinstance(t,bool) or isinstance(p,bool) or not isinstance(t,int) or not isinstance(p,int):
+                raise ValueError('Curve must use integer values')
+            if not 30 <= t <= 85 or not 35 <= p <= 100 or t <= last_t or p < last_p:
+                raise ValueError('Curve must increase: 30..85C and 35..100%')
+            last_t,last_p=t,p
+        if last_t != 85 or last_p != 100:
+            raise ValueError('Last point must be 85C / 100%')
+    return data
+
+def temperature():
+    sensors = [p for p in Path('/sys/class/hwmon').glob('hwmon*') if (p/'name').read_text().strip() == 'coretemp']
+    values = [int(f.read_text())/1000 for p in sensors for f in p.glob('temp*_input')]
+    if not values or any(not 0 < t < 110 for t in values):
+        raise RuntimeError('Temperature sensor unavailable or invalid')
+    return max(values)
+
+def duty(temp,points):
+    if temp >= 85:
+        return 100
+    if temp <= points[0][0]:
+        return points[0][1]
+    for (t0,p0),(t1,p1) in zip(points,points[1:]):
+        if temp <= t1:
+            return round(p0+(p1-p0)*(temp-t0)/(t1-t0))
+    return 100
+
+def atomic(path,data):
+    tmp = path.with_suffix('.tmp')
+    tmp.write_text(json.dumps(data))
+    tmp.chmod(0o644)
+    tmp.replace(path)
+
+def notify(message):
+    address = os.environ.get('NOTIFY_SOCKET')
+    if address:
+        if address.startswith('@'):
+            address='\0'+address[1:]
+        with socket.socket(socket.AF_UNIX,socket.SOCK_DGRAM) as s:
+            s.sendto(message.encode(),address)
+
+def run():
+    lock = open('/run/lock/oxp3-fan.lock','w')
+    fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
+    stopped = False
+    def stop(*_):
+        nonlocal stopped
+        stopped=True
+    signal.signal(signal.SIGTERM,stop)
+    signal.signal(signal.SIGINT,stop)
+    automatic()
+    notify('READY=1')
+    last_mode='auto'; last_duty=None; falling=0
+    try:
+        while not stopped:
+            config=validate(json.loads(CONFIG.read_text()))
+            mode=config['mode']; p=hwmon(); temp=temperature()
+            if mode == 'auto':
+                if last_mode != 'auto':
+                    automatic()
+                last_duty=None
+            else:
+                points=PRESETS.get(mode,config.get('points'))
+                target=duty(temp,points)
+                # Increase immediately; require five seconds before reducing.
+                falling=falling+1 if last_duty is not None and target < last_duty-3 else 0
+                if last_duty is None or target > last_duty or falling >= 5:
+                    raw=round(target*255/100)
+                    if last_mode == 'auto':
+                        # Start at full speed before entering a lower curve duty.
+                        (p/'pwm1_enable').write_text('0\n')
+                    (p/'pwm1').write_text(str(raw)+'\n')
+                    actual=int((p/'pwm1').read_text())
+                    if abs(actual-raw)>2:
+                        raise RuntimeError('PWM readback mismatch')
+                    last_duty=target; falling=0
+            last_mode=mode
+            atomic(STATUS,{'mode':mode,'temperature':temp,'rpm':int((p/'fan1_input').read_text()),
+                           'percent':last_duty,'time':time.monotonic()})
+            notify('WATCHDOG=1')
+            time.sleep(1)
+    finally:
+        automatic()
+        atomic(STATUS,{'mode':'auto','stopped':True,'time':time.monotonic()})
+
+if __name__ == '__main__':
+    if sys.argv[1:] == ['auto']:
+        automatic()
+    elif sys.argv[1:] == ['run']:
+        run()
+    elif sys.argv[1:] == ['probe']:
+        p=hwmon(); assert int((p/'pwm1_enable').read_text()) == 2
+        try:
+            (p/'pwm1_enable').write_text('0\n')
+            for _ in range(10):
+                print(json.dumps({'rpm':int((p/'fan1_input').read_text()),'pwm':int((p/'pwm1').read_text()),'temp':temperature()}),flush=True)
+                time.sleep(1)
+        finally:
+            automatic()
+    else:
+        raise SystemExit('run / auto / probe')

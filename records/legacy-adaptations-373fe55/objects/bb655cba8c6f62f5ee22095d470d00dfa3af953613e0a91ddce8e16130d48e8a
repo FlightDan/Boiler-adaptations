@@ -1,0 +1,14 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:common-telemetry-overlay"
+files[10]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  locks/public-baseline.toon,32751,15dae171a0bbdf7423a117fb008e71e0f7737d2a3647ede1b1887bf051c549cf
+  common/telemetry/overlay/resource.toon,826,6e32519927337aebd392fa77ffd81454ab1f720e5380233bb91a6daf0e3cb083
+  common/telemetry/overlay/mangohud-source-evidence.toon,828,ec86440374dab2a10dcf80230c4a57c943f1dace0c4dd68799f9bd195e9d84b8
+  common/telemetry/overlay/files/telemetry.py,6691,0052e7a97a869b7ed62faf846580c3401dbd407cbaeea4669e9c41dbc5382fb5
+  common/telemetry/overlay/files/boiler-overlay-read.service,559,2490451476a7ed694a7e47107553587125e9c5ae652706f24f18dd6f942faa82
+  common/telemetry/overlay/files/oxp3-overlay-telemetry.service,215,5417c143996ee59b2eb51ac42a5e467ffc94bacb579252321ea3e47f9c172647
+  common/telemetry/overlay/files/boiler-overlay-resume,93,25c58cb25b4b0e36abc39c1d4ff0c65c75b240062c0040be15b3bb0ae1cf122f
+  devices/CPU/Intel/G3E/telemetry-schema.toon,199,d0964ed9658fe6d53fd09c3f03a7cb97ca742f5780fcd7802d518759a98fa51f

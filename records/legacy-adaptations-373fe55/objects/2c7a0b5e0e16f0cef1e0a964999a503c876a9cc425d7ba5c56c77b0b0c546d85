@@ -1,0 +1,3 @@
+[2]{Id,Name,English,Version,Url,Note,EnglishNote}:
+  valve-3.8.14-zip,Valve 官方恢复镜像 · 3.8.14 · ZIP（推荐）,Valve recovery image · 3.8.14 · ZIP (Recommended),3.8.14,"https://steamdeck-images.steamos.cloud/recovery/steamdeck-oobe-repair-20260707.10-3.8.14.img.zip",这是恢复镜像的版本。选择后，进入“3.10 镜像”子项准备最终安装的系统。,This is the recovery image version. Continue to the 3.10 image subpage to prepare the installed system.
+  valve-3.8.14-bz2,Valve 官方恢复镜像 · 3.8.14 · BZ2,Valve recovery image · 3.8.14 · BZ2,3.8.14,"https://steamdeck-images.steamos.cloud/recovery/steamdeck-oobe-repair-20260707.10-3.8.14.img.bz2",这是恢复镜像的版本。选择后，进入“3.10 镜像”子项准备最终安装的系统。,This is the recovery image version. Continue to the 3.10 image subpage to prepare the installed system.

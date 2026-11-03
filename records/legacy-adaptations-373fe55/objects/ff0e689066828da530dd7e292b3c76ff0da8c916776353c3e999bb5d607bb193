@@ -1,0 +1,14 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:common-slot-switch"
+files[10]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  baseline/common/scripts/licenses/upstream-fixes-MIT.txt,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  baseline/common/scripts/slot-switch/49-oxp3-slot-switch.rules,298,f95d37f73f87532e6827a2e50cd03f86703a2def50fe036f9e54a280f155c317
+  baseline/common/scripts/slot-switch/boot.py,20555,94d98f74d6025d79d2f6af07d59657117c6a80316e591e235d4e4e9ab75dcf85
+  baseline/common/scripts/slot-switch/desktop.py,9643,ebfc65ff86e4dcf33011d1884e487fee00b072c134fb1fc0815d7d841cf0294d
+  baseline/common/scripts/slot-switch/oxp3-slot-switch.desktop,236,05c6039b3d12cf633c846da62c9a28f5cae98b179ca2e0985960451520822b4a
+  baseline/common/scripts/slot-switch/oxp3-switch-slot,75,4d58916cc7d5d31405d0d189e2ea7963c8d8a29776242bf8dd967e38c421dd46
+  common/boot/slot-switch/resource.toon,1429,598a0ba1bd3d18a49292060ac437207d21e8fc61e6332b6704f243232883fca1
+  locks/public-baseline.toon,32751,15dae171a0bbdf7423a117fb008e71e0f7737d2a3647ede1b1887bf051c549cf

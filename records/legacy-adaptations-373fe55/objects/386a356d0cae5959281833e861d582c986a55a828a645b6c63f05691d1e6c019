@@ -1,0 +1,12 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:common-boot-fixes"
+files[8]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  baseline/brands/onexplayer/oxp3/scripts/boot_repairs.py,1926,3084c2cfceddd6e4545597a702290caeae063eaed1bdf345fdb291b3aa78ea8d
+  baseline/common/scripts/split_lock.py,8828,ad1602db2d380734ac9d28a77a4c3764c2704197784bb0ddcec20ce5179ddbd9
+  common/boot/fixes/licenses/project-AGPL-3.0,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  common/boot/fixes/licenses/split-lock-MIT,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  common/boot/fixes/resource.toon,1270,a3fda454301891183f4188b254d6920f2804f06efd151bfb89f6302574c1ccc1
+  locks/public-baseline.toon,32751,15dae171a0bbdf7423a117fb008e71e0f7737d2a3647ede1b1887bf051c549cf

@@ -2,62 +2,81 @@
 
 [首页](../README.md) · [English](BUILD.en.md) · [TOON 指南](TOON.md)
 
-要改一台机型，先从它的适配资料和 TOON 入手，再用 Boiler Installer 的构建工具生成机型包。想修改安装器界面或打包方式，则继续使用 Boiler Installer 的应用构建与打包脚本。
+从机型 TOON 找到组件和共用资源，再用 Boiler Installer 的工具准备源码快照与构建输入。本页以适配仓库提交 `3edd6a340b56628785f05365d62349f7d03c63eb` 和安装器提交 `04dce422d0c4831ced6d2b9efdbd852e7b02a724` 为例；使用其他版本时，请同时核对它们各自的输入锁。
 
-下面的命令按 Boiler Installer 公开提交 `c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989` 编写；使用其他版本时，以对应版本的构建说明和输入锁为准。
+## 仓库分工
 
-## 从哪里开始
-
-| 我想做什么 | 入口 |
+| 位置 | 内容 |
 | --- | --- |
-| 看机型适配、复用一份硬件源码 | [机型目录](../brands/onexplayer/) 和 [common](../common/) |
-| 理解机型与共用资源如何连接 | [TOON 指南](TOON.md) |
-| 构建已有机型包 | [Boiler Installer 的 TOON 构建说明](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/adaptations/docs/TOON_MODEL_CATALOG.md) |
-| 构建 Windows 安装器 | [Boiler Installer 构建说明](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/README.md#build-from-an-independent-checkout) |
+| [Boiler-adaptations](https://github.com/FlightDan/Boiler-adaptations) | 机型 TOON、适配源码、共用资源和设备索引 |
+| [Boiler Installer](https://github.com/FlightDan/Boiler-installer) | 源码快照、机型包、维护工具和安装器的构建代码 |
 
-Boiler-devices 中的 `scripts/build-index.py` 接受**已经构建好的机型包**并生成索引候选；它不是机型包构建器。
+两边各有自己的源码清单。适配仓库更新后，构建项目需要使用指定提交重新准备快照，不能只改一个链接就当成输入已经更新。
 
-## 例子：构建 X2 Mini 机型包
+## 1. 检查 TOON 和源码快照
 
-下面的命令在 **Boiler Installer** 仓库根目录运行，使用 PowerShell。先按[构建说明](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/adaptations/docs/TOON_MODEL_CATALOG.md)准备三个目录：已展开的完整 OXP3 `.8` 机型包目录，以及身份桥接和 HDR 的 overlay 目录。它们分别对应 `base`、`bridge_overlay` 和 `hdr_overlay`；把下面三个路径替换成你准备好的实际目录。输出目录应是一个尚不存在的新目录。
+以下命令在 **Boiler Installer** 仓库根目录运行。这个安装器提交已包含绑定适配仓库 `3edd6a3` 的源码快照：
 
 ```powershell
-$Base = "PATH_TO_COMPLETE_OXP3_PACKAGE"
-$Bridge = "PATH_TO_BRIDGE_OVERLAY"
-$Hdr = "PATH_TO_HDR_OVERLAY"
-$Output = "PATH_TO_NEW_X2_OUTPUT"
-
 python -B adaptations/scripts/toon_catalog.py check
-python -B adaptations/scripts/toon_catalog.py preflight --model guide:x2-mini --input "base=$Base" --input "bridge_overlay=$Bridge" --input "hdr_overlay=$Hdr"
-python -B adaptations/scripts/toon_catalog.py build --model guide:x2-mini --input "base=$Base" --input "bridge_overlay=$Bridge" --input "hdr_overlay=$Hdr" --output "$Output"
 ```
 
-`check` 检查目录与生成视图；`preflight` 核对指定的输入和锁；`build` 调用机型对应的构建适配器，生成未签名的机型包。运行 `build` 前先处理 `preflight` 报出的缺失项。
+要从适配仓库重新导出该提交的快照，先准备一个来源为 `FlightDan/Boiler-adaptations` 的独立检出，然后将下面两个路径换成实际路径；输出目录须是新目录：
 
-完整 OXP3 基础包及两个 overlay 的来源、准备命令和固定输入见 [X2 构建说明](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/adaptations/docs/X2_COMPLETE_PACKAGE.md) 与 [桥接 overlay 说明](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/adaptations/docs/X2_COMPLETE_REUSE.md)。若要重建 X2 所需的 OXP3 基础包，OXP3 流程还需要 `.2` 基础包和锁定的第三方归档；按文档准备这些输入。
+```powershell
+$Adaptations = "PATH_TO_BOILER_ADAPTATIONS_CHECKOUT"
+$Snapshot = "PATH_TO_NEW_SNAPSHOT_DIRECTORY"
+python -B scripts/prepare-canonical-model-snapshot.py --source-checkout "$Adaptations" --source-commit 3edd6a340b56628785f05365d62349f7d03c63eb --output "$Snapshot"
+```
 
-现有 X2 构建器复用完整的 OXP3 基础包，再应用两个 overlay。若要生成只含指定组件的裁剪包，需要为该裁剪方式提供对应构建逻辑，并核对依赖和最终清单。
+该命令从指定 Git 提交读取 `model-source-files.json` 中列出的文件，验证大小和哈希，再输出快照。它不会自动替换安装器检出中的文件；更新构建项目的快照时，也要同步其来源锁和源码清单。
 
-## 裁剪或复制适配
+## 2. 按机型申请准备资源池
 
-1. 在 Boiler-devices 中选出要复用的机型文件、共用资源和许可证，按 [TOON 指南](TOON.md)追踪它们的来源和引用。
-2. 在自己的 fork 中调整机型资料与组件选择。TOON 描述“需要什么”；实际构建由 Boiler Installer 的固定适配器处理。
-3. 复用现有构建器时，按其输入锁准备文件；为不同机型或新的裁剪方式构建时，按项目的包协议实现并检查对应适配器。
-4. 运行资源检查、机型包验证，以及安装、维护和恢复所需的测试。记录你实际测试过的设备、系统和功能。
+资源池工具读取快照中两台机型的 `resource_model.resources`，核对各自依赖，再根据两份清单的并集准备资源。把输出路径换成尚不存在的新目录：
 
-共享资源池使用 Boiler Installer 的 `scripts/prepare-resource-pool.py` 准备；它生成的是资源池和目录。机型构建器处理的是另一份机型包，两者的输入和输出各自核对。
+```powershell
+$Pool = "PATH_TO_NEW_RESOURCE_POOL"
+python -B scripts/prepare-resource-pool.py --project . --check-inputs
+python -B scripts/prepare-resource-pool.py --project . --output "$Pool"
+```
 
-例如，Boiler-devices 已有 BMI260 的共用源码和机型引用；Boiler Installer 当前的资源池机型清单尚未列入该资源。要让它走资源池路径，需要在构建项目中补齐对应资源声明和处理流程，再检查生成结果。
+它生成资源池和目录，不是完整机型包。目前扫描快照中的全部机型，两台当前申请的 14 个资源相同。`common_references` 是另一个字段并单独核对：其中 xe、BE201 和 ALC245 的资源 ID 与这 14 项重叠，BMI260 和 GM7 启动策略另有引用。按实际资源路径核对，不要把重复引用当成额外实体文件。
 
-新机型不能只复制一个 TOON 就获得新的可执行构建逻辑；[TOON 构建说明](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/adaptations/docs/TOON_MODEL_CATALOG.md)列出了当前适配器与输入。
+资源池是独立输出，当前 `canonical-build` 不接收这个目录；下一节使用基础机型包和另行准备的共用资源 stage。
 
-### 可以从哪里复制代码
+## 3. 准备共用资源并构建一台机型
 
-- [TOON 解析、检查和适配器入口](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/adaptations/scripts/toon_catalog.py)
-- [X2 机型包构建器](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/adaptations/scripts/build-x2-complete.py)
-- [DevicePackage 格式](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/schemas/DevicePackage.schema.json)和[包检查代码](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/protocol/manifest.py)
+下面以 X2 Mini 为例。先准备好经过核对的 **X2 完整基础机型包目录**、该包已审核的 manifest SHA-256，以及固定来源的公开安装器 ZIP。构建器还需要当前项目锁定的资源输入；具体来源见 [共用资源准备说明](https://github.com/FlightDan/Boiler-installer/blob/04dce422d0c4831ced6d2b9efdbd852e7b02a724/adaptations/docs/CANONICAL_COMMON_PREPARATION_20261103.md)。
 
-已有符合格式的机型包目录时，可以在 Boiler Installer 仓库中用下面的命令生成未签名 ZIP。把两个路径换成实际位置：
+在 PowerShell 中替换以下路径和哈希；`$Stage` 和 `$Output` 须指向尚不存在的新目录：
+
+```powershell
+$Base = "PATH_TO_REVIEWED_X2_PACKAGE_DIRECTORY"
+$BaseSha = "REVIEWED_BASE_MANIFEST_SHA256"
+$PublicInstaller = "PATH_TO_PINNED_PUBLIC_INSTALLER.zip"
+$Stage = "PATH_TO_NEW_COMMON_STAGE"
+$Output = "PATH_TO_NEW_MODEL_OUTPUT"
+
+python -B scripts/prepare-canonical-common.py --canonical-snapshot --gyro-public-archive "$PublicInstaller" --output "$Stage"
+python -B adaptations/scripts/toon_catalog.py canonical-build --model guide:x2-mini --input "base=$Base" --input "stage=$Stage" --input "public-installer=$PublicInstaller" --base-manifest-sha256 "$BaseSha" --output "$Output"
+```
+
+第一个命令准备共用设备输入；第二个命令读取 X2 的机型资料，核对快照、基础包和输入，再生成一台机型的未签名候选包。OXP3 使用 `guide:oxp3` 和对应的 OXP3 基础包。基础包及其实际来源、准备步骤见 [机型构建说明](https://github.com/FlightDan/Boiler-installer/blob/04dce422d0c4831ced6d2b9efdbd852e7b02a724/adaptations/docs/CANONICAL_MODEL_FINALIZATION_20261103.md)。
+
+## 4. 裁剪、复用和打包
+
+两台机型的目标品牌包应按两份 TOON 选择文件：检查 `components` 的 `sources`、`resource_model.resources`、`common_references` 和 `boot_policies`，沿路径收集申请的文件及依赖，保持适配仓库的目录结构；两份清单引用同一路径时只存一份，机型专属文件分别保留。检查清单、许可证、完整性以及安装、维护和恢复所需内容。
+
+当前 `canonical-build` 基于已有完整基础包构建**单台机型**。按两份 TOON 裁剪并去重生成一个品牌包，需要对应的裁剪构建器和包内容核对；不要把单机型完整基础包构建结果当成该品牌包。
+
+可以从这些代码开始：
+
+- [TOON 解析、检查和 canonical-build 入口](https://github.com/FlightDan/Boiler-installer/blob/04dce422d0c4831ced6d2b9efdbd852e7b02a724/adaptations/scripts/toon_catalog.py)
+- [源码快照准备器](https://github.com/FlightDan/Boiler-installer/blob/04dce422d0c4831ced6d2b9efdbd852e7b02a724/scripts/prepare-canonical-model-snapshot.py)与[共用资源准备器](https://github.com/FlightDan/Boiler-installer/blob/04dce422d0c4831ced6d2b9efdbd852e7b02a724/scripts/prepare-canonical-common.py)
+- [DevicePackage 格式](https://github.com/FlightDan/Boiler-installer/blob/04dce422d0c4831ced6d2b9efdbd852e7b02a724/schemas/DevicePackage.schema.json)和[包检查代码](https://github.com/FlightDan/Boiler-installer/blob/04dce422d0c4831ced6d2b9efdbd852e7b02a724/protocol/manifest.py)
+
+已有符合格式的机型包目录时，可以生成未签名 ZIP：
 
 ```powershell
 $Package = "PATH_TO_PACKAGE_DIRECTORY"
@@ -65,8 +84,8 @@ $Zip = "PATH_TO_NEW_PACKAGE.zip"
 python -B scripts/build-device-package.py "$Package" --output "$Zip"
 ```
 
-## 生成安装器
+## 5. 生成 Windows 安装器
 
-机型包和 Windows 安装器是不同产物。构建安装器时，在 Boiler Installer 的 Windows x64 独立检出中准备锁定依赖，构建应用，再按选项准备集成内容并运行打包脚本。入口与所需环境见 [Boiler Installer README](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/README.md#build-from-an-independent-checkout) 和 [依赖准备文档](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/docs/DEPENDENCY_BOOTSTRAP.md)；各准备脚本可用 `--help` 查看参数。
+机型包和安装器是不同产物。构建安装器时，在 Boiler Installer 的 Windows x64 独立检出中准备锁定依赖、构建应用，再准备集成内容并运行打包脚本。入口见 [Boiler Installer 构建说明](https://github.com/FlightDan/Boiler-installer/blob/04dce422d0c4831ced6d2b9efdbd852e7b02a724/README.md#build-from-an-independent-checkout)和[依赖准备文档](https://github.com/FlightDan/Boiler-installer/blob/04dce422d0c4831ced6d2b9efdbd852e7b02a724/docs/DEPENDENCY_BOOTSTRAP.md)。
 
-生成后检查机型包的 manifest、资源文件和哈希，并在适当的测试环境中验证安装、维护与恢复。公开分发时再按项目的设备索引流程处理。
+已有机型包需要加入设备目录时，在 **Boiler-adaptations** 仓库根目录使用[设备索引流程](REGISTRY.md)；`scripts/build-index.py` 接受已生成的包，不负责构建包本身。

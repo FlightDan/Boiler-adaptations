@@ -1,0 +1,27 @@
+schema_version: 1
+kind: BoilerResourceSource
+id: "resource:intel-g3e-public-cpu-controls"
+version: 0.2.0+baseline.72f864.live1
+dependencies[1]: "resource:common-intel-rapl"
+external_component_dependencies[1]: decky
+hardware_requires:
+  intel_pstate[1]: true
+  cpu_core_groups[1]:
+    - [3]: 2,8,4
+  steamos_build[1]: "20260924.1000"
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+  os_versions[1]: "3.10"
+  kernels[1]: 7.2.4-valve1-1-neptune-72-g5ab4af5e2eb9
+install_kind: intel-g3e-public-cpu-live-v1
+verify:
+  kind: cpu-live-state-v1
+restore:
+  kind: cpu-live-transaction-v1
+renderer: fixed-public-cpu-live-v1
+source_lock: locks/resources/intel-g3e-public-cpu-controls.toon
+recipe:
+  public_commit: 72f864e0498c10366493c74608c5ffed62cc99ca
+  deployment: baseline/brands/onexplayer/oxp3/scripts/controls/cpu/deploy-cpu.py
+  templates[4]: devices/CPU/Intel/G3E/templates/oxp3-cpu.service,devices/CPU/Intel/G3E/templates/plugin.toon,devices/CPU/Intel/G3E/templates/package.toon,devices/CPU/Intel/G3E/templates/config.toon

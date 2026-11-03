@@ -1,0 +1,9 @@
+[Unit]
+Description=OXP3 battery display
+[Service]
+ExecCondition=/usr/bin/python3 -I -B /usr/local/lib/oxp3-integration/integration_runtime.py guard
+ExecStart=/bin/bash /var/lib/oxp3-runtime-hardened/battery.sh
+ExecStopPost=/bin/bash /var/lib/oxp3-runtime-hardened/battery.sh --stop
+Restart=on-failure
+[Install]
+WantedBy=multi-user.target

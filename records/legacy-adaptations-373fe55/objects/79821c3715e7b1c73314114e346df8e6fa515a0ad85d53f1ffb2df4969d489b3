@@ -1,0 +1,2 @@
+# Source locks authenticate exact bytes on Windows and Linux.
+* -text

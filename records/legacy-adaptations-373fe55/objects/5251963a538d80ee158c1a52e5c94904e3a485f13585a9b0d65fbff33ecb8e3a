@@ -1,0 +1,21 @@
+schema_version: 1
+kind: BoilerResourceSource
+id: "resource:common-flathub-mirror"
+version: 0.1.0+source-flathub.20261031
+dependencies: []
+external_component_dependencies: []
+hardware_requires:
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+install_kind: boiler-flathub-mirror-v1
+verify:
+  kind: sha256-v1
+restore:
+  kind: transaction-backup-v1
+renderer: fixed-flathub-mirror-v1
+source_lock: locks/resources/common-flathub-mirror.toon
+recipe:
+  definition: baseline/brands/onexplayer/oxp3/scripts/flathub.flatpakrepo
+  license_files[1]: LICENSE
+  mirror_url: "https://mirrors.ustc.edu.cn/flathub"

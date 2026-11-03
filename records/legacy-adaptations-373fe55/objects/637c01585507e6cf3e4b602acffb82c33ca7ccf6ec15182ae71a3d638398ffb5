@@ -1,0 +1,17 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:onexplayer-microphone"
+files[13]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  baseline/common/scripts/licenses/upstream-fixes-MIT.txt,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  devices/Audio/onexplayer/microphone/resource.toon,1104,4422315b12067d66b6d0cf65cbb3c32e04bb8b846f68bb02bed904d65c36f6b9
+  devices/Audio/onexplayer/microphone/src/90-oxp-microphone.conf,36,40b0db31f7f8f7f2fc96fa147a8ff10ed3316dff7316a1b83b7d59d8a34f7888
+  devices/Audio/onexplayer/microphone/src/microphone.py,9440,25074a70432dcd3be14f48b5e3133f063611ad0fd46805fbfa829c054b03c269
+  devices/Audio/onexplayer/microphone/src/oxp-microphone.service,364,902ebd2f3a4caecdf9fc91be16360f1dd95df9dc9428b2aa6cf81be596e9317a
+  devices/EC/onexplayer/battery/charge-backend/patches/oxp3-battery.service.patch,493,60d230449cd312aa62a57062d0d59e1bbc19af90f3fd2e9cdc4e3af2d22b4ae2
+  devices/EC/onexplayer/battery/charge-backend/templates/oxp3-battery.service,610,82eb172c677dd7deab714be2f3b93347e751bd484c14e737aaa4b68b397fcabb
+  devices/EC/onexplayer/battery/charge-backend/upstream/oxp3-battery.service,618,d5771cac38919a517f3ff228de56add0700fdac9e3e7f4d92c461f8ee2fe4767
+  locks/public-00d26ea-metadata.zip,2910,884b14f5e8b2ed9fb025688410c7fb3d735c110c3f0d8fa41516a700341ea4de
+  locks/public-00d26ea-provenance.toon,6063,aa6f37bc5899333b1314b66b4997cf6a9defc6d6ef3c37c467de213005202d4e
+  locks/public-baseline.toon,32751,15dae171a0bbdf7423a117fb008e71e0f7737d2a3647ede1b1887bf051c549cf

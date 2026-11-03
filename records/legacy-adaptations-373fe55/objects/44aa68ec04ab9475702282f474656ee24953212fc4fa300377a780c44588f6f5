@@ -1,0 +1,20 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:onexplayer-battery-common"
+files[16]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  baseline/common/scripts/licenses/upstream-fixes-MIT.txt,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  devices/EC/onexplayer/battery/charge-backend/patches/oxp3-battery.service.patch,493,60d230449cd312aa62a57062d0d59e1bbc19af90f3fd2e9cdc4e3af2d22b4ae2
+  devices/EC/onexplayer/battery/charge-backend/templates/oxp3-battery.service,610,82eb172c677dd7deab714be2f3b93347e751bd484c14e737aaa4b68b397fcabb
+  devices/EC/onexplayer/battery/charge-backend/upstream/oxp3-battery.service,618,d5771cac38919a517f3ff228de56add0700fdac9e3e7f4d92c461f8ee2fe4767
+  devices/EC/onexplayer/battery/common/resource.toon,1614,34baf7711d2e47f28fc6c0325cd9742ead3d4c4f2140de74a114bb39764e9009
+  devices/EC/onexplayer/battery/common/src/battery-plugin-index.js,11336,2e73f21f74bccdd06bbfebd2693d1dc744e980843290674bcb87338accc353fb
+  devices/EC/onexplayer/battery/common/src/battery-plugin-main.py,947,17012e3b6d0d6861ea4e66426686545c5ea18227ddb7617bc116dc99f7679bfb
+  devices/EC/onexplayer/battery/common/src/sleep-router.conf,171,a2f0853556e9387e7f1862a8d0a16fd2e8b8400eed67e595f63c3d68df1729b2
+  devices/EC/onexplayer/battery/common/src/sleep_control.py,8463,b4a0df256f978d7bd3c9fb1388a8da5df83767b068b9ca2ea96582bd40629e99
+  devices/EC/onexplayer/battery/common/templates/package.toon,47,6bca12f90ab126910efe4ea52ea5f2ea81349b6520c0c04ed8d89abbc02a5a6e
+  devices/EC/onexplayer/battery/common/templates/plugin.toon,79,6d4f7ef12e6f4a11633edd09f704bba30d40786588077abb0708708e260208ee
+  locks/public-00d26ea-metadata.zip,2910,884b14f5e8b2ed9fb025688410c7fb3d735c110c3f0d8fa41516a700341ea4de
+  locks/public-00d26ea-provenance.toon,6063,aa6f37bc5899333b1314b66b4997cf6a9defc6d6ef3c37c467de213005202d4e
+  locks/public-baseline.toon,32751,15dae171a0bbdf7423a117fb008e71e0f7737d2a3647ede1b1887bf051c549cf

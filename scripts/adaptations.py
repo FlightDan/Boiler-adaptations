@@ -225,7 +225,23 @@ def check(root=ROOT):
     actual = {path.relative_to(root).as_posix() for folder in (root/'common/scripts', root/'brands')
               for path in folder.rglob('*') if path.is_file() and 'scripts' in path.relative_to(root).parts
               and '__pycache__' not in path.parts and path.suffix != '.pyc'}
-    expected_actual = set(inventory) - set(mapping)
+    # The original upstream lock remains immutable. Additional reviewed source
+    # members have their own explicit canonical source inventory.
+    current = read(root/'model-source-files.json')
+    if current.get('kind') != 'CanonicalAdaptationSourceFiles':
+        raise ValueError('Missing canonical source inventory')
+    current_rows = {row['path']: row for row in current['files']}
+    if len(current_rows) != len(current['files']): raise ValueError('Duplicate canonical source member')
+    imported = read(root/'records/installer-adaptation-source-import-20261104.json')['files']
+    for row in imported:
+        name = row['path']
+        if name not in current_rows or any(current_rows[name][k] != row[k] for k in ('size','sha256')):
+            raise ValueError('Imported source missing from canonical inventory: '+name)
+        data = local(root, name).read_bytes()
+        if len(data) != row['size'] or hashlib.sha256(data).hexdigest() != row['sha256']:
+            raise ValueError('Canonical source member differs: '+name)
+    expected_actual = (set(inventory) - set(mapping)) | {name for name in current_rows
+        if name.startswith('brands/') and '/scripts/' in name}
     if actual != expected_actual:
         raise ValueError('Uninventoried or missing adaptation script files: '+str(sorted(actual ^ expected_actual)))
     models = records(root)
@@ -240,7 +256,9 @@ def check(root=ROOT):
         if name in ('brands/onexplayer/oxp3/manifest.json', 'brands/onexplayer/x2-mini/manifest.json') and 'gyro' not in components:
             raise ValueError('Missing gyro component: '+name)
         for item in components.values():
-            if item['recommendation'] not in LEVELS or item.get('default') is not False:
+            fingerprint_default = (item.get('default') is True and item['id']=='fingerprint-unlock'
+                and name in ('brands/onexplayer/oxp3/manifest.json','brands/onexplayer/x2-mini/manifest.json'))
+            if item['recommendation'] not in LEVELS or not (item.get('default') is False or fingerprint_default):
                 raise ValueError('Source-only choices cannot become installation defaults')
             for dependency in item['dependencies']:
                 if dependency not in components or components[dependency]['recommendation'] == 'excluded':
@@ -256,7 +274,7 @@ def check(root=ROOT):
                 local(root, expected_toon)
                 validate_gyro_reference(common, expected_toon, model)
             for path in item['sources']:
-                if not bmi_gyro and path not in inventory:
+                if not bmi_gyro and path not in inventory and path not in current_rows and path != expected_toon:
                     raise ValueError('Uninventoried component source: '+path)
             if item['recommendation'] == 'pending' and item['sources']:
                 raise ValueError('Pending implementation must not claim an existing script')

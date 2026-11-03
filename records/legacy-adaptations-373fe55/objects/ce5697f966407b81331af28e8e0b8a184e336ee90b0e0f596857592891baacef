@@ -1,0 +1,176 @@
+--- a/binder/deps.c
++++ b/binder/deps.c
+@@ -14,6 +14,28 @@
+ 
+ #include "deps.h"
+ 
++#include <asm/asm.h>
++
++/* A local, annotated retpoline calls the audited kernel dependency targets.
++ * It supports the x86-64 kernel ABI's first four integer/pointer arguments.
++ * No global IBT setting or kernel text is changed.
++ */
++static __always_inline unsigned long binder_kernel_call4(unsigned long target,
++        unsigned long arg1, unsigned long arg2,
++        unsigned long arg3, unsigned long arg4)
++{
++        asm volatile("call binder_kernel_call_thunk\n"
++                : "+a" (target), "+D" (arg1), "+S" (arg2),
++                  "+d" (arg3), "+c" (arg4), ASM_CALL_CONSTRAINT
++                :
++                : "r8", "r9", "r10", "r11", "memory", "cc");
++        return target;
++}
++#define BINDER_CALL1(fn,a) binder_kernel_call4((unsigned long)(fn),(unsigned long)(a),0,0,0)
++#define BINDER_CALL2(fn,a,b) binder_kernel_call4((unsigned long)(fn),(unsigned long)(a),(unsigned long)(b),0,0)
++#define BINDER_CALL3(fn,a,b,c) binder_kernel_call4((unsigned long)(fn),(unsigned long)(a),(unsigned long)(b),(unsigned long)(c),0)
++#define BINDER_CALL4(fn,a,b,c,d) binder_kernel_call4((unsigned long)(fn),(unsigned long)(a),(unsigned long)(b),(unsigned long)(c),(unsigned long)(d))
++
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,7,0))
+ 
+ #ifndef CONFIG_KPROBES
+@@ -64,7 +86,11 @@
+ 	if (!func_ptr)
+ 		func_ptr = get_kallsyms_lookup_name_ptr();
+ 
+-	return func_ptr(name);
++	if (!func_ptr) {
++		pr_err("binder: cannot resolve kallsyms_lookup_name\n");
++		return 0;
++	}
++	return BINDER_CALL1(func_ptr, name);
+ #else
+ 	return kallsyms_lookup_name(name);
+ #endif
+@@ -97,9 +123,9 @@
+ #endif
+ 
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5,19,0))
+-    return close_fd_get_file_ptr(fd);
++    return (struct file *)BINDER_CALL1(close_fd_get_file_ptr, fd);
+ #else
+-	return close_fd_get_file_ptr(fd, res);
++	return BINDER_CALL2(close_fd_get_file_ptr, fd, res);
+ #endif
+ }
+ 
+@@ -109,7 +135,7 @@
+ {
+ 	if (!can_nice_ptr)
+ 		can_nice_ptr = kallsyms_lookup_name_wrapper("can_nice");
+-	return can_nice_ptr(p, nice);
++	return BINDER_CALL2(can_nice_ptr, p, nice);
+ }
+ 
+ static void (*mmput_async_ptr)(struct mm_struct *mm) = NULL;
+@@ -118,7 +144,7 @@
+ {
+ 	if (!mmput_async_ptr)
+ 		mmput_async_ptr = kallsyms_lookup_name_wrapper("mmput_async");
+-	return mmput_async_ptr(mm);
++	(void)BINDER_CALL1(mmput_async_ptr, mm);
+ }
+ 
+ static int (*security_binder_set_context_mgr_ptr)(struct task_struct *mgr) = NULL;
+@@ -127,7 +153,7 @@
+ {
+ 	if (!security_binder_set_context_mgr_ptr)
+ 		security_binder_set_context_mgr_ptr = kallsyms_lookup_name_wrapper("security_binder_set_context_mgr");
+-	return security_binder_set_context_mgr_ptr(mgr);
++	return BINDER_CALL1(security_binder_set_context_mgr_ptr, mgr);
+ }
+ 
+ static int (*security_binder_transaction_ptr)(struct task_struct *from, struct task_struct *to) = NULL;
+@@ -136,7 +162,7 @@
+ {
+ 	if (!security_binder_transaction_ptr)
+ 		security_binder_transaction_ptr = kallsyms_lookup_name_wrapper("security_binder_transaction");
+-	return security_binder_transaction_ptr(from, to);
++	return BINDER_CALL2(security_binder_transaction_ptr, from, to);
+ }
+ 
+ static int (*security_binder_transfer_binder_ptr)(struct task_struct *from, struct task_struct *to) = NULL;
+@@ -145,7 +171,7 @@
+ {
+ 	if (!security_binder_transfer_binder_ptr)
+ 		security_binder_transfer_binder_ptr = kallsyms_lookup_name_wrapper("security_binder_transfer_binder");
+-	return security_binder_transfer_binder_ptr(from, to);
++	return BINDER_CALL2(security_binder_transfer_binder_ptr, from, to);
+ }
+ 
+ static int (*security_binder_transfer_file_ptr)(struct task_struct *from, struct task_struct *to, struct file *file) = NULL;
+@@ -154,7 +180,7 @@
+ {
+ 	if (!security_binder_transfer_file_ptr)
+ 		security_binder_transfer_file_ptr = kallsyms_lookup_name_wrapper("security_binder_transfer_file");
+-	return security_binder_transfer_file_ptr(from, to, file);
++	return BINDER_CALL3(security_binder_transfer_file_ptr, from, to, file);
+ }
+ 
+ static int (*task_work_add_ptr)(struct task_struct *task, struct callback_head *work,
+@@ -165,7 +191,7 @@
+ {
+ 	if (!task_work_add_ptr)
+ 		task_work_add_ptr = kallsyms_lookup_name_wrapper("task_work_add");
+-	return task_work_add_ptr(task, work, notify);
++	return BINDER_CALL3(task_work_add_ptr, task, work, notify);
+ }
+ 
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(6,3,0))
+@@ -175,7 +201,7 @@
+ {
+ 	if (!zap_page_range_single_ptr)
+ 		zap_page_range_single_ptr = kallsyms_lookup_name_wrapper("zap_page_range_single");
+-	zap_page_range_single_ptr(vma, address, size, details);
++	BINDER_CALL4(zap_page_range_single_ptr, vma, address, size, details);
+ }
+ #else
+ static void (*zap_page_range_ptr)(struct vm_area_struct *, unsigned long, unsigned long) = NULL;
+@@ -184,7 +210,7 @@
+ {
+ 	if (!zap_page_range_ptr)
+ 		zap_page_range_ptr = kallsyms_lookup_name_wrapper("zap_page_range");
+-	zap_page_range_ptr(vma, address, size);
++	BINDER_CALL3(zap_page_range_ptr, vma, address, size);
+ }
+ #endif
+ 
+@@ -194,7 +220,7 @@
+ {
+ 	if (!put_ipc_ns_ptr)
+ 		put_ipc_ns_ptr = kallsyms_lookup_name_wrapper("put_ipc_ns");
+-	put_ipc_ns_ptr(ns);
++	BINDER_CALL1(put_ipc_ns_ptr, ns);
+ }
+ 
+ static struct ipc_namespace *init_ipc_ns_ptr = NULL;
+--- a/binder/Makefile
++++ b/binder/Makefile
+@@ -1,6 +1,6 @@
+ ccflags-y += -I$(src) -Wno-int-conversion -DCONFIG_ANDROID_BINDER_DEVICES="\"binder\"" -DCONFIG_ANDROID_BINDERFS="y"
+ obj-m := binder_linux.o
+-binder_linux-y := deps.o binder.o binder_alloc.o binderfs.o
++binder_linux-y := deps.o binder.o binder_alloc.o binderfs.o kernel_call.o
+ 
+ KERNEL_SRC ?= /lib/modules/$(shell uname -r)/build
+ 
+--- /dev/null
++++ b/binder/kernel_call.S
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Retpoline sequence follows Linux arch/x86/lib/retpoline.S. */
++#include <linux/linkage.h>
++#include <asm/nospec-branch.h>
++#include <asm/unwind_hints.h>
++.text
++SYM_CODE_START(binder_kernel_call_thunk)
++        UNWIND_HINT_UNDEFINED
++        ANNOTATE_NOENDBR
++        ANNOTATE_INTRA_FUNCTION_CALL
++        call .Lbinder_kernel_target
++        int3
++.Lbinder_kernel_target:
++        mov %rax, (%rsp)
++        UNWIND_HINT_FUNC
++        RET
++SYM_CODE_END(binder_kernel_call_thunk)

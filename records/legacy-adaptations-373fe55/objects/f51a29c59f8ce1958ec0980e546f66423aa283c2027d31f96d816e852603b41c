@@ -1,0 +1,10 @@
+kind: SelectedPublicComponentSources
+input:
+  path: inputs/public-installer/oxp3-steamos-installer-1.0.6-20261022-220437.zip
+  url: "https://github.com/FlightDan/OneXPlayer3-SteamOS/releases/download/v1.0.6%2Binstaller.20261022.220437/oxp3-steamos-installer-1.0.6-20261022-220437.zip"
+  name: oxp3-steamos-installer-1.0.6-20261022-220437.zip
+  size: 555684389
+  sha256: d8bee8bad14f4cd136c814ebcaa3299fa59202b6cdc6d26ec9c52af0e055f4d4
+component: gamescope-env
+files[1]{path,size,sha256,upstream_member}:
+  inputs/000-90-oxp3-desktop-env-isolation.conf,222,9616729dac8be729b56bd201b8cfbbb1fcd0eb2fb7163944638306856e85a13b,cache/integration/gamescope-env/000.bin

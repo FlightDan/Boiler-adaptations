@@ -1,12 +1,12 @@
 [Boiler Installer 项目](https://github.com/FlightDan/Boiler-installer) · [English](docs/README.en.md)
 
-# Boiler Devices
+# Boiler Adaptations
 
 这里收集 Boiler 的设备和机型适配。你可以查看已有机型的资料，复用共用硬件组件，也欢迎提交自己的适配。
 
 | 文档 | 已适配机型 |
 | --- | --- |
-| [TOON 是怎么工作的](docs/TOON.md)<br>[构建机型包和安装器](docs/BUILD.md)<br>[品牌与机型适配资料](docs/ADAPTATIONS.md) | [ONEXPLAYER 3](brands/onexplayer/oxp3/model.md)<br>[ONEXPLAYER X2 Mini / Mini PRO](brands/onexplayer/x2-mini/model.md) |
+| [TOON 是怎么工作的](docs/TOON.md)<br>[构建机型包和安装器](docs/BUILD.md)<br>[设备索引与签名](docs/REGISTRY.md)<br>[品牌与机型适配资料](docs/ADAPTATIONS.md) | [ONEXPLAYER 3](brands/onexplayer/oxp3/model.md)<br>[ONEXPLAYER X2 Mini / Mini PRO](brands/onexplayer/x2-mini/model.md) |
 
 <details>
 <summary>如何提交新适配</summary>
@@ -30,6 +30,6 @@
 <details>
 <summary>签名与信任链</summary>
 
-签名私钥由我保存在本地并控制使用。目前设备索引是未签名的开发索引；发布设备包时，我会签署正式设备索引，安装器用受信任的公钥验证索引，再按索引核对设备包。
+签名私钥由我保存在本地并控制使用。安装器用受信任的公钥验证已签名的设备索引，再按索引核对设备包。[已发布的签名目录](https://github.com/FlightDan/Boiler-adaptations/releases/tag/catalog-v0.1.0-preview.1)和仓库根目录的开发索引分别维护，详见[设备索引与签名](docs/REGISTRY.md)。
 
 </details>

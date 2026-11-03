@@ -1,0 +1,7 @@
+name: OXP3 Light
+author: "OXP3 SteamOS; HueSync: honjow, HHHHanasak1; HHD: Antheas Kapenekakis"
+flags[1]: root
+api_version: 1
+publish:
+  tags[2]: utility,root
+  description: "ONEXPLAYER 3 paired ring, Xbox button and top slogan lighting."

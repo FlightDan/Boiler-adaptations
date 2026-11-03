@@ -1,0 +1,9 @@
+schema_version: 1
+kind: BoilerOverlayMangoHudSourceEvidence
+package: 0.8.3.rc1.r24.g33c2c7dd-4
+url: https://steamdeck-packages.steamos.cloud/archlinux-mirror/sources/jupiter-staging/mangohud-0.8.3.rc1.r24.g33c2c7dd-4.src.tar.gz
+archive_sha256: 65ba2b0b5351f800af218d749957758e01973adb00adc602d501e8335d3b5bf6
+pkgbuild_sha256: 37d665be49cbb58685e0ee95875b3cb1718de7e913695e143669c98b203c54d5
+upstream_commit: 33c2c7ddbb72c15e19a42163d75424d5804f8ec8
+cherry_picks[3]: 0805396e579c5f1ea27e2e2a78030d8ef6ce1994,9400280e0daa000def18931c3fce80511d53b1c0,2c1dc5283c045e9a7e424dc913fbafcdcc7e3be1
+findings: "Cherry-picks change ImGui graph IDs and mangoapp frame throttling. None changes the preset parser or ordered exec registration. Proc VRAM exists in the pinned source. This source check is not a runtime or hardware acceptance."

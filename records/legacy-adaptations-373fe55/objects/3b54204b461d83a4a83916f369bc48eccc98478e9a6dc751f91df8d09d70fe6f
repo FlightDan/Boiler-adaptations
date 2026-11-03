@@ -1,0 +1,11 @@
+schema_version: 1
+kind: XevmaSourceProvenance
+repository: HHHHanasak1/onexplayer3-steamos-setup
+commit: e72e814da1944da3792076689995b6fe961f5768
+metadata_archive: devices/GPU/Intel/xe/xevmafix-724/upstream/metadata.zip
+module_type: retained-prebuilt
+module_sha256: 10a473fca8031ab43206f7a9146413cf781355ddedd3ff5a66cf59bb5369461b
+module_lock_sha256: 8bb5ee26ae6bcd2bfa8ecf57cb18f9d6819b95f595a76b5bd857a8ae15db6f41
+transforms[1]{upstream,upstream_sha256,patch,patch_sha256,output,output_sha256}:
+  devices/GPU/Intel/xe/xevmafix-724/upstream/load.py,bf49070cb295c872c3059480cc0a393c77bc1b129ffdaba05e12e90ec78dc646,devices/GPU/Intel/xe/xevmafix-724/patches/load.py.patch,210e614c202ece70b6b098d6ffa152697b40558b7e3aff985a2f05417d648b46,devices/GPU/Intel/xe/xevmafix-724/src/load.py,9c4202e2d868daa124c1d2857d8be1dd41ecf513d306dc6ddbb7529e23484504
+build_evidence[6]: devices/GPU/Intel/xe/xevmafix-724/build-evidence/rebuild-xevma.py,devices/GPU/Intel/xe/xevmafix-724/build-evidence/REBUILD.md,devices/GPU/Intel/xe/xevmafix-724/build-evidence/xevma-build.log,devices/GPU/Intel/xe/xevmafix-724/build-evidence/xevma-rebuild-inputs.toon,devices/GPU/Intel/xe/xevmafix-724/build-evidence/xevma-rebuild-proof.toon,devices/GPU/Intel/xe/xevmafix-724/build-evidence/original-json.zip

@@ -1,0 +1,26 @@
+schema_version: 1
+kind: BoilerResourceSource
+id: "resource:gamma22-hdr-game"
+version: 1.0.0-hdr.local1
+dependencies: []
+external_component_dependencies: []
+hardware_requires:
+  gamescope_version[1]: 3.16.30-1
+  gamescope_user[1]: deck
+  hdr_session[1]: game
+  hdr_existing_override[1]: absent
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+  os_versions[1]: "3.10"
+  kernels[1]: 7.2.4-valve1-1-neptune-72-g5ab4af5e2eb9
+install_kind: gamma22-hdr-game-v1
+verify:
+  kind: sha256-v1
+restore:
+  kind: transaction-backup-v1
+renderer: gamma22-shared-v1
+source_lock: locks/resources/gamma22-hdr-game.toon
+recipe:
+  upstream: baseline/brands/onexplayer/oxp3/scripts/hdr/upstream.lua
+  license: baseline/brands/onexplayer/oxp3/scripts/hdr/UPSTREAM_LICENSE

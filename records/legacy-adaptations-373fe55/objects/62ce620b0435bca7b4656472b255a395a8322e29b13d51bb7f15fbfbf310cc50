@@ -1,0 +1,23 @@
+schema_version: 1
+kind: BoilerResourceSource
+id: "resource:common-serial-console-policy"
+version: 0.1.0+source-split.20261031
+dependencies: []
+external_component_dependencies: []
+hardware_requires:
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+  os_versions[1]: "3.10"
+install_kind: files-v1
+verify:
+  kind: sha256-v1
+restore:
+  kind: transaction-backup-v1
+renderer: files-v1
+source_lock: locks/resources/common-serial-console-policy.toon
+recipe:
+  payload[1]{source,renderer,target,mode,scope}:
+    common/system/serial-console-policy/templates/90-oxp3-console.conf,identity-v1,etc/systemd/system/serial-getty@ttyS0.service.d/90-oxp3-console.conf,420,root-slots
+  license_files[2]: LICENSE,baseline/common/scripts/licenses/upstream-fixes-MIT.txt
+  install_details:

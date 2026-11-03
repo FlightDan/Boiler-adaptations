@@ -1,0 +1,8 @@
+--- upstream/oxp3-speaker-resume.service
++++ resource/oxp3-speaker-resume.service
+@@ -8,4 +8,4 @@
+ Type=oneshot
+ RemainAfterExit=yes
+ ExecStart=/usr/bin/true
+-ExecStop=-/usr/bin/systemctl --user -M deck@ start --no-block oxp3-speaker-route.service
++ExecStop=-/usr/bin/systemctl --user -M deck@ restart --no-block oxp3-speaker-route.service

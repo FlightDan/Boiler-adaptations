@@ -1,0 +1,25 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:onexplayer-ec-fan-driver"
+files[21]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  devices/EC/onexplayer/fan-driver/compiled/oxpec-profile.ko,472736,a819b435f1214252d1d0b15b039baa00d31642495075e864b3153299ecd6e372
+  devices/EC/onexplayer/fan-driver/inputs/000-oxpec.ko,476184,33dcd63adc90b8b1af24d74be70ca39af72f8b8de62cd4f5e34b6aeb477cf80d
+  devices/EC/onexplayer/fan-driver/inputs/001-oxpec.ko,476184,33dcd63adc90b8b1af24d74be70ca39af72f8b8de62cd4f5e34b6aeb477cf80d
+  devices/EC/onexplayer/fan-driver/inputs/002-load-fan-module.py,245,df717562fa87bd74fb1d2dd7d30efc2336bf89b94cee582ab4960f4cd93bf49c
+  devices/EC/onexplayer/fan-driver/inputs/003-oxp3-fan-module.service,359,747dfb3ce14c70dd0d0545f25fc2ca503cef7f423a5f480aa7b923d8c2e40d6b
+  devices/EC/onexplayer/fan-driver/licenses/GPL-2.0.txt,19125,454649ddc02b5cc098513cea28db6592b45ac0a906386287c4d48cf8dbde651c
+  devices/EC/onexplayer/fan-driver/licenses/project-AGPL-3.0.txt,35184,e0eedba615d5cd1b986afb6c5b3a4b1ae33713e7e9dc74d19daec5e3221f9d2e
+  devices/EC/onexplayer/fan-driver/licenses/upstream-fixes-MIT.txt,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  devices/EC/onexplayer/fan-driver/profile-build-evidence.toon,8068,bdb44d04375d64ea84e7d3f5764a0043b4a3434c5060225989d62bf59c6aba3d
+  devices/EC/onexplayer/fan-driver/resource.toon,1517,915435bad9bbeabf04fc7316be83882b1f120a2b762d854e3f2daed2847f03e1
+  devices/EC/onexplayer/fan-driver/source-lock.toon,1057,819576aa6d8304cf14a024a3f6e80cba4c2ee14886be083ed6ac19cff249bf0e
+  devices/EC/onexplayer/fan-driver/sources/000-onexplayer3-dmi.patch,426,ecb52b5a9553479ed7a518278d704ce97ad2581f78b80714b371825b6a17f1e4
+  devices/EC/onexplayer/fan-driver/sources/001-oxpec-acpi-lock-release.patch,1497,9fe57bd43ce7ca0f5b198247976d061e1e2a04a7314f56c1cd54763f345edbd1
+  devices/EC/onexplayer/fan-driver/sources/002-oxpec.c,22960,9bca8a14d7b98b37387b9982f5d6f323a71d558209e3fefe43b305cc8ce44d93
+  devices/EC/onexplayer/fan-driver/sources/003-oxpec.upstream.c,22776,254499952d4b2383b0cee42e3349323023e3e9624aa269628de92835568e20f7
+  devices/EC/onexplayer/fan-driver/sources/004-README.md,3142,e84e2ad6d9e2fffb5e7641cf70f78190c32b2821d6edd4f77d2bc2af1ed4758a
+  devices/EC/onexplayer/fan-driver/sources/005-oxpec-profile.c,23324,ec6f58f18e2bb2a1a013d5ca647d01a91a42ada2ccc3437f2ab59a34e67fa86f
+  devices/EC/onexplayer/fan-driver/sources/006-profile.patch,955,baf16c66dcd67595398eb3361eebb2d6d6b075ad39be53b1bcfa53e3b444ff41
+  devices/GPU/Intel/xe/xevmafix-724/build-evidence/xevma-rebuild-inputs.toon,18923,755a63689c45c78e095ce105e59f909e2e5abc69b3d49f777e280fa0b597f4f9

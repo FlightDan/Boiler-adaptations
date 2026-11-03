@@ -1,0 +1,24 @@
+schema_version: 1
+kind: BoilerResourceSource
+id: "resource:common-charge-compatibility-guard"
+version: 0.1.0+source-split.20261031
+dependencies: []
+external_component_dependencies: []
+hardware_requires:
+  python3_runtime[1]: true
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+  os_versions[1]: "3.10"
+install_kind: files-v1
+verify:
+  kind: sha256-v1
+restore:
+  kind: transaction-backup-v1
+renderer: files-v1
+source_lock: locks/resources/common-charge-compatibility-guard.toon
+recipe:
+  payload[1]{source,renderer,target,mode,scope}:
+    common/system/charge-compatibility-guard/src/charge_guard.py,identity-v1,usr/local/lib/boiler-resource-guard/charge_guard.py,420,root-slots
+  license_files[2]: LICENSE,baseline/common/scripts/licenses/upstream-fixes-MIT.txt
+  install_details:

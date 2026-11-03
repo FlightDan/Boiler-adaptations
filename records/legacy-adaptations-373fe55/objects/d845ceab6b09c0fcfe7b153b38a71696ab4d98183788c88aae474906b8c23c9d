@@ -1,0 +1,22 @@
+schema_version: 1
+kind: BoilerWaydroidPublicSourceBuild
+steam_os_build: "20260924.1000"
+kernel: 7.2.4-valve1-1-neptune-72-g5ab4af5e2eb9
+kernel_headers_sha256: c038a1443e0baf0b33d869747e027056beb28f4a619e235fa624403a1918de6a
+official_signing_master: 889B5EBDDD505A683621900DAF1D2199EF0A3CCF
+public_sources[7]{path,size,sha256}:
+  common/virtualization/waydroid/upstream/binder.tar.gz,69370,2701c1fbb5812a1a74481f71c60b733754a43a344e37440d82e0f2b782320599
+  common/virtualization/waydroid/upstream/gbinder.tar.gz,222355,ed1517146e6cf66ddedaddd372eb8045e9345a011e68d89a2887af7a87165ebc
+  common/virtualization/waydroid/upstream/glibutil.tar.gz,72404,ab4728157b68f84492512c7a451fe193924ae2aac3aa851de06eb3fd5acdc714
+  common/virtualization/waydroid/upstream/python-gbinder.tar.gz,25484,27837fad61b741968a552d0b884e3d534b3b3cd1c92423018933972bc3aa9353
+  common/virtualization/waydroid/upstream/waydroid.tar.gz,249566,f138a287eb8b0be7be7f7060971446490138bc2c8315665c8aa9c2c85576d8a5
+  common/virtualization/waydroid/upstream/lxc-7.0.0.tar.gz,962710,ba0c860626efbac6683f351dd718edb062065e919716d787b89e3d547c5d9493
+  common/virtualization/waydroid/upstream/dnsmasq-2.93.tar.xz,642764,0c00d4e5c97c8306e5fb932b348b34269c9c29a0e7df0e8e82958b407092bc19
+self_built_packages[5]{name,size,sha256}:
+  libgbinder-1.1.52-1-x86_64.pkg.tar.zst,83959,59eeaf358937101010b3534b5e47494381c984ad043a5c25952e6eec4abfff17
+  libglibutil-1.0.80-1-x86_64.pkg.tar.zst,47818,98023538d51d0b24987943231f5740bb23d462a50ef0dd3ba661d9f13f0f33a1
+  python-gbinder-1.3.1-1-x86_64.pkg.tar.zst,180157,a9415277f341328d50e1e0eb841fb805ffa03e83845f0ab254e37897ac5c0d5a
+  steamos-waydroid-binder-1-2-x86_64.pkg.tar.zst,796472,f5bbf910f3087c0a54874ce448eab558f938b52badb04e05d4ca727cd6a3783f
+  waydroid-1.6.3-1-any.pkg.tar.zst,245505,c2833f8b0369955e82a2621513fe8d2ca1516fd94de4da172c5036fbe4fbfcd5
+trust: unsigned-local-test-only
+project_patch: common/virtualization/waydroid/build/packages/steamos-waydroid-binder/intel-ibt-kernel-calls.patch

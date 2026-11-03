@@ -1,0 +1,55 @@
+# Local experimental oxpec module
+
+`oxpec.upstream.c` retains the source and all notices fetched from the public
+[Jovian mirror's 7.2.4-valve1 tag](https://raw.githubusercontent.com/Jovian-Experiments/linux/7.2.4-valve1/drivers/platform/x86/oxpec.c).
+This is a named Valve-tag mirror, not an authenticated retrieval of the official
+Valve source archive. Its exact official equivalence remains unconfirmed.
+
+`oxpec.c` contains two local changes: the seven-line ONEXPLAYER 3 board DMI entry described in the
+[reviewed upstream patch](https://lists.openwall.net/linux-kernel/2026/09/20/1381).
+`onexplayer3-dmi.patch` records that addition. `oxpec-acpi-lock-release.patch`
+records a separate fix to the original EC read helper: after an `ec_read()`
+failure, it attempts to release the acquired ACPI global lock before returning.
+Successful reads retain their original behavior. Vendor/GPL notices remain intact.
+Charging registers, fan/turbo policy and teardown behavior are unchanged.
+This module has no automatic restoration of hardware settings modified
+through its writable interfaces; see [the build-path trace](../BUILD_PATH.md).
+
+The exact official `linux-neptune-72-headers-7.2.4.valve1-1` package is staged in
+`research/cache/oxpec-headers/`, with its prepared build tree extracted beneath
+`unpacked/`. Nothing was installed into host `/usr` or a device. No package manager,
+integrity verification, firmware operation or module loading is part of this build.
+
+Build from any working directory:
+
+```sh
+sh /root/steamosmod/research/charging/module/build.sh
+# A caller can select an already available compatible compiler:
+sh /root/steamosmod/research/charging/module/build.sh CC=/path/to/gcc
+```
+
+The build requires tools compatible with the exact headers' configuration and
+compiler flags. GCC 16.1.1 was used for the stock kernel. `build.log` records the
+initial failed host-only attempt. A locally staged Ubuntu toolchain now produces
+the experimental `oxpec.ko` successfully:
+
+```sh
+python3 /root/steamosmod/research/charging/module/stage_toolchain.py
+python3 /root/steamosmod/research/charging/module/build_staged.py
+```
+
+`stage_toolchain.py` downloads fixed GCC16 Noble PPA packages and small official
+Ubuntu helpers to `research/cache/oxpec-toolchain/` and uses `dpkg-deb -x` only;
+it executes no package installer. `build_staged.py` selects those tools and scopes
+their helper library path to one child build process tree. No libc/loader is
+staged or exported globally. Stock headers/configuration remain unchanged.
+
+[BUILD_STATUS.md](BUILD_STATUS.md), `build-staged-lock-fix.log`, `staged-runtime.log` and
+`candidate-metadata.txt` describe the successful build and its bounds. The
+compiler is an experimental GCC16 March snapshot, different from the stock June
+compiler, and source equivalence with official Valve source remains unconfirmed.
+The earlier DMI-only candidate and metadata are preserved as
+`oxpec.before-acpi-lock-fix.ko` and `candidate-metadata.before-acpi-lock-fix.txt`;
+`build-staged.log` records that earlier build.
+Compilation is not target loading or charging acceptance. No deployment command
+is supplied here.

@@ -1,0 +1,3 @@
+[TdpLimit1]
+bus_name = "org.onexplayer.SteamOSManager.PowerControl"
+object_path = "/org/onexplayer/SteamOSManager/PowerControl"

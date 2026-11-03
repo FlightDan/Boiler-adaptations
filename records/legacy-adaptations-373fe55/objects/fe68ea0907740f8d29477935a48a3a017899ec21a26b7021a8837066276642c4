@@ -1,0 +1,62 @@
+set -euo pipefail
+mkdir -p /work/home /work/probes
+if ! test -f /evidence/sdk-signatures.json; then python3 -I -B /work/verify_sdk.py; fi
+if ! test -f /evidence/kde-source-signature.json; then
+python3 -I -B /work/source/verify_source.py --prepared /work/source --keyring /work/source/plasma-signing-keys.pgp --gpg /usr/bin/gpg --gpgv /usr/bin/gpgv --output /evidence/kde-source-signature.json
+fi
+if ! test -f /work/source-prepared; then
+tar --no-same-owner -xJf /work/source/inputs/kwin-6.7.3.tar.xz -C /work
+cd /work/kwin-6.7.3
+for p in 0001-Handle-WM_TAKE_FOCUS-more-gracefully.patch 0002-Load-current-brightness-from-device.patch 0006-inputmethod-Skip-input-events-from-fake-input.patch 0011-Eis-Support-1.6-additions.patch 0013-filter-bad-modes.patch; do
+  patch -p1 -i /work/source/inputs/"$p"
+done 2>&1 | tee /evidence/distro-patches.log
+printf '%s  %s\n' c631c322b7260e7b54ed5dcfc8e0715803699599f61b8d7ddd547d1becd10110 src/backends/drm/drm_output.cpp cdedaa54cb7d22d0a2c75768573ddf3bf43b8829654616956716273ad445ab80 src/backends/drm/drm_output.h 85229854809d006e46c29d9084d8f3a8b84c197a799ecf4917b996a09af82841 src/workspace.cpp | sha256sum -c -
+cp /work/native/drm_output.candidate.cpp src/backends/drm/drm_output.cpp
+cp /work/native/drm_output.candidate.h src/backends/drm/drm_output.h
+cp /work/native/oxp3_gamma22_policy.h src/backends/drm/oxp3_gamma22_policy.h
+cp /work/native/workspace.marker-r2.cpp src/workspace.cpp
+touch /work/source-prepared
+fi
+cd /work/kwin-6.7.3
+find . -type f -print0 | sort -z | xargs -0 sha256sum > /evidence/final-source-tree.sha256
+cp /work/native/MANIFEST.json /evidence/native-source-snapshot.json
+cmake -B /work/build -S /work/kwin-6.7.3 -DCMAKE_INSTALL_PREFIX=/opt/oxp3-desktop-gamma22/6.7.3-1.6 -DKDE_INSTALL_LIBDIR=lib -DKDE_INSTALL_LIBEXECDIR=lib -DKDE_INSTALL_QTPLUGINDIR=lib/qt6/plugins -DKDE_INSTALL_QMLDIR=lib/qt6/qml -DBUILD_TESTING=OFF 2>&1 | tee /evidence/configure.log
+cmake --build /work/build --parallel 4 2>&1 | tee /evidence/build.log
+DESTDIR=/work/sdk-output cmake --install /work/build 2>&1 | tee /evidence/install.log
+PREFIX=/opt/oxp3-desktop-gamma22/6.7.3-1.6
+NEW_LIB_DIR=/work/sdk-output$PREFIX/lib
+test -f "$NEW_LIB_DIR/libkwin.so.6"
+g++ -std=c++20 -fPIC -O2 -Wall -Wextra -Werror -I/work/kwin-6.7.3/src -I/work/build/src -I/work/kwin-6.7.3/src/backends/drm /work/native/boiler-desktop-edid-probe.cpp -L"$NEW_LIB_DIR" -Wl,-rpath-link,"$NEW_LIB_DIR" -Wl,-rpath,/opt/oxp3-desktop-gamma22/6.7.3-1.6/lib -lkwin $(pkg-config --cflags --libs Qt6Core Qt6Gui) -o /work/probes/boiler-desktop-edid-probe
+XML="$(pkg-config --variable=pkgdatadir wayland-protocols)/stable/xdg-shell/xdg-shell.xml"
+wayland-scanner client-header "$XML" /work/probes/xdg-shell-client-protocol.h
+wayland-scanner private-code "$XML" /work/probes/xdg-shell-protocol.c
+cc -O2 $(pkg-config --cflags wayland-client) -c /work/probes/xdg-shell-protocol.c -o /work/probes/xdg-shell-protocol.o
+g++ -std=c++20 -O2 -pthread -I/work/probes -I/work/native /work/native/pattern-wayland.cpp /work/probes/xdg-shell-protocol.o $(pkg-config --cflags --libs wayland-client vulkan) -o /work/probes/oxp3-hdr-pattern
+
+g++ -std=c++20 -fPIC -O2 -Wall -Wextra -Werror -I/work/kwin-6.7.3/src -I/work/build/src -I/work/kwin-6.7.3/src/backends/drm /buildram/incoming/extras/boiler-desktop-interface-probe.cpp -L"$NEW_LIB_DIR" -Wl,-rpath-link,"$NEW_LIB_DIR" -Wl,-rpath,/opt/oxp3-desktop-gamma22/6.7.3-1.6/lib -lkwin $(pkg-config --cflags --libs libdrm Qt6Core Qt6Gui) -o /work/probes/boiler-desktop-interface-probe
+cp /buildram/incoming/extras/test-r2-edid-color.cpp /work/probes/test-r2-edid-color.cpp
+sed -i 's/TransferFunction::gamma22/TransferFunction::Type::gamma22/g' /work/probes/test-r2-edid-color.cpp
+g++ -std=c++20 -fPIC -O2 -Wall -Wextra -Werror -I/work/kwin-6.7.3/src -I/work/build/src -I/work/kwin-6.7.3/src/backends/drm /work/probes/test-r2-edid-color.cpp -L"$NEW_LIB_DIR" -Wl,-rpath-link,"$NEW_LIB_DIR" -Wl,-rpath,/opt/oxp3-desktop-gamma22/6.7.3-1.6/lib -lkwin $(pkg-config --cflags --libs Qt6Core Qt6Gui) -o /work/probes/test-r2-edid-color
+export LD_LIBRARY_PATH="$NEW_LIB_DIR"
+/work/probes/test-r2-edid-color 2>&1 | tee /evidence/color.log
+python3 -I -B /buildram/incoming/extras/test-edid-probe.py /work/probes/boiler-desktop-edid-probe 2>&1 | tee /evidence/edid-tests.log
+for name in boiler-desktop-edid-probe boiler-desktop-interface-probe oxp3-hdr-pattern; do cp /work/probes/"$name" /work/sdk-output$PREFIX/bin/; done
+printf 'kwin 6.7.3-1.6\nqt6-base 6.11.1-1\nqt6-declarative 6.11.1-3\n' > /work/sdk-output$PREFIX/compatible-packages.txt
+for file in /work/sdk-output$PREFIX/bin/kwin_wayland /work/sdk-output$PREFIX/bin/kwin_wayland_wrapper "$NEW_LIB_DIR/libkwin.so.6" /work/probes/boiler-desktop-edid-probe /work/probes/boiler-desktop-interface-probe; do
+ readelf -d "$file"
+done 2>&1 | tee /evidence/elf-dynamic.log
+cp /work/build/CMakeCache.txt /evidence/CMakeCache.txt
+
+export LD_LIBRARY_PATH="$NEW_LIB_DIR"
+for f in "$NEW_LIB_DIR/libkwin.so.6" /work/sdk-output$PREFIX/bin/kwin_wayland /work/probes/boiler-desktop-edid-probe /work/probes/boiler-desktop-interface-probe /work/probes/oxp3-hdr-pattern; do
+  ldd -r "$f"
+done 2>&1 | tee /evidence/ldd-r.log
+if grep -E 'not found|undefined symbol' /evidence/ldd-r.log; then exit 1; fi
+cp /work/native/presentation-proof.h /work/probes/
+g++ -std=c++20 -O2 -Wall -Wextra -Werror -I/work/native /work/source/inputs/test-policy.cpp -o /work/probes/test-policy
+/work/probes/test-policy 2>&1 | tee /evidence/policy.log
+tar -C /work/sdk-output -czf /evidence/native-output.tar.gz .
+tar -C /work -czf /evidence/new-probes.tar.gz probes
+tar -C /work -czf /evidence/corresponding-source.tar.gz kwin-6.7.3
+sha256sum /evidence/*.tar.gz > /evidence/delivery.sha256
+printf 'REMOTE_NATIVE_FIXED_PREFIX_COMPLETE\n'

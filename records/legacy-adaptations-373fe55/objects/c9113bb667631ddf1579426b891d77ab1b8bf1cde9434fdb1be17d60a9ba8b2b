@@ -1,0 +1,965 @@
+// Follow the Steam page language, with its browser locale as a fallback.
+function language() {
+    const locale = (typeof document !== 'undefined' && document.documentElement.lang)
+        || (typeof navigator !== 'undefined' && navigator.language) || 'zh-CN';
+    return /^(zh|schinese|tchinese)/i.test(locale) ? 'zh' : 'en';
+}
+const english = {
+    '确认游戏接入': 'Review game setup',
+    '应用接入': 'Apply setup',
+    '取消': 'Cancel',
+    '程序': 'Executable',
+    '将备份并修改这些文件，并更新此游戏的 Steam 启动项：': 'These files will be backed up and changed, and this game’s Steam launch options will be updated:',
+    '已取消游戏接入。': 'Game setup cancelled.',
+    '已保留之后修改的文件，请检查游戏备份。': 'Later file changes were preserved. Check the game backup.',
+    '所选 Opti 版本未找到本地缓存包，请选择在线下载源或选择其他版本。': 'No local package was found for this Opti version. Choose an online source or another version.',
+    '本地安装包不存在，请重新选择安装来源。': 'The local package is missing. Choose an installation source again.',
+    '撤销未完成的 Opti 操作，保留原文件和回退记录。': 'Undo the unfinished Opti operation, retaining original files and rollback records.',
+    '从本地安装': 'Install from local package',
+    '已找到本地安装包，可直接安装。': 'Local package found. Ready to install without downloading.',
+    '仅首次下载；之后所有游戏复用本地安装包。': 'Download once. All games then reuse the local package.',
+    '先选择游戏主程序，确认后再显示安装和设置。': 'Choose the game executable first to show installation and settings.',
+    '必选：选择实际运行的游戏主程序。': 'Required: choose the executable you launch to play.',
+    '未找到可用的游戏主程序，请检查游戏安装。': 'No usable game executable found. Check the game installation.',
+    '正在准备 Opti 安装…': 'Preparing the Opti installation…',
+    '正在临时关闭 XMX，以安装 Opti…': 'Temporarily turning XMX off to install Opti…',
+    'Opti 已安装，正在恢复 XMX…': 'Opti installed. Restoring XMX…',
+    'Opti 已安装，XMX 已恢复；下次启动游戏生效。': 'Opti installed and XMX restored for the next game launch.',
+    '安装流程未完成，请按当前状态完成或恢复：': 'Installation did not finish. Complete or restore the current state: ',
+    '游戏正在运行，请先退出游戏再安装或更换 Opti。': 'The game is running. Exit it before installing or changing Opti.',
+    '安装时自动暂时关闭 XMX，完成后恢复；请先退出游戏。': 'Installation temporarily turns XMX off and restores it afterward. Exit the game first.',
+    '安装所选版本，保留回退备份；请先退出游戏。': 'Install the selected version with rollback backups. Exit the game first.',
+    '修复并安装所选版本': 'Repair with the selected version',
+    '保留现有文件并建立回退备份。': 'Keep existing files and create rollback backups.',
+    '没有待完成的 Opti 启动设置。': 'No Opti launch setup is pending.',
+    'Opti 安装版本': 'Opti install version',
+    '重新准备 Opti 10 和 FSR 组件，并重置超分与帧生成；之后重新选择 FSR。': 'Prepare Opti 10 and FSR components again, resetting upscaling and frame generation. Select FSR afterward.',
+    '当前已安装：': 'Currently installed: ',
+    '10.0 预览版（FSR 4.1 XMX）': '10.0 preview (FSR 4.1 XMX)',
+    '请先关闭 XMX；安装旧版后 FSR 4.1 XMX 需要重新准备 Opti 10。': 'Turn XMX off first. Installing an older version requires preparing Opti 10 again for FSR 4.1 XMX.',
+    '安装旧版后 FSR 4.1 XMX 需要重新准备 Opti 10；保留回退备份。': 'FSR 4.1 XMX will require Opti 10 preparation again. Rollback backups are retained.',
+    '选择后自动保存；请先退出游戏。': 'Selections save automatically. Exit the game first.',
+    '正在自动保存设置…': 'Saving settings automatically…',
+    '设置已自动保存，下次启动游戏生效。': 'Settings saved automatically for the next game launch.',
+    '游戏正在运行，请先退出游戏再更改设置。': 'The game is running. Exit it before changing settings.',
+    'FSR 4.1.2 Lite XMX 已就绪；从 Steam 启动游戏即可。': 'FSR 4.1.2 Lite XMX is ready. Launch the game from Steam.',
+    '重新选择 FSR 后会自动准备此游戏并保存。': 'Select FSR again to prepare this game and save automatically.',
+    'FSR 需要 XMX；重新选择 FSR 会自动开启 XMX。': 'FSR requires XMX. Selecting FSR again enables XMX automatically.',
+    '重新选择 FSR 会自动准备组件并开启 XMX。': 'Selecting FSR again prepares the components and enables XMX automatically.',
+    '打开时优先选择正在运行的游戏，也可手动切换。': 'Opens the running game by default. You can also choose another game.',
+    '仅限 Intel；更改前请退出游戏。': 'Intel only. Exit the game before changing.',
+    '原生 XeSS 帧生成请关闭。': 'Turn off for native XeSS Frame Generation.',
+    '默认官方源；镜像由第三方提供。': 'Official source by default; third-party mirrors available.',
+    '保留文件并建立回退备份。': 'Keep files and create rollback backups.',
+    '开启 Opti 注入后生效。': 'Applies when Opti injection is enabled.',
+    '插帧倍率': 'FG multiplier', '游戏原生控制': 'Game controlled', '原生': 'Native',
+    '选择游戏支持的帧生成类型。': 'Select the frame generation type supported by the game.',
+    '启用 Intel XMX 执行路径；帧生成仍需游戏、运行时和 Proton 支持。': 'Enable the Intel XMX path. Frame generation still requires game, runtime and Proton support.',
+    'XeSS FG 倍率（实验）': 'XeSS FG multiplier (experimental)',
+    '仅用于 Opti XeSS FG 输出。实际倍率取决于运行时支持；原生 XeSS FG 请在游戏内设置。': 'For Opti XeSS FG output. The runtime determines the effective multiplier. Configure native XeSS FG in the game.',
+    '2x（生成 1 帧）': '2x (1 generated frame)', '3x（生成 2 帧）': '3x (2 generated frames)', '4x（生成 3 帧）': '4x (3 generated frames)',
+    '恢复上次保存前的配置；保留安装回退记录。先退出游戏。': 'Restore the settings before the last save, retaining install rollback. Exit the game first.',
+    '正在撤销上次设置…': 'Undoing the last settings change…', '已恢复上次保存前的设置，下次启动生效。': 'Previous settings restored for the next launch.',
+    '恢复中断的设置': 'Recover interrupted settings', '撤销上次设置': 'Undo last settings change',
+    '设置保存或恢复未完成，请先恢复上次设置': 'A settings change is incomplete. Recover the previous settings first.',
+    '设置保存未完成，已保留恢复记录；请先恢复上次设置：': 'Settings were not fully saved. Recovery records were retained. Recover the previous settings: ',
+    '设置恢复未完成，已保留恢复记录；请重试恢复上次设置：': 'Settings recovery is incomplete. Records were retained. Retry recovery: ',
+    '设置文件已被外部修改，保留现场：': 'A settings file changed externally. It was left untouched: ',
+    '没有可恢复的设置': 'No settings change is available to undo.',
+    '设置恢复目标已变化，保留现场': 'Settings recovery targets changed. Files were left untouched.',
+    '设置恢复记录与当前安装不一致': 'Settings recovery does not match the current installation.',
+    '无效设置备份路径': 'Invalid settings backup path.',
+    '设置文件必须是当前用户的普通文件：': 'The settings file must be a regular file owned by the current user: ',
+    '游戏程序已经变化，请重新打开插件': 'The game executable changed. Reopen the plugin before continuing.',
+    'XMX 状态已变化，请重新打开插件': 'XMX state changed. Reopen the plugin before continuing.',
+    'Steam 启动项读回不一致，请恢复或重新打开插件后重试': 'Steam launch options do not match. Restore or reopen the plugin and try again.',
+    '没有已管理的 Opti 设置文件': 'No managed Opti settings file was found.',
+    'XMX 操作待完成，请先完成或恢复': 'An XMX operation is pending. Complete or restore it first.',
+    '游戏 Proton 环境已变化，请重新打开插件': 'The game Proton prefix changed. Reopen the plugin before continuing.',
+    '固定版本的 XMX 运行环境尚未发布。发布后请更新插件。': 'The pinned XMX runtime release is not published yet. Update the plugin when it becomes available.',
+    '独立的 XMX 组件，不含 OptiScaler。': 'Separate XMX components; OptiScaler is managed separately.',
+    'XMX 运行环境已就绪。': 'XMX runtime is ready.', 'XMX 运行环境已就绪': 'XMX runtime ready',
+    '下载后校验并配置到当前用户目录。': 'Download, verify and configure in your user data directory.',
+    '正在检查 XMX 运行环境…': 'Checking the XMX runtime…',
+    '正在下载并配置 XMX 运行环境…': 'Downloading and configuring the XMX runtime…',
+    '下载并配置 XMX 运行环境': 'Download and configure XMX runtime',
+    'XMX 运行环境已配置。选择游戏后开启 XMX。': 'XMX runtime configured. Select a game to enable XMX.',
+    '正在准备 XMX 运行环境…': 'Preparing the XMX runtime…', '正在下载 XMX 运行环境…': 'Downloading the XMX runtime…',
+    '正在解压 XMX 运行环境…': 'Extracting the XMX runtime…', '正在验证并配置 XMX 运行环境…': 'Validating and configuring the XMX runtime…',
+    'XMX 运行环境配置完成。': 'XMX runtime setup completed.', 'XMX 运行环境配置未完成。': 'XMX runtime setup did not complete.',
+    '进度连接暂不可用，正在重试。': 'Progress connection is temporarily unavailable. Retrying.',
+    '正在准备 Opti…': 'Preparing Opti…', '正在下载 Opti…': 'Downloading Opti…', '正在复用 Opti 缓存…': 'Reusing the Opti cache…',
+    '正在解压 Opti…': 'Extracting Opti…', '正在安装 Opti…': 'Installing Opti…', 'Opti 已准备，等待确认启动设置。': 'Opti is prepared; confirm the launch setup.',
+    'Opti 操作已完成。': 'Opti operation completed.', 'Opti 操作未完成。': 'Opti operation did not complete.',
+    'Opti 操作仍在进行，请等待完成。': 'An Opti operation is still running. Wait for it to finish.',
+    '仅支持 Intel 设备。': 'Intel devices only.',
+    '为游戏启用 XMX 加速，使兼容的游戏中的 XeSS 帧生成可以正常使用。': 'Enable XMX acceleration so XeSS Frame Generation can work in compatible games.',
+    '更改状态前请先关闭游戏！': 'Close the game before changing this setting!',
+    '游戏原生支持 XeSS 帧生成时，请关闭此选项。': 'If the game natively supports XeSS Frame Generation, turn this option off.',
+    '使用 ': 'Use ',
+    ' 修改游戏内的超分辨率/帧生成设置': ' to change in-game upscaling/frame generation settings',
+    '游戏': 'Game', '选择游戏': 'Select a game', 'XMX 加速': 'XMX acceleration', 'Opti 注入': 'Opti injection',
+    '打开 / 关闭 Opti 覆盖层': 'Toggle Opti overlay', '高级设置': 'Advanced settings', '收起高级设置': 'Hide advanced settings',
+    '请先为此游戏安装 Opti。': 'Install Opti for this game first.',
+    '请先修复此游戏的 Opti 安装。': 'Repair this game\'s Opti installation first.',
+    '请先完成或恢复启动设置。': 'Complete or restore the launch setup first.',
+    '请先恢复中断的设置。': 'Recover the interrupted settings first.',
+    '开启 Opti 注入并重新启动游戏后可用。': 'Enable Opti injection and relaunch the game first.',
+    '游戏运行时可用；再次点击可关闭。': 'Use while the game is running. Press again to close.',
+    '下载源': 'Download source', 'GitHub 官方': 'GitHub (official)',
+    'ghfast.top（第三方备用）': 'ghfast.top (third-party mirror)', 'gh-proxy.com（第三方备用）': 'gh-proxy.com (third-party mirror)',
+    '默认使用官方；备用镜像由第三方提供。已有缓存时直接复用。': 'Uses the official source by default. Mirrors are provided by third parties. Cached downloads are reused.',
+    '迁移现有 Opti': 'Migrate existing Opti', '安装 Opti 0.9.4': 'Install Opti 0.9.4',
+    '保留现有文件，建立统一管理和回退记录。': 'Keep existing files and add managed backups and rollback.',
+    '安装 Opti 0.9.4；有原生 XeSS 的游戏可直接使用 XMX。': 'Install Opti 0.9.4. Games with native XeSS can use XMX directly.',
+    '完成 Opti 启动设置': 'Finish Opti launch setup', '确认游戏程序': 'Confirm game executable',
+    '检测到多个版本，只需确认一次。': 'Multiple executables found. Select the one you use.',
+    '请选择要运行的版本': 'Select the version to launch', '继续开启': 'Continue setup', '恢复原配置': 'Restore original setup',
+    '超分输出': 'Upscaling output',
+    'FSR 4.1.2 Lite XMX': 'FSR 4.1.2 Lite XMX',
+    'XMX 开启时可选择 XeSS 或 FSR 4.1.2 Lite；先退出游戏，保存后下次启动生效。': 'With XMX enabled, choose XeSS or FSR 4.1.2 Lite. Exit the game first; changes apply on the next launch.',
+    'FSR 4.1.2 Lite 通过 XMX 兼容组件运行；保存时会准备此游戏。': 'FSR 4.1.2 Lite uses the XMX compatibility component. Saving prepares this game.',
+    'FSR 模型包已就绪；保存时会为此游戏准备 Opti 10 和模型。': 'The FSR model package is ready. Saving prepares Opti 10 and the model for this game.',
+    '此游戏的 FSR 文件已准备；保存时会刷新 XMX 兼容组件。': 'FSR files are prepared for this game. Saving refreshes the XMX compatibility component.',
+    'FSR 4.1.2 Lite XMX 已就绪；退出游戏后保存设置并从 Steam 重新启动。': 'FSR 4.1.2 Lite XMX is ready. Exit the game, save settings, then relaunch it from Steam.',
+    'FSR 需要 XMX；保存后会自动开启 XMX，退出游戏后从 Steam 启动。': 'FSR requires XMX. Saving turns XMX on; exit the game and launch it from Steam.',
+    'FSR 需要 XMX；保存时会为此游戏准备 FSR 并自动开启 XMX。': 'FSR requires XMX. Saving prepares FSR for this game and turns XMX on.',
+    '导入 FSR 模型包': 'Import FSR model package',
+    '当前插件后台不支持 FSR 模型导入，请更新插件。': 'This plugin backend does not support FSR model import. Update the plugin.',
+    '请导入本地 FSR 模型包。': 'Import a local FSR model package.',
+    '正在选择 FSR 模型包…': 'Choosing an FSR model package…',
+    '请选择 ZIP 格式的 FSR 模型包。': 'Choose an FSR model package in ZIP format.',
+    'FSR 模型包已导入并验证。': 'The FSR model package was imported and verified.',
+    'FSR 模型包尚未就绪。': 'The FSR model package is not ready.',
+    '启动项已变化，请重新打开插件后恢复 XMX，再保存 FSR。': 'Launch options changed. Reopen the plugin and restore XMX before saving FSR.',
+    'FSR XMX 兼容组件尚未就绪，请重新打开插件后重试。': 'The FSR XMX compatibility component is not ready. Reopen the plugin and try again.',
+    'DLSS（需要支持的显卡）': 'DLSS (supported GPU required)', '帧生成输出': 'Frame generation output',
+    '这是 Opti 的输出；XeFG 输入尚未实现。原生 XeSS FG 可关闭 Opti 注入测试。': 'This is the Opti output. XeFG input is not implemented. Turn off Opti injection to test native XeSS FG.',
+    'Opti 注入已关闭；这里的设置将在重新开启后生效。': 'Opti injection is off. These settings apply when it is turned back on.',
+    '游戏原生（不接管）': 'Native (no FG interception)', 'FSR 帧生成': 'FSR Frame Generation', 'XeSS 帧生成（实验）': 'XeSS Frame Generation (experimental)',
+    '游戏 FG 类型': 'Game FG input', '选择游戏实际支持的类型，并在游戏里开启对应帧生成。无原生 FG 才选超分输入。': 'Select a supported input and enable it in the game. Use upscaler input when the game has no native FG.',
+    '无原生 FG：使用超分输入': 'No native FG: use upscaler input', '显卡伪装': 'GPU spoofing',
+    'XMX 开启时保留真实 Intel 身份。': 'XMX retains the real Intel GPU identity.',
+    '实验兼容选项；改身份不保证解锁功能。': 'Experimental compatibility option. Spoofing does not guarantee feature support.',
+    '真实显卡（推荐）': 'Real GPU (recommended)', '保存设置': 'Save settings', '恢复默认': 'Reset to defaults',
+    '恢复 XeSS、真实显卡、由游戏管理帧生成；先退出游戏。': 'Restore XeSS, real GPU identity and native FG. Exit the game first.',
+    'Opti 版本': 'Opti version', '0.9.4（当前稳定版）': '0.9.4 (stable)', '0.7.9（兼容旧版）': '0.7.9 (legacy compatibility)',
+    '先关闭 XMX，再更换 Opti 版本。': 'Turn off XMX before changing the Opti version.',
+    '开启 Opti 注入后可更换版本；保留回退备份。': 'Enable Opti injection before changing versions. Rollback backups are retained.',
+    '安装所选版本': 'Install selected version', '回退上次操作': 'Undo last operation',
+    '撤销上次安装、迁移或卸载；需先关闭 XMX。': 'Undo the last installation, migration, toggle or removal. Turn off XMX first.',
+    '卸载 Opti': 'Uninstall Opti', '确认卸载 Opti': 'Confirm Opti removal',
+    '卸载本插件管理的 Opti 文件并恢复原文件；需先关闭 XMX。': 'Remove managed Opti files and restore originals. Turn off XMX first.',
+    '操作失败': 'Operation failed', 'Opti2XMX：未完成': 'Opti2XMX: not completed',
+    '读取 Steam 启动项超时': 'Timed out reading Steam launch options',
+    '启动项刚被其他工具修改，请重新打开插件后重试': 'Launch options changed elsewhere. Reopen the plugin and try again.',
+    'Steam 启动项写入尚未确认，请使用继续开启或恢复': 'Steam has not confirmed the launch options. Continue setup or restore.',
+    '正在读取游戏列表…': 'Loading games…', '正在检查这个游戏…': 'Checking this game…',
+    '未找到已安装的 Steam 游戏。': 'No installed Steam games found.',
+    '启动项已被其他工具修改，请检查后再试。': 'Launch options changed elsewhere. Check them before retrying.',
+    '发现多个游戏程序，请在下面确认一次。': 'Multiple game executables found. Select one below.',
+    '正在开启 XMX，请稍候…': 'Enabling XMX…', '正在关闭 XMX，恢复原配置…': 'Disabling XMX and restoring the original setup…',
+    '上次设置未完成，请先点击恢复。': 'The previous setup is incomplete. Restore it first.',
+    '已开启。直接从 Steam 启动游戏即可。': 'Enabled. Launch the game from Steam.',
+    '已关闭，原文件和启动项已恢复。': 'Disabled. Original files and launch options restored.',
+    'XMX 已开启': 'XMX enabled', 'XMX 已关闭': 'XMX disabled',
+    '上次设置未完成，请用下面的按钮继续或恢复。': 'Setup is incomplete. Use the buttons below to continue or restore.',
+    '启动设置已变化。打开开关可重新应用；也可以恢复原配置。': 'Launch options changed. Enable to reapply, or restore the original setup.',
+    '已就绪，打开开关即可。启用或关闭前请先退出游戏。': 'Ready to enable. Exit the game before switching.',
+    '正在开启 Opti 注入…': 'Enabling Opti injection…', '正在关闭 Opti 注入，保留 XMX…': 'Disabling Opti injection while keeping XMX…',
+    'Opti 注入已开启，下次启动生效。': 'Opti injection enabled for the next launch.',
+    'Opti 注入已关闭；XMX 设置保留，使用游戏原生功能。': 'Opti injection disabled. XMX settings are retained; native game features will be used.',
+    '正在下载并安装 Opti，请稍候…': 'Downloading and installing Opti…', '正在处理 Opti 配置…': 'Updating Opti setup…',
+    '启动项已变化，请检查后重试': 'Launch options changed. Check them and try again.',
+    'Opti 操作完成，下次启动游戏生效。': 'Opti setup complete. Changes apply on the next launch.',
+    'Opti 配置已完成': 'Opti setup complete', '正在恢复推荐默认设置…': 'Restoring recommended defaults…',
+    '正在保存设置…': 'Saving settings…', '设置已保存，下次启动游戏生效。': 'Settings saved for the next launch.',
+    '正在切换 Opti 覆盖层…': 'Toggling the Opti overlay…', '已发送覆盖层快捷键。': 'Overlay shortcut sent.',
+    '游戏仍在运行。请从 Steam 退出游戏，再操作 XMX 开关。': 'The game is still running. Exit it from Steam before changing the switches.',
+    '游戏仍在运行，请退出后重试。': 'The game is still running. Exit it and try again.',
+    'Opti 注入已关闭，当前使用游戏原生功能': 'Opti injection is off; native game features are in use.',
+    '请先启动选中的游戏，再打开面板': 'Start the selected game before opening the overlay.',
+    '未找到该游戏的可见窗口，请回到游戏后重试': 'No visible window found for this game. Return to the game and try again.',
+    '此游戏已有其他 XMX 配置，需要先迁移后才能用此开关。': 'This game has another XMX setup. Migrate it before using this switch.',
+    'XMX 运行组件未就绪。': 'XMX runtime components are not ready.',
+    '请先选择要运行的游戏程序。': 'Select the game executable first.',
+    '选择与 Steam 启动选项一致的版本。': 'Choose the version used by your Steam launch option.',
+    '修复安装 Opti 0.9.4': 'Repair Opti 0.9.4 installation',
+    '缺少注入文件；备份现有文件后重新安装，可回退。': 'Injector missing. Back up existing files and reinstall; rollback is available.',
+    '游戏已有注入文件，请先迁移或处理冲突：': 'An injector already exists. Migrate it or resolve the conflict first: ',
+    '请先从 Steam 用 Proton 启动游戏一次，退出后重新打开插件。': 'Launch this game once with Proton, exit, then reopen the plugin.',
+    '尚未发现 XeSS。请先为此游戏安装 OptiScaler 并运行一次，然后重新打开插件。': 'XeSS was not found. Install OptiScaler for this game, run it once, then reopen the plugin.',
+    '未识别到可接入的游戏程序，请检查游戏安装。': 'No compatible executable found. Check the game installation.',
+    'OptiScaler 文件不完整，需要同目录的 dxgi.dll 和 libxess.dll。': 'OptiScaler is incomplete. dxgi.dll and libxess.dll must be beside the executable.',
+    '请先开启 Opti 注入，再更换版本': 'Enable Opti injection before changing versions.',
+    '请先关闭 XMX，再安装、回退或卸载 Opti': 'Turn off XMX before installing, rolling back or removing Opti.',
+    '上次操作待完成，请先完成启动项设置或回退': 'The previous operation is pending. Complete launch setup or roll back.',
+    '文件已被其他工具修改，请先处理冲突：': 'A file was changed by another tool. Resolve the conflict: ',
+    '操作中断，备份已保存，请点击回退上次操作': 'Operation interrupted. Backups were saved. Use Undo last operation.',
+};
+function t(text) {
+    if (language() === 'zh')
+        return text;
+    if (english[text])
+        return english[text];
+    for (const [prefix, translated] of Object.entries(english)) {
+        if (prefix.endsWith('：') && text.startsWith(prefix))
+            return translated + text.slice(prefix.length);
+    }
+    return text;
+}
+
+const manifest = {"name":"Opti2XMX"};
+const API_VERSION = 2;
+const internalAPIConnection = window.__DECKY_SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED_deckyLoaderAPIInit;
+if (!internalAPIConnection) {
+    throw new Error('[@decky/api]: Failed to connect to the loader as as the loader API was not initialized. This is likely a bug in Decky Loader.');
+}
+let api;
+try {
+    api = internalAPIConnection.connect(API_VERSION, manifest.name);
+}
+catch {
+    api = internalAPIConnection.connect(1, manifest.name);
+    console.warn(`[@decky/api] Requested API version ${API_VERSION} but the running loader only supports version 1. Some features may not work.`);
+}
+if (api._version != API_VERSION) {
+    console.warn(`[@decky/api] Requested API version ${API_VERSION} but the running loader only supports version ${api._version}. Some features may not work.`);
+}
+const callable = api.callable;
+const toaster = api.toaster;
+const openFilePicker = api.openFilePicker;
+const definePlugin = (fn) => {
+    return (...args) => {
+        return fn(...args);
+    };
+};
+
+let selection = { appid: 0, executables: {}, sources: {}, versions: {}, cache: {}, snapshots: {}, settingsSave: null,
+    settingsEpochs: {}, actionBusy: false, manualGame: null };
+const selectionListeners = new Set();
+const selectionSnapshot = () => selection;
+function subscribeSelection(listener) {
+    selectionListeners.add(listener);
+    return () => { selectionListeners.delete(listener); };
+}
+function updateSelection(next) {
+    selection = next;
+    for (const listener of selectionListeners)
+        listener();
+}
+function runningAppid() {
+    try {
+        const id = Number(DFL.Router?.MainRunningApp?.appid);
+        return Number.isSafeInteger(id) && id > 0 ? id : 0;
+    }
+    catch {
+        return 0;
+    }
+}
+function initialGame(list, operation, previous) {
+    const available = (id) => list.find(game => game.appid === id)?.appid;
+    const attached = operation?.running || operation?.phase === 'awaiting-launch';
+    const running = runningAppid();
+    // A native game dropdown temporarily unmounts Content. Keep an explicit
+    // choice for this running game, but follow Steam when a different game starts.
+    let manual = selection.manualGame;
+    if (manual && running > 0 && manual.runningAppid !== running) {
+        manual = null;
+        updateSelection({ ...selection, manualGame: null });
+    }
+    return (selection.settingsSave?.saving ? available(selection.settingsSave.appid) : undefined)
+        || (attached ? available(operation?.appid) : undefined)
+        || (manual?.runningAppid === running && manual.appid === previous ? available(manual.appid) : undefined)
+        || available(running) || available(previous) || list[0]?.appid || 0;
+}
+function downloadSource(version) {
+    const chosen = selection.sources[version];
+    return chosen || (selection.cache[version]?.cached ? 'local' : 'github');
+}
+function setSource(version, value) {
+    if (value === 'github' || value === 'ghfast' || value === 'ghproxy' || (value === 'local' && selection.cache[version]?.cached))
+        updateSelection({ ...selection, sources: { ...selection.sources, [version]: value } });
+}
+const inventory = callable('inventory');
+const inspect = callable('inspect_game');
+const enable = callable('enable');
+const reviewEnable = callable('review_enable');
+async function confirmGameReview(id, reviewed) {
+    return new Promise((resolve) => {
+        let settled = false;
+        const finish = (value) => { if (!settled) {
+            settled = true;
+            resolve(value);
+        } };
+        DFL.showModal(SP_JSX.jsxs(DFL.ConfirmModal, { strTitle: t('确认游戏接入'), strOKButtonText: t('应用接入'), strCancelButtonText: t('取消'), onOK: () => finish(true), onCancel: () => finish(false), children: [SP_JSX.jsxs("p", { children: [t('游戏'), ": ", reviewed.plan.game_name || String(id)] }), SP_JSX.jsxs("p", { children: [t('程序'), ": ", reviewed.plan.executable] }), SP_JSX.jsx("p", { children: t('将备份并修改这些文件，并更新此游戏的 Steam 启动项：') }), SP_JSX.jsx("ul", { children: reviewed.plan.changes.map(item => { const path = typeof item === 'string' ? item : item.path; return SP_JSX.jsx("li", { children: path }, path); }) })] }), undefined, { fnOnClose: () => finish(false) });
+    });
+}
+async function confirmTemporaryXmx() {
+    return new Promise((resolve) => {
+        let settled = false;
+        const finish = (value) => { if (!settled) {
+            settled = true;
+            resolve(value);
+        } };
+        DFL.showModal(SP_JSX.jsxs(DFL.ConfirmModal, { strTitle: t('暂时关闭 XMX'), strOKButtonText: t('继续'), strCancelButtonText: t('取消'), onOK: () => finish(true), onCancel: () => finish(false), children: [SP_JSX.jsx("p", { children: t('需要暂时恢复此游戏的 XMX 文件和 Steam 启动项。下一步将单独显示安装文件供确认。') }), SP_JSX.jsx("p", { children: t('之后修改过的文件会保留；若取消下一步，XMX 可能保持关闭。') })] }), undefined, { fnOnClose: () => finish(false) });
+    });
+}
+async function reviewedEnable(id, exe, route, launch) {
+    const reviewed = unwrap(await reviewEnable(id, exe, route, launch));
+    if (!await confirmGameReview(id, reviewed))
+        return { ok: false, error: t('已取消游戏接入。') };
+    return enable(id, exe, route, launch, reviewed.sha256);
+}
+const confirm = callable('confirm_launch');
+const restoreRpc = callable('restore');
+async function restore(id, launch) {
+    const result = await restoreRpc(id, launch);
+    if (result.ok && result.data?.core_preserved_changes?.length)
+        toaster.toast({ title: 'Opti2XMX', body: t('已保留之后修改的文件，请检查游戏备份。') });
+    return result;
+}
+const optiInstall = callable('opti_install');
+const reviewOptiInstall = callable('review_opti_install');
+const reviewOptiAgility = callable('review_opti_agility');
+const optiAgility = callable('opti_agility');
+async function reviewedOptiInstall(id, exe, launch, version, source) {
+    const reviewed = unwrap(await reviewOptiInstall(id, exe, launch, version, source));
+    if (!await confirmGameReview(id, reviewed))
+        return { ok: false, error: t('已取消游戏接入。') };
+    return optiInstall(id, exe, launch, version, source, reviewed.sha256);
+}
+const optiCacheStatus = callable('opti_cache_status');
+const optiMigrate = callable('opti_migrate');
+const optiRollbackRpc = callable('opti_rollback');
+const optiUninstallRpc = callable('opti_uninstall');
+async function preserveNotice(action, id, launch) {
+    const result = await action(id, launch);
+    if (result.ok && result.data?.preserved_changes?.length)
+        toaster.toast({ title: 'Opti2XMX', body: t('已保留之后修改的文件，请检查游戏备份。') });
+    return result;
+}
+const optiRollback = (id, launch) => preserveNotice(optiRollbackRpc, id, launch);
+const optiUninstall = (id, launch) => preserveNotice(optiUninstallRpc, id, launch);
+const optiConfirm = callable('opti_confirm');
+const optiToggle = callable('opti_toggle');
+const optiSettings = callable('opti_settings');
+const settingsPreflight = callable('settings_preflight');
+const optiRestoreSettings = callable('opti_restore_settings');
+const optiPanel = callable('opti_panel');
+const operationProgress = callable('operation_progress');
+const runtimeStatus = callable('runtime_status');
+const runtimeInstall = callable('runtime_install');
+const fsrStatus = callable('fsr_status');
+const fsrImport = callable('fsr_import');
+const fsrPrepare = callable('fsr_prepare');
+const reviewFsrPrepare = callable('review_fsr_prepare');
+async function reviewedFsrPrepare(id, exe, launch, source) {
+    const reviewed = unwrap(await reviewFsrPrepare(id, exe, launch, source));
+    if (!await confirmGameReview(id, reviewed))
+        return { ok: false, error: t('已取消游戏接入。') };
+    return fsrPrepare(id, exe, launch, source, reviewed.sha256);
+}
+function unwrap(r) {
+    if (!r.ok || r.data === undefined)
+        throw new Error(t(r.error || '操作失败'));
+    return r.data;
+}
+function readLaunch(id) {
+    return new Promise((resolve, reject) => {
+        let reg;
+        let done = false;
+        const timeout = setTimeout(() => { done = true; reg?.unregister(); reject(new Error(t('读取 Steam 启动项超时'))); }, 8000);
+        reg = SteamClient.Apps.RegisterForAppDetails(id, (...args) => {
+            const details = args.find((a) => typeof a === 'object' && a !== null && 'strLaunchOptions' in a && typeof a.strLaunchOptions === 'string');
+            if (done || !details)
+                return;
+            done = true;
+            clearTimeout(timeout);
+            resolve(details.strLaunchOptions);
+            queueMicrotask(() => reg?.unregister());
+        });
+    });
+}
+async function writeLaunch(id, desired, expected) {
+    if (await readLaunch(id) !== expected)
+        throw new Error(t('启动项刚被其他工具修改，请重新打开插件后重试'));
+    SteamClient.Apps.SetAppLaunchOptions(id, desired);
+    for (let n = 0; n < 10; n++) {
+        await new Promise(resolve => setTimeout(resolve, 150));
+        const actual = await readLaunch(id);
+        if (actual === desired)
+            return actual;
+    }
+    throw new Error(t('Steam 启动项写入尚未确认，请使用继续开启或恢复'));
+}
+async function finish(id, setup, restoring = false) {
+    const before = await readLaunch(id);
+    const target = restoring ? setup.old_launch : setup.launch;
+    if (before !== setup.old_launch && before !== setup.launch)
+        throw new Error(t('启动项已被其他工具修改，请检查后再试。'));
+    const actual = before === target ? before : await writeLaunch(id, target, before);
+    unwrap(await confirm(id, actual));
+}
+async function applyPendingLaunch(id, before, next) {
+    if (before !== next.expected && before !== next.target)
+        throw new Error(t('启动项已变化，请检查后重试'));
+    const actual = before === next.target ? before : await writeLaunch(id, next.target, before);
+    unwrap(await optiConfirm(id, actual));
+}
+async function saveFSRSettings(id, desired, source, manual) {
+    let currentInfo = unwrap(await inspect(id));
+    let launch = await readLaunch(id);
+    let xmxActive = currentInfo.state?.status === 'active' && launch === currentInfo.state.launch;
+    const executable = () => currentInfo.automatic.executable
+        || (currentInfo.executables.includes(manual) && currentInfo.automatic.candidates.includes(manual) ? manual : '');
+    if (currentInfo.state?.status === 'active' && !xmxActive)
+        throw new Error(t('启动项已变化，请重新打开插件后恢复 XMX，再保存 FSR。'));
+    if (!currentInfo.fsr?.prepared && xmxActive) {
+        if (!await confirmTemporaryXmx())
+            throw new Error(t('已取消。'));
+        await finish(id, unwrap(await restore(id, launch)), true);
+        currentInfo = unwrap(await inspect(id));
+        launch = await readLaunch(id);
+        xmxActive = false;
+    }
+    if (!currentInfo.fsr?.prepared) {
+        const exe = executable();
+        if (!exe)
+            throw new Error(t('请先选择要运行的游戏程序。'));
+        await applyPendingLaunch(id, launch, unwrap(await reviewedFsrPrepare(id, exe, launch, source)));
+        currentInfo = unwrap(await inspect(id));
+        launch = await readLaunch(id);
+        xmxActive = currentInfo.state?.status === 'active' && launch === currentInfo.state.launch;
+    }
+    if (xmxActive && !currentInfo.fsr?.bridge_ready) {
+        if (!await confirmTemporaryXmx())
+            throw new Error(t('已取消。'));
+        await finish(id, unwrap(await restore(id, launch)), true);
+        currentInfo = unwrap(await inspect(id));
+        launch = await readLaunch(id);
+        xmxActive = false;
+    }
+    if (!xmxActive) {
+        const exe = executable();
+        if (!exe)
+            throw new Error(t('请先选择要运行的游戏程序。'));
+        const setup = unwrap(await reviewedEnable(id, exe, currentInfo.automatic.route, launch));
+        if (!['active', 'pending_launch'].includes(setup.status))
+            throw new Error(t('上次设置未完成，请先点击恢复。'));
+        await finish(id, setup);
+        currentInfo = unwrap(await inspect(id));
+        launch = await readLaunch(id);
+        xmxActive = currentInfo.state?.status === 'active' && launch === currentInfo.state.launch;
+    }
+    if (!xmxActive || !currentInfo.fsr?.bridge_ready)
+        throw new Error(t(currentInfo.fsr?.reason || 'FSR XMX 兼容组件尚未就绪，请重新打开插件后重试。'));
+    unwrap(await optiSettings(id, desired, false));
+}
+const defaults = { sr: 'xess', fg: 'native', fg_input: 'upscaler', spoof: 'real', fg_multiplier: 'native' };
+function validPatch(patch) {
+    const allowed = {
+        sr: ['xess', 'fsr_xmx', 'fsr31', 'fsr22', 'dlss'], fg: ['native', 'fsrfg', 'xefg'],
+        fg_input: ['fsrfg30', 'fsrfg', 'dlssg', 'upscaler'], spoof: ['real', 'nvidia', 'amd', 'intel'], fg_multiplier: ['native', '2', '3', '4'],
+    };
+    return Object.entries(patch).every(([key, value]) => allowed[key]?.includes(value));
+}
+// The native Steam menu can call this after Content has unmounted. The shared
+// lock and result belong to the plugin session, not to that old React instance.
+async function saveSettingsPatch(id, patch, reset = false) {
+    if (selection.appid !== id || selection.actionBusy || selection.settingsSave?.saving || !validPatch(patch))
+        return;
+    const manual = selection.executables[id] || '';
+    updateSelection({ ...selection, settingsEpochs: { ...selection.settingsEpochs, [id]: (selection.settingsEpochs[id] || 0) + 1 },
+        settingsSave: { appid: id, saving: true, error: false, message: '正在自动保存设置…' } });
+    let failure = '';
+    try {
+        unwrap(await settingsPreflight(id));
+        const current = unwrap(await inspect(id));
+        if (!current.opti?.managed)
+            throw new Error(t('请先安装或迁移 Opti'));
+        const desired = reset ? { ...defaults } : { ...current.opti.settings, ...patch };
+        if (patch.fg === 'native')
+            desired.fg_multiplier = 'native';
+        else if (patch.fg && (!desired.fg_multiplier || desired.fg_multiplier === 'native'))
+            desired.fg_multiplier = '2';
+        if (desired.sr === 'fsr_xmx') {
+            if (!current.fsr?.ready)
+                throw new Error(current.fsr?.reason || t('请导入本地 FSR 模型包。'));
+            desired.spoof = 'real';
+            await saveFSRSettings(id, desired, downloadSource(current.fsr?.opti_version || '10.0.0-pre1_20261025'), manual);
+        }
+        else
+            unwrap(await optiSettings(id, desired, reset));
+    }
+    catch (error) {
+        failure = error instanceof Error ? error.message : String(error);
+    }
+    await finishSessionTask(id, failure, '设置已自动保存，下次启动游戏生效。');
+}
+async function finishSessionTask(id, failure, success) {
+    let refreshed;
+    try {
+        const [info, launch] = await Promise.all([inspect(id).then(unwrap), readLaunch(id)]);
+        refreshed = { info, launch };
+    }
+    catch (error) {
+        if (!failure)
+            failure = error instanceof Error ? error.message : String(error);
+    }
+    updateSelection({ ...selection,
+        snapshots: refreshed ? { ...selection.snapshots, [id]: refreshed } : selection.snapshots,
+        settingsEpochs: { ...selection.settingsEpochs, [id]: (selection.settingsEpochs[id] || 0) + 1 },
+        settingsSave: { appid: id, saving: false, error: !!failure, message: failure || success } });
+    if (failure)
+        toaster.toast({ title: t('Opti2XMX：未完成'), body: t(failure) });
+}
+function selectedExecutable(info) {
+    const manual = selection.executables[info.appid] || '';
+    return info.automatic.executable || (info.executables.includes(manual) && info.automatic.candidates.includes(manual) ? manual : '');
+}
+async function runOptiAction(id, kind, version) {
+    if (selection.appid !== id || selection.actionBusy || selection.settingsSave?.saving)
+        return;
+    const source = downloadSource(version);
+    updateSelection({ ...selection, settingsEpochs: { ...selection.settingsEpochs, [id]: (selection.settingsEpochs[id] || 0) + 1 },
+        settingsSave: { appid: id, saving: true, error: false, message: '正在准备 Opti 安装…' } });
+    let failure = '', restoredXmx = false;
+    try {
+        let data = unwrap(await inspect(id));
+        let launch = await readLaunch(id);
+        const exe = selectedExecutable(data);
+        if ((kind === 'install' || kind === 'migrate') && !exe)
+            throw new Error(t('请先选择要运行的游戏程序。'));
+        if (kind === 'install' && source === 'local') {
+            const cache = unwrap(await optiCacheStatus());
+            updateSelection({ ...selection, cache });
+            if (!cache[version]?.cached)
+                throw new Error(t('本地安装包不存在，请重新选择安装来源。'));
+        }
+        const wasActive = data.state?.status === 'active';
+        if (wasActive && launch !== data.state?.launch)
+            throw new Error(t('启动项已被其他工具修改，请检查后再试。'));
+        if (kind === 'install' && wasActive) {
+            if (!await confirmTemporaryXmx())
+                throw new Error(t('已取消。'));
+            updateSelection({ ...selection, settingsSave: { appid: id, saving: true, error: false, message: '正在临时关闭 XMX，以安装 Opti…' } });
+            await finish(id, unwrap(await restore(id, launch)), true);
+            restoredXmx = true;
+            data = unwrap(await inspect(id));
+            launch = await readLaunch(id);
+        }
+        const fsrReprepare = version === data.fsr?.opti_version && data.fsr.prepared && data.fsr.ready;
+        const next = kind === 'install' ? fsrReprepare
+            ? unwrap(await reviewedFsrPrepare(id, exe, launch, source)) : unwrap(await reviewedOptiInstall(id, exe, launch, version, source))
+            : kind === 'migrate' ? unwrap(await optiMigrate(id, exe, launch))
+                : kind === 'rollback' ? unwrap(await optiRollback(id, launch))
+                    : kind === 'uninstall' ? unwrap(await optiUninstall(id, launch)) : data.opti?.pending;
+        if (!next)
+            throw new Error(t('没有待完成的 Opti 启动设置。'));
+        await applyPendingLaunch(id, launch, next);
+        if (restoredXmx) {
+            updateSelection({ ...selection, settingsSave: { appid: id, saving: true, error: false, message: 'Opti 已安装，正在恢复 XMX…' } });
+            data = unwrap(await inspect(id));
+            launch = await readLaunch(id);
+            const freshExe = selectedExecutable(data);
+            if (!freshExe)
+                throw new Error(t('请先选择要运行的游戏程序。'));
+            const setup = unwrap(await reviewedEnable(id, freshExe, data.automatic.route, launch));
+            if (!['active', 'pending_launch'].includes(setup.status))
+                throw new Error(t('上次设置未完成，请先点击恢复。'));
+            await finish(id, setup);
+        }
+    }
+    catch (error) {
+        failure = error instanceof Error ? error.message : String(error);
+        if (failure.includes('游戏仍在运行'))
+            failure = '游戏正在运行，请先退出游戏再安装或更换 Opti。';
+        else if (restoredXmx)
+            failure = t('安装流程未完成，请按当前状态完成或恢复：') + t(failure);
+    }
+    try {
+        updateSelection({ ...selection, cache: unwrap(await optiCacheStatus()) });
+    }
+    catch { /* Nonessential cache status must not hide the installation result. */ }
+    await finishSessionTask(id, failure, restoredXmx ? 'Opti 已安装，XMX 已恢复；下次启动游戏生效。' : 'Opti 操作完成，下次启动游戏生效。');
+}
+function Content() {
+    const [games, setGames] = SP_REACT.useState([]);
+    const [appid, setAppid] = SP_REACT.useState(0);
+    const [loadedInfo, setInfo] = SP_REACT.useState(null);
+    const [manualExe, setManualExe] = SP_REACT.useState('');
+    const [loadedLaunch, setActualLaunch] = SP_REACT.useState('');
+    const [localBusy, setBusy] = SP_REACT.useState(false);
+    const [message, setMessage] = SP_REACT.useState(t('正在读取游戏列表…'));
+    const [error, setError] = SP_REACT.useState(false);
+    const lock = SP_REACT.useRef(false);
+    const [advanced, setAdvanced] = SP_REACT.useState(false);
+    const [removeConfirm, setRemoveConfirm] = SP_REACT.useState(false);
+    const [operation, setOperation] = SP_REACT.useState(null);
+    const [progressDisconnected, setProgressDisconnected] = SP_REACT.useState(false);
+    const latestOperation = SP_REACT.useRef(null);
+    const mounted = SP_REACT.useRef(true);
+    const selected = SP_REACT.useRef(0);
+    const loadSequence = SP_REACT.useRef(0);
+    const progressRequest = SP_REACT.useRef(0);
+    const acceptedRequest = SP_REACT.useRef(0);
+    const refreshNeeded = SP_REACT.useRef(null);
+    const [runtime, setRuntime] = SP_REACT.useState(null);
+    const [fsr, setFsr] = SP_REACT.useState(null);
+    const session = SP_REACT.useSyncExternalStore(subscribeSelection, selectionSnapshot);
+    const snapshot = session.snapshots[appid];
+    const info = snapshot?.info || loadedInfo;
+    const actualLaunch = snapshot?.launch ?? loadedLaunch;
+    const settings = info?.opti?.settings || defaults;
+    const saveFeedback = session.settingsSave?.appid === appid ? session.settingsSave : null;
+    const visibleMessage = saveFeedback?.message || message;
+    const visibleError = saveFeedback?.error ?? error;
+    const busy = localBusy || operation?.running === true || session.settingsSave?.saving === true || session.actionBusy;
+    function acceptOperation(value) {
+        if (!mounted.current || value.schema !== 1 || !Number.isSafeInteger(value.revision)
+            || (latestOperation.current?.instance_id === value.instance_id && value.revision < latestOperation.current.revision))
+            return false;
+        latestOperation.current = value;
+        setOperation(value);
+        return true;
+    }
+    async function readOperation(allowed = () => mounted.current) {
+        const request = ++progressRequest.current;
+        let timer;
+        try {
+            const reply = await Promise.race([operationProgress(), new Promise((_, reject) => {
+                    timer = setTimeout(() => reject(new Error('progress timeout')), 5000);
+                })]);
+            const value = unwrap(reply);
+            if (request < acceptedRequest.current || !allowed())
+                return null;
+            acceptedRequest.current = request;
+            setProgressDisconnected(false);
+            return acceptOperation(value) ? value : null;
+        }
+        catch (e) {
+            acceptedRequest.current = Math.max(acceptedRequest.current, request);
+            if (allowed())
+                setProgressDisconnected(true);
+            throw e;
+        }
+        finally {
+            if (timer !== undefined)
+                clearTimeout(timer);
+        }
+    }
+    async function load(id) {
+        const sequence = ++loadSequence.current;
+        const settingsEpoch = selection.settingsEpochs[id] || 0;
+        const [data, launch] = await Promise.all([inspect(id).then(unwrap), readLaunch(id)]);
+        if (!mounted.current || selected.current !== id || sequence !== loadSequence.current
+            || settingsEpoch !== (selection.settingsEpochs[id] || 0))
+            return data;
+        const remembered = selection.executables[id] || '';
+        const valid = data.automatic.candidates.includes(remembered) && data.executables.includes(remembered);
+        if (remembered && !valid) {
+            const executables = { ...selection.executables };
+            delete executables[id];
+            updateSelection({ ...selection, executables });
+        }
+        setInfo(data);
+        setActualLaunch(launch);
+        setManualExe(valid ? remembered : '');
+        updateSelection({ ...selection, snapshots: { ...selection.snapshots, [id]: { info: data, launch } } });
+        if (data.fsr)
+            setFsr({ ready: data.fsr.ready, version: data.fsr.version, reason: data.fsr.reason });
+        setRemoveConfirm(false);
+        return data;
+    }
+    async function task(progress, fn, reattach = false) {
+        if (lock.current || (!reattach && (latestOperation.current?.running || selection.settingsSave?.saving || selection.actionBusy)))
+            return;
+        if (!reattach && selection.settingsSave && !selection.settingsSave.saving)
+            updateSelection({ ...selection, settingsSave: null });
+        if (!reattach)
+            updateSelection({ ...selection, actionBusy: true });
+        lock.current = true;
+        setBusy(true);
+        setError(false);
+        setMessage(progress);
+        try {
+            await fn();
+        }
+        catch (e) {
+            const text = t(e instanceof Error ? e.message : String(e));
+            setError(true);
+            setMessage(text);
+            toaster.toast({ title: t('Opti2XMX：未完成'), body: text });
+        }
+        finally {
+            lock.current = false;
+            setBusy(false);
+            if (!reattach)
+                updateSelection({ ...selection, actionBusy: false });
+        }
+    }
+    async function select(id, manual = false) {
+        if (!games.some(game => game.appid === id))
+            return;
+        localStorage.setItem('opti2xmx-selected', String(id));
+        if (selection.appid !== id || manual)
+            updateSelection({ ...selection, appid: id,
+                manualGame: manual ? { appid: id, runningAppid: runningAppid() } : selection.manualGame });
+        if (!mounted.current)
+            return;
+        await task(t('正在检查这个游戏…'), async () => {
+            setAppid(id);
+            setInfo(null);
+            setManualExe('');
+            selected.current = id;
+            await load(id);
+            setMessage('');
+        });
+    }
+    SP_REACT.useEffect(() => {
+        if (!busy && session.appid && selected.current !== session.appid && games.some(g => g.appid === session.appid))
+            void select(session.appid);
+    }, [session.appid, games, busy]);
+    SP_REACT.useEffect(() => {
+        mounted.current = true;
+        let alive = true, polling = false;
+        async function poll() {
+            if (polling)
+                return;
+            polling = true;
+            try {
+                const before = latestOperation.current;
+                const next = await readOperation(() => alive && mounted.current);
+                if (!alive || !next)
+                    return;
+                const restarted = before && before.instance_id !== next.instance_id;
+                const confirmed = before?.operation_id === next.operation_id && before?.phase === 'awaiting-launch' && next.phase === 'completed';
+                if (before?.running && !next.running && next.kind === 'runtime_install')
+                    setRuntime(unwrap(await runtimeStatus()));
+                if ((restarted || (before?.running && !next.running) || confirmed) && selected.current > 0
+                    && (restarted || next.appid === selected.current || next.kind === 'runtime_install'))
+                    refreshNeeded.current = { appid: selected.current, instance: next.instance_id, operation: next.operation_id };
+                const refresh = refreshNeeded.current;
+                if (refresh && (refresh.appid !== selected.current || refresh.instance !== next.instance_id || refresh.operation !== next.operation_id))
+                    refreshNeeded.current = null;
+                else if (refresh && !lock.current) {
+                    await load(refresh.appid);
+                    if (refreshNeeded.current === refresh)
+                        refreshNeeded.current = null;
+                }
+            }
+            catch { /* Keep the last running snapshot; a failed poll must not unlock it. */ }
+            finally {
+                polling = false;
+            }
+        }
+        void poll();
+        const timer = setInterval(() => { void poll(); }, 500);
+        return () => { alive = false; mounted.current = false; clearInterval(timer); };
+    }, []);
+    SP_REACT.useEffect(() => {
+        void task(t('正在读取游戏列表…'), async () => {
+            try {
+                await readOperation();
+            }
+            catch { /* Inventory remains usable while snapshot polling reconnects. */ }
+            setRuntime(unwrap(await runtimeStatus()));
+            try {
+                setFsr(unwrap(await fsrStatus()));
+            }
+            catch {
+                setFsr({ ready: false, version: '', reason: t('当前插件后台不支持 FSR 模型导入，请更新插件。') });
+            }
+            try {
+                updateSelection({ ...selection, cache: unwrap(await optiCacheStatus()) });
+            }
+            catch { /* Older backends can still show network sources. */ }
+            const list = unwrap(await inventory());
+            if (!mounted.current)
+                return;
+            setGames(list);
+            const previous = Number(localStorage.getItem('opti2xmx-selected')) || selection.appid;
+            const id = initialGame(list, latestOperation.current, previous);
+            if (id) {
+                selected.current = id;
+                setAppid(id);
+                updateSelection({ ...selection, appid: id });
+                await load(id);
+                setMessage('');
+            }
+            else
+                setMessage(t('未找到已安装的 Steam 游戏。'));
+        }, true);
+    }, []);
+    const state = info?.state;
+    const active = state?.status === 'active' && actualLaunch === state.launch;
+    const managed = !!state && !['restored', 'failed'].includes(state.status);
+    const pending = managed && state?.status !== 'active';
+    const rememberedExe = session.executables[appid] || manualExe;
+    const validManualExe = info?.executables.includes(rememberedExe) && info.automatic.candidates.includes(rememberedExe) ? rememberedExe : '';
+    const executable = info?.automatic.executable || validManualExe;
+    const needsChoice = !!info && !info.automatic.executable && info.automatic.candidates.length > 1;
+    const reason = needsChoice && validManualExe && info?.automatic.reason === '发现多个游戏程序，请在下面确认一次。'
+        ? '' : info?.automatic.reason || '';
+    const blocked = !managed && (!!reason || !executable);
+    async function toggle(want) {
+        if (!info)
+            return;
+        const id = info.appid;
+        await task(want ? t('正在开启 XMX，请稍候…') : t('正在关闭 XMX，恢复原配置…'), async () => {
+            try {
+                const before = await readLaunch(id);
+                let preserved = false;
+                if (want) {
+                    const setup = managed ? state : unwrap(await reviewedEnable(id, executable, info.automatic.route, before));
+                    if (!['active', 'pending_launch'].includes(setup.status))
+                        throw new Error(t('上次设置未完成，请先点击恢复。'));
+                    await finish(id, setup);
+                }
+                else {
+                    const restored = unwrap(await restore(id, before));
+                    preserved = !!restored.core_preserved_changes?.length;
+                    await finish(id, restored, true);
+                }
+                setMessage(want ? t('已开启。直接从 Steam 启动游戏即可。') : preserved ? t('已保留之后修改的文件，请检查游戏备份。') : t('已关闭，原文件和启动项已恢复。'));
+                toaster.toast({ title: 'Opti2XMX', body: want ? t('XMX 已开启') : preserved ? t('已保留之后修改的文件，请检查游戏备份。') : t('XMX 已关闭') });
+            }
+            finally {
+                await load(id);
+            }
+        });
+    }
+    const opti = info?.opti;
+    const gameFsr = info?.fsr;
+    const opti10Version = gameFsr?.opti_version || '10.0.0-pre1_20261025';
+    const supportedVersions = [opti10Version, '0.9.4', '0.7.9'];
+    const version = session.versions[appid]
+        || (opti?.version && supportedVersions.includes(opti.version) ? opti.version : '0.9.4');
+    const source = downloadSource(version);
+    const downgrade = !!opti?.version.startsWith('10.') && !version.startsWith('10.');
+    const reprepareFsrVersion = version === opti10Version && !!gameFsr?.prepared && gameFsr.ready;
+    const fsrReady = gameFsr?.ready ?? fsr?.ready ?? false;
+    const fsrReason = gameFsr?.reason || fsr?.reason || '请导入本地 FSR 模型包。';
+    const selectedSR = settings.sr;
+    const migrateOpti = !!opti?.installed && !opti.incomplete;
+    const installReason = !info?.prefix_ready ? '请先从 Steam 用 Proton 启动游戏一次，退出后重新打开插件。'
+        : !executable ? '请先选择要运行的游戏程序。' : '';
+    const optiPending = !!opti?.pending;
+    const configBlocked = optiPending || !!opti?.settings_recovery;
+    const overlayReason = !opti?.installed ? '请先为此游戏安装 Opti。'
+        : opti.incomplete ? '请先修复此游戏的 Opti 安装。'
+            : optiPending || pending ? '请先完成或恢复启动设置。'
+                : opti.settings_recovery ? '请先恢复中断的设置。'
+                    : opti.injection_enabled === false ? '开启 Opti 注入并重新启动游戏后可用。' : '';
+    async function toggleOpti(want) {
+        await task(want ? t('正在开启 Opti 注入…') : t('正在关闭 Opti 注入，保留 XMX…'), async () => {
+            try {
+                const before = await readLaunch(appid);
+                const next = unwrap(await optiToggle(appid, want, before));
+                const actual = before === next.target ? before : await writeLaunch(appid, next.target, before);
+                unwrap(await optiConfirm(appid, actual));
+                setMessage(want ? t('Opti 注入已开启，下次启动生效。') : t('Opti 注入已关闭；XMX 设置保留，使用游戏原生功能。'));
+            }
+            finally {
+                await load(appid);
+            }
+        });
+    }
+    function optiAction(kind) { return runOptiAction(appid, kind, version); }
+    async function installAgility() {
+        await task(t('正在下载官方 Agility 组件…'), async () => {
+            try {
+                const launch = await readLaunch(appid);
+                const source = downloadSource(opti?.version || version);
+                const online = source === 'local' ? 'github' : source;
+                const review = unwrap(await reviewOptiAgility(appid, executable, launch, online));
+                if (!await confirmGameReview(appid, review))
+                    return;
+                const pending = unwrap(await optiAgility(appid, executable, launch, online, review.sha256));
+                await applyPendingLaunch(appid, launch, pending);
+                setMessage(t('已配置 Agility 组件，下次启动生效。'));
+            }
+            finally {
+                await load(appid);
+            }
+        });
+    }
+    async function importFSRModel() {
+        await task(t('正在选择 FSR 模型包…'), async () => {
+            const picked = await openFilePicker(0 /* FileSelectionType.FILE */, '/home/deck/Downloads', true, false, undefined, ['zip']);
+            const path = picked?.realpath || picked?.path;
+            if (!path) {
+                setMessage('');
+                return;
+            }
+            if (!path.toLowerCase().endsWith('.zip'))
+                throw new Error(t('请选择 ZIP 格式的 FSR 模型包。'));
+            const status = unwrap(await fsrImport(path));
+            setFsr(status);
+            if (appid)
+                await load(appid);
+            setMessage(status.ready ? t('FSR 模型包已导入并验证。') : t(status.reason || 'FSR 模型包尚未就绪。'));
+        });
+    }
+    const options = (items) => items.map(([data, label]) => ({ data, label }));
+    const versionControls = SP_JSX.jsxs(SP_JSX.Fragment, { children: [SP_JSX.jsx(DFL.DropdownItem, { layout: "below", label: t('Opti 安装版本'), disabled: busy || configBlocked, selectedOption: version, description: opti?.version ? t('当前已安装：' + opti.version) : undefined, rgOptions: options([[opti10Version, t('10.0 预览版（FSR 4.1 XMX）')], ['0.9.4', t('0.9.4（当前稳定版）')], ['0.7.9', t('0.7.9（兼容旧版）')]]), onChange: v => {
+                    const value = String(v.data);
+                    if (selection.appid === appid && supportedVersions.includes(value))
+                        updateSelection({ ...selection, versions: { ...selection.versions, [appid]: value } });
+                } }), SP_JSX.jsx(DFL.DropdownItem, { layout: "below", label: t('下载源'), selectedOption: source, disabled: busy || configBlocked, description: t(session.cache[version]?.cached ? '已找到本地安装包，可直接安装。'
+                    : source === 'local' ? '本地安装包不存在，请重新选择安装来源。' : '仅首次下载；之后所有游戏复用本地安装包。'), rgOptions: options([...(session.cache[version]?.cached || source === 'local' ? [['local', t('从本地安装')]] : []),
+                    ['github', t('GitHub 官方')], ['ghfast', t('ghfast.top（第三方备用）')], ['ghproxy', t('gh-proxy.com（第三方备用）')]]), onChange: v => setSource(version, String(v.data)) })] });
+    const installDescription = installReason ? t(installReason) : active
+        ? t('安装时自动暂时关闭 XMX，完成后恢复；请先退出游戏。')
+        : downgrade ? t('安装旧版后 FSR 4.1 XMX 需要重新准备 Opti 10；保留回退备份。')
+            : reprepareFsrVersion ? t('重新准备 Opti 10 和 FSR 组件，并重置超分与帧生成；之后重新选择 FSR。')
+                : t('安装所选版本，保留回退备份；请先退出游戏。');
+    const runtimeReady = runtime?.ready ? t('XMX 运行环境已就绪') : '';
+    const runtimeControl = !runtime?.ready && SP_JSX.jsx(DFL.ButtonItem, { layout: "below", disabled: busy || !runtime || !runtime.available || !!runtime.host_issue, description: runtime
+            ? t(runtime.error || runtime.availability_message || runtime.host_issue || '下载后校验并配置到当前用户目录。')
+            : t('正在检查 XMX 运行环境…'), onClick: () => task(t('正在下载并配置 XMX 运行环境…'), async () => {
+            try {
+                setRuntime(unwrap(await runtimeInstall()));
+                setMessage(t('XMX 运行环境已配置。选择游戏后开启 XMX。'));
+            }
+            finally {
+                setRuntime(unwrap(await runtimeStatus()));
+                if (appid)
+                    await load(appid);
+            }
+        }), children: t('下载并配置 XMX 运行环境') });
+    const recoveryControls = SP_JSX.jsxs(SP_JSX.Fragment, { children: [optiPending && SP_JSX.jsx(DFL.ButtonItem, { layout: "below", disabled: busy || opti?.status === 'recovery_required', onClick: () => optiAction('finish'), children: t('完成 Opti 启动设置') }), pending && state?.status === 'pending_launch' && SP_JSX.jsx(DFL.ButtonItem, { layout: "below", disabled: busy, onClick: () => toggle(true), children: t('继续开启') }), managed && (!active || pending) && SP_JSX.jsx(DFL.ButtonItem, { layout: "below", disabled: busy, onClick: () => toggle(false), children: t('恢复原配置') }), opti?.rollback && (optiPending || !executable) && SP_JSX.jsx(DFL.ButtonItem, { layout: "below", disabled: busy || managed || !!opti.settings_recovery, description: t('撤销未完成的 Opti 操作，保留原文件和回退记录。'), onClick: () => optiAction('rollback'), children: t('回退上次操作') }), !executable && opti?.settings_recovery && SP_JSX.jsx(DFL.ButtonItem, { layout: "below", disabled: busy || optiPending, onClick: () => task(t('正在撤销上次设置…'), async () => { unwrap(await optiRestoreSettings(appid)); await load(appid); }), children: t('恢复中断的设置') })] });
+    return SP_JSX.jsxs(DFL.PanelSection, { children: [progressDisconnected && SP_JSX.jsx(DFL.PanelSectionRow, { children: SP_JSX.jsx("div", { role: "status", children: t('进度连接暂不可用，正在重试。') }) }), SP_JSX.jsx(DFL.DropdownItem, { label: t('游戏'), layout: "below", disabled: busy, selectedOption: appid, strDefaultLabel: t('选择游戏'), description: t('打开时优先选择正在运行的游戏，也可手动切换。'), rgOptions: games.map(g => ({ data: g.appid, label: g.name })), onChange: v => void select(Number(v.data), true) }), info ? SP_JSX.jsxs(SP_JSX.Fragment, { children: [!executable && SP_JSX.jsx(DFL.PanelSectionRow, { children: SP_JSX.jsx("div", { role: "status", children: t(needsChoice
+                                ? '先选择游戏主程序，确认后再显示安装和设置。'
+                                : reason || '未找到可用的游戏主程序，请检查游戏安装。') }) }), needsChoice && !managed && SP_JSX.jsx(DFL.DropdownItem, { label: t('确认游戏程序'), layout: "below", selectedOption: validManualExe, description: t('必选：选择实际运行的游戏主程序。'), disabled: busy, strDefaultLabel: t('请选择要运行的版本'), rgOptions: info.automatic.candidates.map(p => ({ data: p, label: p })), onChange: v => {
+                            const value = String(v.data), id = info.appid;
+                            if (selection.appid !== id || !info.executables.includes(value) || !info.automatic.candidates.includes(value))
+                                return;
+                            updateSelection({ ...selection, executables: { ...selection.executables, [id]: value } });
+                            if (mounted.current)
+                                setManualExe(value);
+                        } }), !!executable && SP_JSX.jsxs(SP_JSX.Fragment, { children: [opti && !opti.managed && !optiPending && SP_JSX.jsxs(SP_JSX.Fragment, { children: [!migrateOpti && versionControls, SP_JSX.jsx(DFL.ButtonItem, { layout: "below", disabled: busy || !!installReason || configBlocked || pending, description: migrateOpti ? t('保留现有文件并建立回退备份。') : installDescription, onClick: () => optiAction(migrateOpti ? 'migrate' : 'install'), children: migrateOpti ? t('迁移现有 Opti')
+                                            : opti.incomplete ? t('修复并安装所选版本') : t('安装所选版本') })] }), SP_JSX.jsx(DFL.ToggleField, { label: t('XMX 加速'), checked: active, disabled: busy || blocked || pending || configBlocked, description: t(blocked ? reason || '请先选择要运行的游戏程序。' : '仅限 Intel；更改前请退出游戏。'), onChange: want => void toggle(want) }), opti?.managed && SP_JSX.jsx(DFL.ToggleField, { label: t('Opti 注入'), checked: opti.injection_enabled, disabled: busy || pending || configBlocked, description: t('原生 XeSS 帧生成请关闭。'), onChange: want => void toggleOpti(want) }), opti?.installed && !opti.incomplete && SP_JSX.jsx(DFL.ButtonItem, { layout: "below", disabled: busy || !!overlayReason, description: t(overlayReason || '游戏运行时可用；再次点击可关闭。'), onClick: () => task(t('正在切换 Opti 覆盖层…'), async () => {
+                                    DFL.Navigation.CloseSideMenus();
+                                    unwrap(await optiPanel(appid));
+                                    setMessage(t('已发送覆盖层快捷键。'));
+                                }), children: t('打开 / 关闭 Opti 覆盖层') }), runtimeControl, (opti?.managed || opti?.rollback) && SP_JSX.jsxs(SP_JSX.Fragment, { children: [SP_JSX.jsx(DFL.ButtonItem, { layout: "below", disabled: busy, description: [opti.version ? 'Opti ' + opti.version : '', runtimeReady].filter(Boolean).join(' · '), onClick: () => setAdvanced(!advanced), children: advanced ? t('收起高级设置') : t('高级设置') }), advanced && SP_JSX.jsxs(SP_JSX.Fragment, { children: [opti.managed && (opti.version.startsWith('0.9') || opti.version.startsWith('10.')) && SP_JSX.jsxs(SP_JSX.Fragment, { children: [SP_JSX.jsx(DFL.DropdownItem, { layout: "below", label: t('超分输出'), disabled: busy || configBlocked, selectedOption: selectedSR, description: t('选择后自动保存；请先退出游戏。'), rgOptions: options(active ? [['xess', 'XeSS'], ['fsr_xmx', t('FSR 4.1.2 Lite XMX')]]
+                                                            : [['xess', 'XeSS'], ['fsr_xmx', t('FSR 4.1.2 Lite XMX')], ['fsr31', 'FSR 3.1'], ['fsr22', 'FSR 2.2'], ['dlss', t('DLSS（需要支持的显卡）')]]), onChange: v => void saveSettingsPatch(appid, { sr: String(v.data) }) }), !fsrReady && SP_JSX.jsx(DFL.ButtonItem, { layout: "below", disabled: busy || configBlocked, description: t(fsrReason), onClick: () => void importFSRModel(), children: t('导入 FSR 模型包') }), selectedSR === 'fsr_xmx' && SP_JSX.jsx(SP_JSX.Fragment, { children: SP_JSX.jsx(DFL.PanelSectionRow, { children: SP_JSX.jsxs("div", { style: { fontSize: 13, lineHeight: 1.5 }, children: [SP_JSX.jsx("div", { role: "status", children: t(!fsrReady ? fsrReason
+                                                                            : gameFsr?.bridge_ready ? 'FSR 4.1.2 Lite XMX 已就绪；从 Steam 启动游戏即可。'
+                                                                                : '重新选择 FSR 后会自动准备此游戏并保存。') }), !active && SP_JSX.jsx("div", { role: "note", children: t(gameFsr?.prepared
+                                                                            ? 'FSR 需要 XMX；重新选择 FSR 会自动开启 XMX。'
+                                                                            : '重新选择 FSR 会自动准备组件并开启 XMX。') })] }) }) }), SP_JSX.jsx(DFL.DropdownItem, { layout: "below", label: t('帧生成输出'), disabled: busy || configBlocked, selectedOption: settings.fg, description: opti.injection_enabled ? undefined : t('开启 Opti 注入后生效。'), rgOptions: options([['native', t('游戏原生（不接管）')], ['fsrfg', t('FSR 帧生成')], ['xefg', t('XeSS 帧生成（实验）')]]), onChange: v => void saveSettingsPatch(appid, { fg: String(v.data) }) }), settings.fg !== 'fsrfg' && SP_JSX.jsx(DFL.DropdownItem, { layout: "below", label: t('插帧倍率') + (settings.fg === 'native' ? ' · ' + t('游戏原生控制') : ''), disabled: busy || configBlocked, selectedOption: settings.fg === 'native' ? 'native' : settings.fg_multiplier || '2', description: t('选择后自动保存；请先退出游戏。'), rgOptions: options([['native', t('原生')], ['2', '2×'], ['3', '3×'], ['4', '4×']]), onChange: v => {
+                                                            const value = String(v.data);
+                                                            if (['native', '2', '3', '4'].includes(value))
+                                                                void saveSettingsPatch(appid, { fg: value === 'native' ? 'native' : 'xefg', fg_multiplier: value });
+                                                        } }), settings.fg !== 'native' && SP_JSX.jsx(DFL.DropdownItem, { layout: "below", label: t('游戏 FG 类型'), disabled: busy || configBlocked, selectedOption: settings.fg_input, description: t('选择游戏支持的帧生成类型。'), rgOptions: options([['fsrfg30', 'FSR 3.0 FG'], ['fsrfg', 'FSR 3.1 FG'], ['dlssg', 'DLSS FG'], ['upscaler', t('无原生 FG：使用超分输入')]]), onChange: v => void saveSettingsPatch(appid, { fg_input: String(v.data) }) }), SP_JSX.jsx(DFL.DropdownItem, { layout: "below", label: t('显卡伪装'), disabled: busy || active || configBlocked || selectedSR === 'fsr_xmx', selectedOption: selectedSR === 'fsr_xmx' ? 'real' : settings.spoof, description: active || selectedSR === 'fsr_xmx' ? t('XMX 开启时保留真实 Intel 身份。') : t('实验兼容选项；改身份不保证解锁功能。'), rgOptions: options([['real', t('真实显卡（推荐）')], ['nvidia', 'NVIDIA'], ['amd', 'AMD'], ['intel', 'Intel Arc']]), onChange: v => void saveSettingsPatch(appid, { spoof: String(v.data) }) }), SP_JSX.jsx(DFL.ButtonItem, { layout: "below", disabled: busy || optiPending || !!opti.settings_recovery, description: t('恢复 XeSS、真实显卡、由游戏管理帧生成；先退出游戏。'), onClick: () => void saveSettingsPatch(appid, {}, true), children: t('恢复默认') }), (opti.settings_rollback || opti.settings_recovery) && SP_JSX.jsx(DFL.ButtonItem, { layout: "below", disabled: busy || optiPending, description: t('恢复上次保存前的配置；保留安装回退记录。先退出游戏。'), onClick: () => task(t('正在撤销上次设置…'), async () => { unwrap(await optiRestoreSettings(appid)); await load(appid); setMessage(t('已恢复上次保存前的设置，下次启动生效。')); }), children: opti.settings_recovery ? t('恢复中断的设置') : t('撤销上次设置') })] }), opti.managed && SP_JSX.jsxs(SP_JSX.Fragment, { children: [versionControls, SP_JSX.jsx(DFL.ButtonItem, { layout: "below", disabled: busy || pending || configBlocked || !opti.injection_enabled || !!installReason, description: installDescription, onClick: () => optiAction('install'), children: t('安装所选版本') }), SP_JSX.jsx(DFL.ButtonItem, { layout: "below", disabled: busy || managed || pending || configBlocked || !opti.injection_enabled || !!installReason, description: t('高级兼容选项：需要联网从官方 OptiScaler 下载并校验 Agility 组件；请先关闭 XMX。'), onClick: () => void installAgility(), children: t('安装 Agility 组件') })] }), !optiPending && SP_JSX.jsx(DFL.ButtonItem, { layout: "below", disabled: busy || managed || !!opti.settings_recovery || !opti.rollback, description: t('撤销上次安装、迁移或卸载；需先关闭 XMX。'), onClick: () => optiAction('rollback'), children: t('回退上次操作') }), SP_JSX.jsx(DFL.ButtonItem, { layout: "below", disabled: busy || managed || configBlocked || !opti.managed, description: t('卸载本插件管理的 Opti 文件并恢复原文件；需先关闭 XMX。'), onClick: () => removeConfirm ? optiAction('uninstall') : setRemoveConfirm(true), children: removeConfirm ? t('确认卸载 Opti') : t('卸载 Opti') })] })] })] }), recoveryControls, visibleMessage && SP_JSX.jsx(DFL.PanelSectionRow, { children: SP_JSX.jsx("div", { role: visibleError ? 'alert' : 'status', style: { fontSize: 13, lineHeight: 1.5 }, children: t(visibleMessage) }) })] }) : SP_JSX.jsxs(SP_JSX.Fragment, { children: [runtimeControl, SP_JSX.jsx(DFL.PanelSectionRow, { children: SP_JSX.jsx("div", { role: "status", style: { fontSize: 13, lineHeight: 1.5 }, children: t(visibleMessage) }) })] }), operation?.operation_id && (operation.appid === appid || operation.running || operation.kind === 'runtime_install') && SP_JSX.jsx(DFL.PanelSectionRow, { children: SP_JSX.jsxs("div", { role: operation.phase === 'failed' ? 'alert' : 'status', style: { fontSize: 13, lineHeight: 1.5 }, children: [t((operation.kind === 'runtime_install' ? { started: '正在准备 XMX 运行环境…', downloading: '正在下载 XMX 运行环境…', extracting: '正在解压 XMX 运行环境…', installing: '正在验证并配置 XMX 运行环境…', completed: 'XMX 运行环境配置完成。', failed: 'XMX 运行环境配置未完成。' } : { started: '正在准备 Opti…', downloading: '正在下载 Opti…', 'cache-hit': '正在复用 Opti 缓存…', extracting: '正在解压 Opti…', installing: '正在安装 Opti…', 'awaiting-launch': 'Opti 已准备，等待确认启动设置。', completed: 'Opti 操作已完成。', failed: 'Opti 操作未完成。' })[operation.phase] || '正在处理 Opti 配置…'), operation.downloaded_bytes > 0 && SP_JSX.jsxs(SP_JSX.Fragment, { children: [" \u00B7 ", (operation.downloaded_bytes / 1048576).toFixed(1), " MiB", operation.total_bytes !== null && operation.total_bytes > 0 && operation.downloaded_bytes <= operation.total_bytes
+                                    && SP_JSX.jsxs(SP_JSX.Fragment, { children: [" / ", (operation.total_bytes / 1048576).toFixed(1), " MiB \u00B7 ", (operation.downloaded_bytes * 100 / operation.total_bytes).toFixed(0), "%"] })] }), operation.error && SP_JSX.jsxs(SP_JSX.Fragment, { children: [" \u00B7 ", t(operation.error)] })] }) }), runtimeReady && !!executable && !(opti?.managed || opti?.rollback) && SP_JSX.jsx(DFL.PanelSectionRow, { children: SP_JSX.jsx("div", { role: "status", children: runtimeReady }) })] });
+}
+var index = definePlugin(() => ({
+    name: 'Opti2XMX', titleView: SP_JSX.jsx("div", { className: DFL.staticClasses.Title, children: "Opti2XMX" }),
+    content: SP_JSX.jsx(Content, {}), icon: SP_JSX.jsx("span", { style: { fontWeight: 700 }, children: "X" }), onDismount() { },
+}));
+
+export { index as default };
+//# sourceMappingURL=index.js.map

@@ -1,0 +1,19 @@
+schema_version: 1
+kind: BoilerResourceSource
+id: "resource:common-kde-keyboard"
+version: 0.1.0+source-keyboard.20261031
+dependencies: []
+external_component_dependencies: []
+hardware_requires:
+compatibility:
+  architectures[1]: x86_64
+  os_ids[1]: steamos
+install_kind: boiler-kde-keyboard-v1
+verify:
+  kind: boiler-kde-keyboard-verify-v1
+restore:
+  kind: boiler-kde-keyboard-restore-v1
+renderer: fixed-kde-keyboard-v1
+source_lock: locks/resources/common-kde-keyboard.toon
+recipe:
+  license_files[1]: LICENSE

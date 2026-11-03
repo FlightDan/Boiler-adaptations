@@ -1,0 +1,13 @@
+kind: SelectedPublicComponentSources
+input:
+  path: inputs/public-installer/oxp3-steamos-installer-1.0.6-20261022-220437.zip
+  url: "https://github.com/FlightDan/OneXPlayer3-SteamOS/releases/download/v1.0.6%2Binstaller.20261022.220437/oxp3-steamos-installer-1.0.6-20261022-220437.zip"
+  name: oxp3-steamos-installer-1.0.6-20261022-220437.zip
+  size: 555684389
+  sha256: d8bee8bad14f4cd136c814ebcaa3299fa59202b6cdc6d26ec9c52af0e055f4d4
+component: fan-driver
+files[4]{path,size,sha256,upstream_member}:
+  inputs/000-oxpec.ko,476184,33dcd63adc90b8b1af24d74be70ca39af72f8b8de62cd4f5e34b6aeb477cf80d,cache/integration/fan-driver/000.bin
+  inputs/001-oxpec.ko,476184,33dcd63adc90b8b1af24d74be70ca39af72f8b8de62cd4f5e34b6aeb477cf80d,cache/integration/fan-driver/001.bin
+  inputs/002-load-fan-module.py,245,df717562fa87bd74fb1d2dd7d30efc2336bf89b94cee582ab4960f4cd93bf49c,cache/integration/fan-driver/002.bin
+  inputs/003-oxp3-fan-module.service,359,747dfb3ce14c70dd0d0545f25fc2ca503cef7f423a5f480aa7b923d8c2e40d6b,cache/integration/fan-driver/003.bin

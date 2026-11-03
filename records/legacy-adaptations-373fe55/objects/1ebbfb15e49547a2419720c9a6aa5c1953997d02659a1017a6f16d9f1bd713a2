@@ -1,0 +1,10 @@
+schema_version: 1
+kind: BoilerResourceSourceLock
+resource: "resource:gamma22-hdr-game"
+files[6]{path,size,sha256}:
+  LICENSE,34523,0d96a4ff68ad6d4b6f1f30f713b18d5184912ba8dd389f86aa7710db079abcb0
+  THIRD_PARTY_NOTICES.md,2675,ef25a8ae7a53d052e9f5548e944228fdb8e870e2bb8467b714e867c9d28a523a
+  baseline/brands/onexplayer/oxp3/scripts/hdr/UPSTREAM_LICENSE,1070,1959942e9e263938024cbd4d8c63bba342647877777dd48056c467672dcb915a
+  baseline/brands/onexplayer/oxp3/scripts/hdr/upstream.lua,5836,a37042dbcbcb91515244bf42ec3f5efe96e04b9e417b6945dd476b31e48ae846
+  devices/display/gamescope/gamma22-hdr/resource.toon,788,bafca70e191b52ba47c894e19a8b289ef240d833e92d2d81c640d482d2a874ea
+  locks/public-baseline.toon,32751,15dae171a0bbdf7423a117fb008e71e0f7737d2a3647ede1b1887bf051c549cf

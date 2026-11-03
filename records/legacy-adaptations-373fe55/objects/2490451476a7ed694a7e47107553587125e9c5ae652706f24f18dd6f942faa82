@@ -1,0 +1,11 @@
+[Unit]
+Description=Read-only telemetry sensor access for Boiler overlay
+ConditionPathExists=/var/lib/boiler-resource-approved/common-telemetry-overlay.json
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/python3 -I /usr/local/lib/boiler/boiler-resource-firstboot.py overlay-permissions grant
+ExecReload=/usr/bin/python3 -I /usr/local/lib/boiler/boiler-resource-firstboot.py overlay-permissions grant
+ExecStop=/usr/bin/python3 -I /usr/local/lib/boiler/boiler-resource-firstboot.py overlay-permissions restore
+[Install]
+WantedBy=multi-user.target

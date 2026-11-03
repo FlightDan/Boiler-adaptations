@@ -1,0 +1,5 @@
+enabled: false
+epp: balance_performance
+p_mhz: 4700
+e_mhz: 3600
+lp_mhz: 3100

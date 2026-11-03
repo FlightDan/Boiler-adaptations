@@ -2,62 +2,81 @@
 
 [Home](README.en.md) · [中文](BUILD.md) · [TOON guide](TOON.en.md)
 
-To work on a model, start with its adaptation files and TOON, then use the Boiler Installer build tools to make a device package. To change the installer interface or packaging, continue with the application build and packaging scripts in Boiler Installer.
+Start with the model TOON to find components and shared resources, then use the Boiler Installer tools to prepare the source snapshot and build inputs. This page uses adaptations commit `3edd6a340b56628785f05365d62349f7d03c63eb` and installer commit `04dce422d0c4831ced6d2b9efdbd852e7b02a724`; for other versions, check their respective input locks.
 
-The commands below describe Boiler Installer public commit `c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989`. For another version, use that version's build instructions and input locks.
+## Repository roles
 
-## Where to start
-
-| Goal | Entry point |
+| Location | Contents |
 | --- | --- |
-| Inspect a model or reuse hardware source | [Model directories](../brands/onexplayer/) and [common](../common/) |
-| Understand model-to-resource references | [TOON guide](TOON.en.md) |
-| Build an existing device package | [Boiler Installer TOON build guide](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/adaptations/docs/TOON_MODEL_CATALOG.md) |
-| Build the Windows installer | [Boiler Installer build instructions](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/README.md#build-from-an-independent-checkout) |
+| [Boiler-adaptations](https://github.com/FlightDan/Boiler-adaptations) | Model TOONs, adaptation sources, shared resources, and the device index |
+| [Boiler Installer](https://github.com/FlightDan/Boiler-installer) | Build tools for source snapshots, model packages, maintenance, and the installer |
 
-`scripts/build-index.py` in Boiler-devices takes an **already built device package** and prepares an index candidate. It does not build the package itself.
+Each repository has its own source inventory. When adaptations change, prepare a snapshot from the chosen commit for the build project; changing a link alone does not update the build inputs.
 
-## Example: build the X2 Mini package
+## 1. Check TOON and the source snapshot
 
-Run these PowerShell commands from the **Boiler Installer** repository root. First prepare three directories from the [build guide](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/adaptations/docs/TOON_MODEL_CATALOG.md): an extracted complete OXP3 `.8` package, an identity bridge overlay, and an HDR overlay. The X2 input names are `base`, `bridge_overlay`, and `hdr_overlay`. Replace the three paths below with your actual directories; choose an output directory that does not already exist.
+Run these commands from the **Boiler Installer** repository root. This installer commit already includes a source snapshot bound to adaptations commit `3edd6a3`:
 
 ```powershell
-$Base = "PATH_TO_COMPLETE_OXP3_PACKAGE"
-$Bridge = "PATH_TO_BRIDGE_OVERLAY"
-$Hdr = "PATH_TO_HDR_OVERLAY"
-$Output = "PATH_TO_NEW_X2_OUTPUT"
-
 python -B adaptations/scripts/toon_catalog.py check
-python -B adaptations/scripts/toon_catalog.py preflight --model guide:x2-mini --input "base=$Base" --input "bridge_overlay=$Bridge" --input "hdr_overlay=$Hdr"
-python -B adaptations/scripts/toon_catalog.py build --model guide:x2-mini --input "base=$Base" --input "bridge_overlay=$Bridge" --input "hdr_overlay=$Hdr" --output "$Output"
 ```
 
-`check` checks the catalog and generated views; `preflight` checks the supplied inputs and locks; `build` invokes the model's build adapter and produces an unsigned device package. Resolve any missing inputs reported by `preflight` before running `build`.
+To export a fresh snapshot of that commit, prepare an independent checkout whose origin is `FlightDan/Boiler-adaptations`, then replace both paths below. The output directory must be new:
 
-The [X2 package guide](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/adaptations/docs/X2_COMPLETE_PACKAGE.md) and [bridge overlay guide](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/adaptations/docs/X2_COMPLETE_REUSE.md) explain the OXP3 base, overlays, fixed inputs, and preparation commands. To rebuild the OXP3 package used as the X2 base, the OXP3 pipeline also requires its `.2` base and locked third-party archives.
+```powershell
+$Adaptations = "PATH_TO_BOILER_ADAPTATIONS_CHECKOUT"
+$Snapshot = "PATH_TO_NEW_SNAPSHOT_DIRECTORY"
+python -B scripts/prepare-canonical-model-snapshot.py --source-checkout "$Adaptations" --source-commit 3edd6a340b56628785f05365d62349f7d03c63eb --output "$Snapshot"
+```
 
-The current X2 builder reuses the complete OXP3 base and applies both overlays. To produce a trimmed package containing only selected components, provide build logic for that selection and check its dependencies and final inventory.
+The command reads files listed in `model-source-files.json` from the specified Git commit, checks their sizes and hashes, and writes a snapshot. It does not automatically replace files in the installer checkout; updating the build project's snapshot also requires updating its source lock and inventory.
 
-## Trim or reuse an adaptation
+## 2. Prepare a resource pool from model requests
 
-1. In Boiler-devices, select the model files, shared resources, and licenses you need. Follow their origins and references using the [TOON guide](TOON.en.md).
-2. Adjust model data and component selections in your fork. TOON describes what is needed; a fixed adapter in Boiler Installer performs the build.
-3. When reusing an existing builder, prepare the inputs specified by its locks. For a different model or a new way to trim the package, implement and check an appropriate adapter against the project's package contract.
-4. Run resource checks, package validation, and the tests needed for installation, maintenance, and recovery. Record the devices, systems, and features you tested.
+The resource-pool tool reads `resource_model.resources` from both models in the snapshot, checks each model's dependencies, and prepares the union of their requests. Replace the output path with a new directory:
 
-Boiler Installer's `scripts/prepare-resource-pool.py` prepares a shared resource pool and its catalog. The model builder handles a separate device package; check the inputs and outputs of each.
+```powershell
+$Pool = "PATH_TO_NEW_RESOURCE_POOL"
+python -B scripts/prepare-resource-pool.py --project . --check-inputs
+python -B scripts/prepare-resource-pool.py --project . --output "$Pool"
+```
 
-For example, Boiler-devices contains the shared BMI260 sources and model references, but Boiler Installer's current resource-pool model lists do not include that resource. To use it through the resource-pool path, add the corresponding resource declaration and handling in the build project, then check the result.
+This produces a resource pool and catalog, not a complete model package. It currently scans all models in the snapshot; both models currently request the same 14 resources. `common_references` is a separate field and is checked separately: its xe, BE201, and ALC245 resource IDs overlap with those 14, while BMI260 and the GM7 boot policy have separate references. Check the actual resource paths instead of counting repeated references as extra files.
 
-Copying a TOON file alone does not create a new executable builder. The [TOON build guide](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/adaptations/docs/TOON_MODEL_CATALOG.md) lists the adapters and inputs.
+The resource pool is a separate output; the current `canonical-build` does not consume that directory. The next section uses a base model package and a separately prepared common-resource stage.
 
-### Code to start from
+## 3. Prepare shared resources and build one model
 
-- [TOON parsing, checks, and adapter entry point](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/adaptations/scripts/toon_catalog.py)
-- [X2 device-package builder](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/adaptations/scripts/build-x2-complete.py)
-- [DevicePackage format](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/schemas/DevicePackage.schema.json) and [package validator](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/protocol/manifest.py)
+This example uses X2 Mini. First prepare a reviewed **complete X2 base package directory**, its reviewed manifest SHA-256, and the pinned public installer ZIP. The builder also needs the project's locked resource inputs; see the [common-resource preparation guide](https://github.com/FlightDan/Boiler-installer/blob/04dce422d0c4831ced6d2b9efdbd852e7b02a724/adaptations/docs/CANONICAL_COMMON_PREPARATION_20261103.md).
 
-If you already have a device-package directory in that format, run this from the Boiler Installer repository to produce an unsigned ZIP. Replace both paths with your own:
+Replace the paths and hash below in PowerShell; `$Stage` and `$Output` must be new directories:
+
+```powershell
+$Base = "PATH_TO_REVIEWED_X2_PACKAGE_DIRECTORY"
+$BaseSha = "REVIEWED_BASE_MANIFEST_SHA256"
+$PublicInstaller = "PATH_TO_PINNED_PUBLIC_INSTALLER.zip"
+$Stage = "PATH_TO_NEW_COMMON_STAGE"
+$Output = "PATH_TO_NEW_MODEL_OUTPUT"
+
+python -B scripts/prepare-canonical-common.py --canonical-snapshot --gyro-public-archive "$PublicInstaller" --output "$Stage"
+python -B adaptations/scripts/toon_catalog.py canonical-build --model guide:x2-mini --input "base=$Base" --input "stage=$Stage" --input "public-installer=$PublicInstaller" --base-manifest-sha256 "$BaseSha" --output "$Output"
+```
+
+The first command prepares shared device inputs. The second reads the X2 model data, checks the snapshot, base package and inputs, then builds an unsigned candidate for one model. For OXP3 use `guide:oxp3` and its corresponding base package. See the [model build guide](https://github.com/FlightDan/Boiler-installer/blob/04dce422d0c4831ced6d2b9efdbd852e7b02a724/adaptations/docs/CANONICAL_MODEL_FINALIZATION_20261103.md) for the bases and their preparation.
+
+## 4. Trim, reuse, and package
+
+The intended two-model brand package uses both TOONs as a file list: check `components` and their `sources`, `resource_model.resources`, `common_references`, and `boot_policies`. Collect requested files and dependencies using their adaptation-repository paths, store a path referenced by both models once, and retain each model's own files. Check the inventory, licenses, integrity, and the inputs needed for installation, maintenance, and recovery.
+
+The current `canonical-build` builds **one model** from an existing complete base package. Building one trimmed, deduplicated brand package from two TOONs requires a corresponding trimming builder and package-content checks; a complete single-model base build is not that brand package.
+
+Code to start from:
+
+- [TOON parsing, checks, and canonical-build](https://github.com/FlightDan/Boiler-installer/blob/04dce422d0c4831ced6d2b9efdbd852e7b02a724/adaptations/scripts/toon_catalog.py)
+- [Source snapshot preparation](https://github.com/FlightDan/Boiler-installer/blob/04dce422d0c4831ced6d2b9efdbd852e7b02a724/scripts/prepare-canonical-model-snapshot.py) and [shared-resource preparation](https://github.com/FlightDan/Boiler-installer/blob/04dce422d0c4831ced6d2b9efdbd852e7b02a724/scripts/prepare-canonical-common.py)
+- [DevicePackage format](https://github.com/FlightDan/Boiler-installer/blob/04dce422d0c4831ced6d2b9efdbd852e7b02a724/schemas/DevicePackage.schema.json) and [package validator](https://github.com/FlightDan/Boiler-installer/blob/04dce422d0c4831ced6d2b9efdbd852e7b02a724/protocol/manifest.py)
+
+To create an unsigned ZIP from an existing valid device-package directory:
 
 ```powershell
 $Package = "PATH_TO_PACKAGE_DIRECTORY"
@@ -65,8 +84,8 @@ $Zip = "PATH_TO_NEW_PACKAGE.zip"
 python -B scripts/build-device-package.py "$Package" --output "$Zip"
 ```
 
-## Build the installer
+## 5. Build the Windows installer
 
-The model package and the Windows installer are separate artifacts. To build the installer, prepare its locked dependencies in an independent Windows x64 checkout of Boiler Installer, build the application, prepare the selected integration content, and run the packaging script. See the [Boiler Installer README](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/README.md#build-from-an-independent-checkout) and [dependency preparation guide](https://github.com/FlightDan/Boiler-installer/blob/c1c70ea7d1234b59372bb5c595ec2fd0fe5b1989/docs/DEPENDENCY_BOOTSTRAP.md); use `--help` for each preparation script's arguments.
+The device package and installer are separate artifacts. In an independent Windows x64 checkout of Boiler Installer, prepare locked dependencies, build the application, prepare integration content, and run the packaging script. Start with the [Boiler Installer build instructions](https://github.com/FlightDan/Boiler-installer/blob/04dce422d0c4831ced6d2b9efdbd852e7b02a724/README.md#build-from-an-independent-checkout) and [dependency guide](https://github.com/FlightDan/Boiler-installer/blob/04dce422d0c4831ced6d2b9efdbd852e7b02a724/docs/DEPENDENCY_BOOTSTRAP.md).
 
-Check the resulting package manifest, resource files, and hashes, then test installation, maintenance, and recovery in an appropriate environment. For public distribution, follow the project's device-index workflow.
+To include an existing device package in the directory, use the [device-index workflow](REGISTRY.en.md) from the **Boiler-adaptations** repository root. `scripts/build-index.py` accepts a built package; it does not build the package itself.

@@ -1,0 +1,11 @@
+[Unit]
+Description=Return OXP3 fan to firmware before sleep
+Before=sleep.target
+[Service]
+ExecCondition=/usr/bin/python3 -I -B /usr/local/lib/oxp3-integration/integration_runtime.py guard
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/bin/python3 -I /var/lib/oxp3-fan/fan-sleep.py pre
+ExecStop=/usr/bin/python3 -I /var/lib/oxp3-fan/fan-sleep.py post
+[Install]
+WantedBy=sleep.target

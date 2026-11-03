@@ -1,0 +1,5 @@
+# OXP3: the default ttyS0 cannot provide an interactive login terminal.
+# Keep kernel console output and all other gettys unchanged.
+# An intentional serial login setup can opt in through the kernel command line.
+[Unit]
+ConditionKernelCommandLine=oxp3.serial-console=1
