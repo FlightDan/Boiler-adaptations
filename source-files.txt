@@ -286,8 +286,17 @@ common/xevma/kmod_transform.py
 current-source-lock.json
 device-index.json
 devices/oxp3.json
+devices/x2-mini.json
 docs/ADAPTATIONS.md
+docs/BUILD.en.md
+docs/BUILD.md
+docs/FINGERPRINT_OVERLAY_AUTHORITY_PREVIEW_20261104.md
+docs/README.zh.md
+docs/REGISTRY.en.md
+docs/REGISTRY.md
 docs/RELEASE_0.1.0-layout.1.md
+docs/TOON.en.md
+docs/TOON.md
 fingerprint-source-lock.json
 licenses/GPL-2.0.txt
 licenses/license-inventory.json
@@ -673,6 +682,8 @@ source-plan.json
 tests/test_adaptations.py
 tests/test_common_device_sources.py
 tests/test_consolidation.py
+tests/test_fingerprint_overlay.py
+tests/test_index_models.py
 tests/test_model_source_inventory.py
 tests/test_parser_authentication.py
 tests/test_registry.py

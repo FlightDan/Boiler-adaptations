@@ -25,8 +25,8 @@
     },
     {
       "path": "README.md",
-      "size": 3250,
-      "sha256": "6d91a14b8d9783001d0e9e8a7fd5126630e6efebc8a7ef0c163c6468c7af9251"
+      "size": 1967,
+      "sha256": "16a1a7d2c1a68582b208343a799d624ad0eae5eda093a0ac6955c510592ffe1f"
     },
     {
       "path": "THIRD_PARTY_NOTICES.md",
@@ -1454,14 +1454,49 @@
       "sha256": "6bb7ff5bb57f2f757a34c8547ddc0e800b348e73052515622752519280f46349"
     },
     {
+      "path": "docs/BUILD.en.md",
+      "size": 7466,
+      "sha256": "d21e47d4a537d93e9c06ff2d38b924c667d4d3473c370bf3fc0eed5b0c051928"
+    },
+    {
+      "path": "docs/BUILD.md",
+      "size": 6984,
+      "sha256": "335f2522ab356a6b4ff35e5513c4baa51c966e35d5d7ea7c976691a73faa1a64"
+    },
+    {
       "path": "docs/FINGERPRINT_OVERLAY_AUTHORITY_PREVIEW_20261104.md",
       "size": 1610,
       "sha256": "94d1d39ada7b402db04bd9c40f6886789384ed10062c87d2fdec40136cb5dda5"
     },
     {
+      "path": "docs/README.zh.md",
+      "size": 1765,
+      "sha256": "2c20f6104309ca5a46dfaac09ef9a324e755a2ec21c70228eae578b9b1de9ba9"
+    },
+    {
+      "path": "docs/REGISTRY.en.md",
+      "size": 2771,
+      "sha256": "7b53200a5dbca7df61095c9c4bb3571688b2cfd34ea80cbdf504cf1b3836af75"
+    },
+    {
+      "path": "docs/REGISTRY.md",
+      "size": 2394,
+      "sha256": "a32dca363acb3b7e5af1a727f0d0d08af904d09530f7bc5d48d612162882b0cb"
+    },
+    {
       "path": "docs/RELEASE_0.1.0-layout.1.md",
       "size": 4247,
       "sha256": "162562c25df38c24c1930e5f0eab9aa47460fd5aafe546f4edc2dafe6d3a033c"
+    },
+    {
+      "path": "docs/TOON.en.md",
+      "size": 3736,
+      "sha256": "a8b9ef9f28ed651797d33fc803aa812e81cf7fab85b089d23be8ab6c46490c63"
+    },
+    {
+      "path": "docs/TOON.md",
+      "size": 3447,
+      "sha256": "289e30b6af0fc937cf02125a9b29975bc5020d4f64d351ef0adcb0f04cc12752"
     },
     {
       "path": "fingerprint-source-lock.json",
@@ -1760,8 +1795,8 @@
     },
     {
       "path": "source-files.txt",
-      "size": 52210,
-      "sha256": "1998f4481d24be1c043a468af718f6e156bfe8c1a7e814fbaa7029e5ecc6fc2a"
+      "size": 52462,
+      "sha256": "48d506855bc47108d13470d91a5070e1f7de149a247b6128d6f0685dea0876c7"
     },
     {
       "path": "source-lock.json",
