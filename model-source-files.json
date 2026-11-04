@@ -1535,8 +1535,8 @@
     },
     {
       "path": "records/migrations/branded-model-identity-20261104.md",
-      "size": 1588,
-      "sha256": "7df677c58feffb80af3b56e1a8676205943297cc546f7cbebca3cfa4ae34df30"
+      "size": 1547,
+      "sha256": "87d628ff2e1fcb82bca480661d71fcc8ed95e0eebcc1d24a53590d56ec548508"
     },
     {
       "path": "records/migrations/common-bmi260-inputplumber-20261103.json",
