@@ -1845,8 +1845,8 @@
     },
     {
       "path": "tests/test_adaptations.py",
-      "size": 19322,
-      "sha256": "4de0d5db3b1cdd11d02db3b04a52e17285b6f043e0713ec3a4a54e4ef8d67695"
+      "size": 19473,
+      "sha256": "aefff98cb8854358082ad4dce320cff4219aac1237900f8ab8a8b3ba4bb4348a"
     },
     {
       "path": "tests/test_common_device_sources.py",

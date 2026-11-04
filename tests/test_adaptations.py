@@ -60,7 +60,10 @@ class AdaptationCollectionTests(unittest.TestCase):
             self.copy_collection(root)
             history = Path('records/installer-adaptation-source-import-20261104.json')
             (root/history).parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(ROOT/history, root/history)
+            (root/history).write_text(json.dumps({'files': [{
+                'path': 'common/fingerprint/bridge/index.js',
+                'size': 1, 'sha256': '0' * 64,
+            }]}), encoding='utf-8')
             source = root/'common/fingerprint/bridge/index.js'
             source.write_bytes(source.read_bytes() + b'\n// current update\n')
             spec = importlib.util.spec_from_file_location('refresh_inventory', ROOT/'scripts/refresh-model-source-inventory.py')
