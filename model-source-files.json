@@ -1444,6 +1444,11 @@
       "sha256": "c14b43b80069c50846418287a61cf7d88f4d74d48e7c2f8b3c5aa2f476f4d651"
     },
     {
+      "path": "devices/x2-mini.json",
+      "size": 724,
+      "sha256": "74ce19feec692f336ac67e66b7161fb268c523fc6845a6964039e2869258ba08"
+    },
+    {
       "path": "docs/ADAPTATIONS.md",
       "size": 3017,
       "sha256": "6bb7ff5bb57f2f757a34c8547ddc0e800b348e73052515622752519280f46349"
@@ -1459,19 +1464,24 @@
       "sha256": "335f2522ab356a6b4ff35e5513c4baa51c966e35d5d7ea7c976691a73faa1a64"
     },
     {
+      "path": "docs/FINGERPRINT_OVERLAY_AUTHORITY_PREVIEW_20261104.md",
+      "size": 1610,
+      "sha256": "94d1d39ada7b402db04bd9c40f6886789384ed10062c87d2fdec40136cb5dda5"
+    },
+    {
       "path": "docs/README.zh.md",
       "size": 1765,
       "sha256": "2c20f6104309ca5a46dfaac09ef9a324e755a2ec21c70228eae578b9b1de9ba9"
     },
     {
       "path": "docs/REGISTRY.en.md",
-      "size": 2420,
-      "sha256": "bb4e807b484123fd772650523819db1a14606445faf418e7df27d5f467d4f767"
+      "size": 2771,
+      "sha256": "7b53200a5dbca7df61095c9c4bb3571688b2cfd34ea80cbdf504cf1b3836af75"
     },
     {
       "path": "docs/REGISTRY.md",
-      "size": 2123,
-      "sha256": "724ac2533e6464deea76a8cdcf5bb294ebb987d2e90e609459ee64eedf83735f"
+      "size": 2394,
+      "sha256": "a32dca363acb3b7e5af1a727f0d0d08af904d09530f7bc5d48d612162882b0cb"
     },
     {
       "path": "docs/RELEASE_0.1.0-layout.1.md",
@@ -1725,13 +1735,13 @@
     },
     {
       "path": "scripts/build-fingerprint-overlay.py",
-      "size": 14311,
-      "sha256": "9493353672fee16f25c31de510f347c9b3216e23ba958a0a0cc73ff2c5b6714d"
+      "size": 19485,
+      "sha256": "4012b3b4b8e0eb4222b96e3f433deac1c3da50036d2554c4a2196f94dae4f78f"
     },
     {
       "path": "scripts/build-index.py",
-      "size": 20181,
-      "sha256": "03dc586b04f6a2f6d86eac31427d4a69312893539084183128d6e10cb29c7419"
+      "size": 34520,
+      "sha256": "ba68ec057315bd45f2e70df3f4479438300926811cabf658981a026e9f56a8ef"
     },
     {
       "path": "scripts/build-keyboard-runtime.py",
@@ -1775,8 +1785,8 @@
     },
     {
       "path": "scripts/prepare-fingerprint.py",
-      "size": 4941,
-      "sha256": "f62601456660c1a419f6afc008453f493764f3707f976395273bd0a2884c21aa"
+      "size": 5259,
+      "sha256": "9dbfb861d5de9da63908051cfd75f0941077755a83e6895c9c28def74b49c81c"
     },
     {
       "path": "scripts/validate-fingerprint-native.py",
@@ -1785,8 +1795,8 @@
     },
     {
       "path": "source-files.txt",
-      "size": 52325,
-      "sha256": "8f2f5128133a3e099b3ff62c0e27621735a5c2142da523d22b71316fba497db4"
+      "size": 52462,
+      "sha256": "48d506855bc47108d13470d91a5070e1f7de149a247b6128d6f0685dea0876c7"
     },
     {
       "path": "source-lock.json",
@@ -1809,9 +1819,19 @@
       "sha256": "f87fb74d1cb0be94b89ed1bf6bfb4e626e3e9a61dc8aaf635b9f75b32740089c"
     },
     {
+      "path": "tests/test_fingerprint_overlay.py",
+      "size": 11381,
+      "sha256": "334c833e2a0cbd67454bd1736853619dea310615fc5d151b1fec969476ad119d"
+    },
+    {
+      "path": "tests/test_index_models.py",
+      "size": 13466,
+      "sha256": "e32d1d4321234f92f7ef3c24b265bc0a816df89e604c22fff651c1f8cbef4828"
+    },
+    {
       "path": "tests/test_registry.py",
-      "size": 12496,
-      "sha256": "a12cd82b35416f67e42c72023b71587d82e0410202098ec3084a64e69fc6ad84"
+      "size": 13088,
+      "sha256": "72086d6d9f0c00cebad46e8d06fc05bf230f9bb031acc8f8d4ae3974e1884dd5"
     },
     {
       "path": "toon-parser-lock.json",

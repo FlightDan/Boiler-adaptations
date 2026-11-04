@@ -21,7 +21,7 @@ $Output = "PATH_TO_NEW_DEVELOPMENT_INDEX.json"
 python -B scripts/build-index.py --package "$Package" --output "$Output"
 ```
 
-For a release candidate, also provide the actual ZIP, a fixed release asset URL, and an increasing `--sequence`. The script checks the ZIP, manifest, and hashes, and requires the package to name an exact public source commit. The current release-candidate path accepts the registered experimental OXP3 package. Run `python -B scripts/build-index.py --help` for the full arguments.
+For a release candidate, also provide the actual ZIP, a fixed release asset URL, and an increasing `--sequence`. The script checks the ZIP, manifest, and hashes, and requires the package to name an exact public source commit. The single-package release-candidate path accepts the registered experimental OXP3 package. The two-model candidate mode takes two `--model PACKAGE ZIP URL` inputs, one each for OXP3 and X2 Mini, and checks their fingerprint components. It also requires the independently signature-verified previous index and its SHA-256, an increasing sequence, an exact adaptation repository commit and version, and an installer checkout and commit. Run `python -B scripts/build-index.py --help` for the full arguments.
 
 For subsequent releases, independently verify the previous signed index before passing it with `--previous-index`; the script does not verify that file's signature for the operator. The sequence must increase and prior revocations must be retained. `verified_at` records when the local artifact inventory was checked.
 
