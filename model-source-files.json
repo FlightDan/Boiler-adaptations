@@ -25,8 +25,8 @@
     },
     {
       "path": "README.md",
-      "size": 1760,
-      "sha256": "a6156f5732eb2611728e06999a1780ddc9362dc00ff4da819eed6479028ed1ed"
+      "size": 1778,
+      "sha256": "1b7c2e34be943abccbfe5d833d2f537fa0449a4b126203a7a43fa764f685026a"
     },
     {
       "path": "THIRD_PARTY_NOTICES.md",
@@ -1460,8 +1460,8 @@
     },
     {
       "path": "docs/README.en.md",
-      "size": 1919,
-      "sha256": "469677fab67ab82f662c656908bd7fed2db511eb0d8864d71b1353ee1e038138"
+      "size": 1944,
+      "sha256": "5f16ad50c209673d1f3e2010303b13bb764b2900116b6b358cfdec5f0bbaa947"
     },
     {
       "path": "docs/REGISTRY.en.md",

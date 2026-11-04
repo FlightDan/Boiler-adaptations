@@ -14,9 +14,9 @@ This repository collects device and model adaptations for Boiler. Browse the exi
 1. Fork this repository.
 2. Add the adaptation under the right brand and model. Put reusable hardware resources in `common/` and reference them from the model's TOON.
 3. Include the model, operating system and kernel versions, what you tested, and screenshots or logs that show the result.
-4. Open a pull request. I use an agent to help review the code, then review and merge it myself.
+4. Open a pull request. The author uses an agent to help check the code, then reviews and merges it.
 
-When publishing packages, I sign the device index. The documents above explain the workflow and build tools.
+When publishing packages, the author signs the device index. The documents above explain the workflow and build tools.
 
 </details>
 
@@ -30,6 +30,6 @@ This repository uses [AGPL-3.0](../LICENSE). Some sources and resources use othe
 <details>
 <summary>Signatures and trust</summary>
 
-I keep and control the signing private key locally. The installer verifies a signed device index with a trusted public key, then uses that index to check packages. The [published signed catalog](https://github.com/FlightDan/Boiler-adaptations/releases/tag/catalog-v0.1.0-preview.1) and the development index in the repository root are maintained separately; see [Device index and signatures](REGISTRY.en.md).
+The author keeps and controls the signing private key locally. The installer verifies a signed device index with a trusted public key, then uses that index to check packages. The [published signed catalog](https://github.com/FlightDan/Boiler-adaptations/releases/tag/catalog-v0.1.0-preview.1) and the development index in the repository root are maintained separately; see [Device index and signatures](REGISTRY.en.md).
 
 </details>
