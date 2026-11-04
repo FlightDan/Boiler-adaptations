@@ -1860,8 +1860,8 @@
     },
     {
       "path": "tests/test_index_models.py",
-      "size": 26894,
-      "sha256": "e344161dafce47ba6c4287f8fe651fa48e76b648ac9aaa3a5b0e861887dd267a"
+      "size": 27692,
+      "sha256": "c7b0cc33c0a76b02ce1b9f7ab51992ac0fffbd50bf000dffd1f032df92461766"
     },
     {
       "path": "tests/test_model_identity.py",
