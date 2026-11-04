@@ -25,8 +25,8 @@
     },
     {
       "path": "README.md",
-      "size": 1778,
-      "sha256": "1b7c2e34be943abccbfe5d833d2f537fa0449a4b126203a7a43fa764f685026a"
+      "size": 1967,
+      "sha256": "16a1a7d2c1a68582b208343a799d624ad0eae5eda093a0ac6955c510592ffe1f"
     },
     {
       "path": "THIRD_PARTY_NOTICES.md",
@@ -1451,27 +1451,27 @@
     {
       "path": "docs/BUILD.en.md",
       "size": 7466,
-      "sha256": "79f342f44bd1a1a7437d539c49f85ef4d73bb62ab967b50fa7fb41ac060f418b"
+      "sha256": "d21e47d4a537d93e9c06ff2d38b924c667d4d3473c370bf3fc0eed5b0c051928"
     },
     {
       "path": "docs/BUILD.md",
       "size": 6984,
-      "sha256": "d601bddb9e2df80d4d3c33af38e0d25c7e9c774a3b6be52b0f12463dcadeb42e"
+      "sha256": "335f2522ab356a6b4ff35e5513c4baa51c966e35d5d7ea7c976691a73faa1a64"
     },
     {
-      "path": "docs/README.en.md",
-      "size": 1944,
-      "sha256": "5f16ad50c209673d1f3e2010303b13bb764b2900116b6b358cfdec5f0bbaa947"
+      "path": "docs/README.zh.md",
+      "size": 1765,
+      "sha256": "2c20f6104309ca5a46dfaac09ef9a324e755a2ec21c70228eae578b9b1de9ba9"
     },
     {
       "path": "docs/REGISTRY.en.md",
       "size": 2420,
-      "sha256": "fa7b352b22f6c87290cf4b448a54abbf3c4aea7a1b2a61f4beccacaf536ac9ed"
+      "sha256": "bb4e807b484123fd772650523819db1a14606445faf418e7df27d5f467d4f767"
     },
     {
       "path": "docs/REGISTRY.md",
       "size": 2123,
-      "sha256": "9f0d5e5016fbca892d985a1cd057ecb9c5d40654352b8becc0a2536ae4f85651"
+      "sha256": "724ac2533e6464deea76a8cdcf5bb294ebb987d2e90e609459ee64eedf83735f"
     },
     {
       "path": "docs/RELEASE_0.1.0-layout.1.md",
@@ -1481,12 +1481,12 @@
     {
       "path": "docs/TOON.en.md",
       "size": 3736,
-      "sha256": "89b14b7985b2c69cc67442c0b5d1a03c3a80395cd7d1fc435dff17ad16f34824"
+      "sha256": "a8b9ef9f28ed651797d33fc803aa812e81cf7fab85b089d23be8ab6c46490c63"
     },
     {
       "path": "docs/TOON.md",
       "size": 3447,
-      "sha256": "b20bf88f54a4404dd2a3700be8895ba3c8b2d57a981d0f547838a7e6c42e095a"
+      "sha256": "289e30b6af0fc937cf02125a9b29975bc5020d4f64d351ef0adcb0f04cc12752"
     },
     {
       "path": "fingerprint-source-lock.json",
@@ -1786,7 +1786,7 @@
     {
       "path": "source-files.txt",
       "size": 52325,
-      "sha256": "435cf73b1913ee47cd3f9002ebffd3f819b091118f1ebfc5a825cdb17a3b52eb"
+      "sha256": "8f2f5128133a3e099b3ff62c0e27621735a5c2142da523d22b71316fba497db4"
     },
     {
       "path": "source-lock.json",

@@ -1,6 +1,6 @@
 # TOON: how models refer to adaptations
 
-[Home](README.en.md) · [中文](TOON.md) · [Build guide](BUILD.en.md)
+[Home](../README.md) · [中文](TOON.md) · [Build guide](BUILD.en.md)
 
 TOON is structured text. Here, each model's TOON is a checklist describing components, dependencies, source paths, hardware parameters, and build inputs. Tools read it to check those records and generate catalogs or invoke a builder.
 

@@ -1,6 +1,6 @@
 # TOON：机型如何引用适配
 
-[首页](../README.md) · [English](TOON.en.md) · [构建指南](BUILD.md)
+[首页](README.zh.md) · [English](TOON.en.md) · [构建指南](BUILD.md)
 
 TOON 是结构化文本。在这里，一台机型的 TOON 就是一张清单：它描述组件、依赖、源码位置、硬件参数和构建输入。读取它的工具负责检查这些内容并生成目录或调用构建器。
 

@@ -1,6 +1,6 @@
 # Device index and signatures
 
-[Home](README.en.md) · [中文](REGISTRY.md) · [Build guide](BUILD.en.md)
+[Home](../README.md) · [中文](REGISTRY.md) · [Build guide](BUILD.en.md)
 
 The device index tells the installer which model packages are available, where to obtain them, and how to check them. Each package manifest then lists its files and hashes.
 

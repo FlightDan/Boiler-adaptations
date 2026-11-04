@@ -1,6 +1,6 @@
 # Build a device package and installer
 
-[Home](README.en.md) · [中文](BUILD.md) · [TOON guide](TOON.en.md)
+[Home](../README.md) · [中文](BUILD.md) · [TOON guide](TOON.en.md)
 
 Start with the model TOON to find components and shared resources, then use the Boiler Installer tools to prepare the source snapshot and build inputs. This page uses adaptations commit `3edd6a340b56628785f05365d62349f7d03c63eb` and installer commit `04dce422d0c4831ced6d2b9efdbd852e7b02a724`; for other versions, check their respective input locks.
 

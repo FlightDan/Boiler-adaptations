@@ -289,7 +289,7 @@ devices/oxp3.json
 docs/ADAPTATIONS.md
 docs/BUILD.en.md
 docs/BUILD.md
-docs/README.en.md
+docs/README.zh.md
 docs/REGISTRY.en.md
 docs/REGISTRY.md
 docs/RELEASE_0.1.0-layout.1.md

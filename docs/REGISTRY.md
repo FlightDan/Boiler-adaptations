@@ -1,6 +1,6 @@
 # 设备索引与签名
 
-[首页](../README.md) · [English](REGISTRY.en.md) · [构建指南](BUILD.md)
+[首页](README.zh.md) · [English](REGISTRY.en.md) · [构建指南](BUILD.md)
 
 设备索引告诉安装器有哪些机型包、从哪里获取以及如何核对。包中的 manifest 再列出具体文件和哈希。
 
