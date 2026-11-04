@@ -42,6 +42,8 @@ TOON 中的 `resources[4]{id,source}` 表示四行，每行按顺序填写资源
 3. 记录实际硬件、系统和测试情况，维护源码清单及来源锁，然后运行仓库提供的检查。生成文件通过工具更新，不手工填充哈希。
 4. 用 Boiler Installer 的快照与构建工具处理需要的输入；[构建指南](BUILD.md)列出了当前命令。
 
-适配仓库中的 `python -B scripts/common-device-sources.py write` 根据机型 TOON 更新共用引用视图和索引；用同一脚本的 `check` 检查结果。安装器的 `python -B adaptations/scripts/toon_catalog.py generate` 负责其选定目录中的机型视图，`check` 用于核对。
+适配仓库中的 `python -B scripts/common-device-sources.py write` 根据机型 TOON 更新共用引用视图和索引；用同一脚本的 `check` 检查结果。安装器的 `python -B scripts/toon_catalog.py generate` 负责其选定目录中的机型视图，`check` 用于核对。
 
 TOON 写的是需要什么；运行、维护和恢复逻辑由构建器与对应组件提供。把 TOON 用作两台机型共同的购物清单时，同一路径只应收录一份，机型专属文件分别保留。
+
+`models.toon` 的 schema 2 只列出带品牌的 `canonical_id` 和相对仓库根目录的 `source`。机型 TOON 的 `legacy_aliases` 明确保存旧指南及包标识；`device_record` 保存设备记录的其余元数据，名称和硬件匹配从 `runtime` 生成。`devices/*.json` 是旧协议视图，不会改写历史签名。运行 `python -B scripts/model-identity.py write` 更新视图，使用 `check` 验证。`resource_model` 的名称和硬件匹配由 `runtime` 投影，避免重复维护。
