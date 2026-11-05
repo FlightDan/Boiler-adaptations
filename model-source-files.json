@@ -1460,13 +1460,13 @@
     },
     {
       "path": "docs/REGISTRY.en.md",
-      "size": 2572,
-      "sha256": "106eb2dfbddfa47124cfe7640736dad383a57cb520282f41cf4e5c8ae2e7ee25"
+      "size": 2627,
+      "sha256": "2f02ba2d2dfe5ee2f18be99cddafdd4319e40bb22cf3321834d4fcf4478096c6"
     },
     {
       "path": "docs/REGISTRY.md",
-      "size": 2259,
-      "sha256": "42ec8a0d88dcfec84250980d20f6a5122a9acd3419fa8873f04287f2c3cac8de"
+      "size": 2318,
+      "sha256": "337be32c219d3a3d18fe16f641547bd8879b1fac5de209c8b8ec119b1fe4e373"
     },
     {
       "path": "docs/RELEASE_0.1.0-layout.1.md",
@@ -1475,13 +1475,13 @@
     },
     {
       "path": "docs/TOON.en.md",
-      "size": 4756,
-      "sha256": "8ffc540c753d8872c6433edcffc56fc2b865a35f16316efbad2630d9c921d354"
+      "size": 4634,
+      "sha256": "e97a34eafc0f89fedc3ccc8889d23a146ad199483850758ba917193cd784bcc7"
     },
     {
       "path": "docs/TOON.md",
-      "size": 4280,
-      "sha256": "d46121a0de8a655f98fd2e7aca0b9e48fdc2e7269057c19c0ec2e35673115024"
+      "size": 4205,
+      "sha256": "fdb54312af72a2ad8cffc3127efbf73d9bd406c9cc53ba74183082d749334347"
     },
     {
       "path": "fingerprint-source-lock.json",
@@ -1765,8 +1765,8 @@
     },
     {
       "path": "scripts/common-device-sources.py",
-      "size": 12231,
-      "sha256": "d56e114ca442d4a406898ecd7d99250d7619594f58e0abbce29c67afcefb4d0a"
+      "size": 10485,
+      "sha256": "781bd4acaaaf0946bbe09102f6a3e58e5a41573dc5166ea8628e21653bf2e93f"
     },
     {
       "path": "scripts/fingerprint_provenance.py",
@@ -1775,8 +1775,8 @@
     },
     {
       "path": "scripts/model-identity.py",
-      "size": 14132,
-      "sha256": "7b44bdba2723aeea11d196669e3184dde400390227e19186c43cc88a839f6b3c"
+      "size": 14031,
+      "sha256": "4588883cff19bdf420451f52abf42252a8650d6929844cf041b9339a7ed4a673"
     },
     {
       "path": "scripts/prepare-current-inputs.py",
@@ -1840,8 +1840,8 @@
     },
     {
       "path": "tests/test_registry.py",
-      "size": 13281,
-      "sha256": "3554bbee374f26e284454bf788acb21156652034764eb44a5c8bfbb814bc73e3"
+      "size": 13343,
+      "sha256": "c5549e5eaa92baad23b4f38a649178e4291da4c6bcd0cd758651cf9a858986a5"
     },
     {
       "path": "tests/test_x2_catalog_entrypoints.py",

@@ -13,9 +13,10 @@ The maintainer holds the signing private key. The installer verifies the index w
 
 ## Prepare an index
 
-[scripts/build-index.py](../scripts/build-index.py) accepts an existing device-package directory and checks its manifest and file inventory. Run this command from the Boiler-adaptations repository root to create a local development index; replace both paths with your own and use a new output file:
+[scripts/build-index.py](../scripts/build-index.py) accepts an existing device-package directory and checks its manifest and file inventory. Run this command from the Boiler Installer source root to create a local development index; replace both paths with your own and use a new output file:
 
 ```powershell
+$AdaptationCheckout = "ABSOLUTE_PATH_TO_ADAPTATION_CHECKOUT"
 $Package = "PATH_TO_DEVICE_PACKAGE"
 $Output = "PATH_TO_NEW_DEVELOPMENT_INDEX.json"
 python -B scripts/toon_catalog.py index-candidate --source-checkout "$AdaptationCheckout" --package "$Package" --output "$Output"

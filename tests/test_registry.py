@@ -145,7 +145,8 @@ class RegistryTests(unittest.TestCase):
             for sequence in (0,1,3):
                 with self.subTest(sequence=sequence), self.assertRaises(ValueError):
                     self.candidate(package,registry,archive,work/'candidate.json',sequence=sequence,previous_index=work/'previous.json')
-            (registry/'devices/onexplayer/oxp3.toon').write_text('{}')
+            model_path = registry/'devices/onexplayer/oxp3.toon'
+            model_path.write_bytes(model_path.read_bytes() + b'\n')
             with self.assertRaisesRegex(ValueError,'committed bytes'):
                 self.candidate(package,registry,archive,work/'candidate.json')
 

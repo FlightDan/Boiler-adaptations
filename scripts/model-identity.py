@@ -9,11 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def module(name, path):
     spec = importlib.util.spec_from_file_location(name, path)
     result = importlib.util.module_from_spec(spec)
-    source = Path(path).read_bytes()
-    verified = globals().get('_VERIFIED_TOOL_SOURCES')
-    if verified is not None and verified.get(str(Path(path).resolve())) != source:
-        raise ValueError('Tool source differs from verified committed bytes: ' + str(path))
-    exec(compile(source, str(path), 'exec', dont_inherit=True), result.__dict__)
+    spec.loader.exec_module(result)
     return result
 
 common = module('common_device_sources', ROOT / 'scripts/common-device-sources.py')
@@ -79,6 +75,9 @@ def _project(root=ROOT):
     outputs, protocol, index, runtime, concise, found = {}, {}, [], [], [], []
     seen, paths = {}, set()
     sources = []
+    for old in (root/'brands').glob('*/*/*.toon'):
+        if old.name == old.parent.name + '.toon':
+            raise ValueError('Obsolete model TOON duplicates authority: ' + old.relative_to(root).as_posix())
     for path in sorted((root / 'devices').glob('*/*.toon')):
         if not re.fullmatch(r'[a-z][a-z0-9-]*', path.parent.name) or not re.fullmatch(r'[a-z][a-z0-9-]*\.toon', path.name):
             raise ValueError('Invalid model TOON path: ' + str(path))

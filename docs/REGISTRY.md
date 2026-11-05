@@ -13,9 +13,10 @@
 
 ## 准备索引
 
-[scripts/build-index.py](../scripts/build-index.py) 接受一个已有的机型包目录，核对 manifest 和文件清单。以下命令在 Boiler-adaptations 仓库根目录运行，生成本地开发索引；把路径改成自己的实际目录和一个尚不存在的输出文件：
+[scripts/build-index.py](../scripts/build-index.py) 接受一个已有的机型包目录，核对 manifest 和文件清单。以下命令在 Boiler Installer 源码根目录运行，生成本地开发索引；把路径改成自己的实际目录和一个尚不存在的输出文件：
 
 ```powershell
+$AdaptationCheckout = "ABSOLUTE_PATH_TO_ADAPTATION_CHECKOUT"
 $Package = "PATH_TO_DEVICE_PACKAGE"
 $Output = "PATH_TO_NEW_DEVELOPMENT_INDEX.json"
 python -B scripts/toon_catalog.py index-candidate --source-checkout "$AdaptationCheckout" --package "$Package" --output "$Output"
