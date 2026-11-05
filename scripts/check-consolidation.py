@@ -95,7 +95,7 @@ def verify(root, *, old_source=None, release_assets=None):
             raise ValueError('Historical objects cannot be active build inputs')
         names.add(name)
         check_bytes(member(root, name), row)
-    required = {'brands/onexplayer/oxp3/oxp3.toon', 'brands/onexplayer/x2-mini/x2-mini.toon'}
+    required = {'devices/onexplayer/oxp3.toon', 'devices/onexplayer/x2-mini.toon'}
     if not required <= names:
         raise ValueError('Missing canonical model TOON')
     return dict(historical_files=len(rows), existing=existing, archived=archived,

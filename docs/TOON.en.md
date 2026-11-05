@@ -6,10 +6,10 @@ TOON is structured text. Here, each model's TOON is a checklist describing compo
 
 ## Start with the model files
 
-- [ONEXPLAYER 3: oxp3.toon](../brands/onexplayer/oxp3/oxp3.toon)
-- [X2 Mini / Mini PRO: x2-mini.toon](../brands/onexplayer/x2-mini/x2-mini.toon)
+- [ONEXPLAYER 3: oxp3.toon](../devices/onexplayer/oxp3.toon)
+- [X2 Mini / Mini PRO: x2-mini.toon](../devices/onexplayer/x2-mini.toon)
 
-These are the maintained model files. `models.toon`, `model-index.json`, and `common-device-sources.toon` are generated catalogs or views. The installer source snapshot generates each model's `manifest.json` from TOON; the adaptation repository's existing checker also reads that manifest to check the model guide. Change the model TOON first, then use the relevant tools to synchronize and check these views.
+These are the maintained model files. `models.toon` and `common-device-sources.toon` are generated catalogs or views. The installer source snapshot generates each model's `manifest.json` from TOON; the adaptation repository's existing checker also reads that manifest to check the model guide. Change the model TOON first, then use the relevant tools to synchronize and check these views.
 
 `complete` in the generated catalog describes the model's build-data status. Consult the separate records for installation, maintenance, recovery, and hardware tests.
 

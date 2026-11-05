@@ -192,7 +192,7 @@ def gm7() -> dict:
 
 
 def model(model_id: str, source: str, policy: dict) -> dict:
-    guide_path = str(PurePosixPath(source).parent / (model_id.split(':', 1)[1] + '.toon'))
+    guide_path = 'devices/onexplayer/' + model_id.split(':', 1)[1] + '.toon'
     guide = load(guide_path)
     value = guide.get('resource_model', {}).get('common_references')
     if not isinstance(value, dict) or load(source) != value:
@@ -226,7 +226,7 @@ def main() -> None:
     action = parser.parse_args().action
     if action == 'write':
         for model_id, source in MODELS.items():
-            guide_path = str(PurePosixPath(source).parent / (model_id.split(':', 1)[1] + '.toon'))
+            guide_path = 'devices/onexplayer/' + model_id.split(':', 1)[1] + '.toon'
             value = load(guide_path).get('resource_model', {}).get('common_references')
             if not isinstance(value, dict): raise ValueError('missing model common references')
             relative(source).write_text(toon_format.dumps(value) + '\n', encoding='utf-8', newline='\n')
