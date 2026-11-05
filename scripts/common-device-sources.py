@@ -183,11 +183,13 @@ def main() -> None:
     parser.add_argument('action', choices=('check', 'write'))
     action = parser.parse_args().action
     if action == 'write':
-        for model_id, source in MODELS.items():
-            guide_path = 'devices/onexplayer/' + model_id.split(':', 1)[1] + '.toon'
-            value = load(guide_path).get('resource_model', {}).get('common_references')
-            if not isinstance(value, dict): raise ValueError('missing model common references')
-            relative(source).write_text(toon_format.dumps(value) + '\n', encoding='utf-8', newline='\n')
+        import importlib.util
+        spec = importlib.util.spec_from_file_location('model_identity', Path(__file__).with_name('model-identity.py'))
+        identity = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(identity)
+        views = identity.views(ROOT)
+        for source in MODELS.values():
+            relative(source).write_bytes(views[source])
     output = json.dumps(build(), ensure_ascii=False, indent=2) + '\n'
     path = ROOT / INDEX
     if action == 'write':

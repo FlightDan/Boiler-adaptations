@@ -3,6 +3,8 @@ import importlib.util
 import json
 import shutil
 import subprocess
+import sys
+import types
 import tempfile
 import unittest
 from pathlib import Path
@@ -15,6 +17,18 @@ builder=importlib.util.module_from_spec(spec); spec.loader.exec_module(builder)
 
 class MultiIndexTests(unittest.TestCase):
     def setUp(self):
+        saved_protocol = {name: module for name, module in sys.modules.items()
+                          if name == 'protocol' or name.startswith('protocol.')}
+        for name in saved_protocol:
+            del sys.modules[name]
+
+        def restore_protocol():
+            for name in list(sys.modules):
+                if name == 'protocol' or name.startswith('protocol.'):
+                    del sys.modules[name]
+            sys.modules.update(saved_protocol)
+
+        self.addCleanup(restore_protocol)
         self.tmp=tempfile.TemporaryDirectory(); self.addCleanup(self.tmp.cleanup)
         self.work=Path(self.tmp.name); self.repo=self.work/'repo'; (self.repo/'devices').mkdir(parents=True)
         inventory=json.loads((ROOT/'model-source-files.json').read_bytes())
@@ -63,6 +77,12 @@ class MultiIndexTests(unittest.TestCase):
         with mock.patch.object(builder,'ROOT',self.repo): return builder.build_models(self.models,self.work/'out.json',**args)
     def change(self, index, callback):
         folder,archive,_=self.models[index]; path=folder/'manifest.json'; obj=json.loads(path.read_text()); callback(obj); path.write_text(json.dumps(obj)); self.zip(folder,archive)
+    def test_preloaded_protocol_is_rejected(self):
+        sys.modules['protocol'] = types.ModuleType('protocol')
+        with self.assertRaisesRegex(ValueError, 'Protocol already loaded'):
+            self.run_build()
+        self.assertFalse((self.work/'out.json').exists())
+
     def test_two_models_preserve_history_and_bind_bytes(self):
         result=self.run_build(); self.assertEqual(result['devices'],['devices/oxp3.json','devices/x2-mini.json']); self.assertEqual(result['packages'][0],self.old); self.assertEqual(result['revocations'],self.previous['revocations']); self.assertEqual(result['sequence'],2)
         oxp3,x2=result['packages'][1:]

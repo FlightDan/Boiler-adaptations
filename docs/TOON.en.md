@@ -42,7 +42,7 @@ In TOON, `resources[4]{id,source}` means four rows, each containing a resource I
 3. Record the actual hardware, system, and tests; maintain source inventories and locks, then run the repository checks. Generate derived files with the tools rather than entering hashes by hand.
 4. Use Boiler Installer's snapshot and build tools for the required inputs; the [build guide](BUILD.en.md) lists the current commands.
 
-In the adaptations repository, `python -B scripts/common-device-sources.py write` updates the shared-reference views and index from the model TOONs; use the same script's `check` action to verify them. In the installer, `python -B scripts/toon_catalog.py generate --catalog-root <adaptation-checkout>` updates model views in the selected catalog, and `check` verifies them.
+From the installer root, run `python -B scripts/toon_catalog.py generate --catalog-root <adaptation-checkout>` to update the model catalog and its shared-reference views. Use `check` through the same entrypoint to verify them.
 
 TOON describes what is needed; builders and components provide execution, maintenance, and recovery. When using two model TOONs as a shared shopping list, include a shared path once and retain each model's own files.
 

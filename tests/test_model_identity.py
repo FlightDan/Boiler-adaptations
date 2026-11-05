@@ -103,6 +103,10 @@ class IdentityTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     identity.generate(self.root)
                 extra.unlink()
+        duplicate = self.root/'brands/onexplayer/oxp3/oxp3.toon'
+        duplicate.write_bytes((self.root/'devices/onexplayer/oxp3.toon').read_bytes())
+        with self.assertRaises(ValueError):
+            identity.generate(self.root)
 
     def test_resource_projection_and_missing_source(self):
         path = self.root/'devices/onexplayer/oxp3.toon'

@@ -42,7 +42,7 @@ TOON 中的 `resources[4]{id,source}` 表示四行，每行按顺序填写资源
 3. 记录实际硬件、系统和测试情况，维护源码清单及来源锁，然后运行仓库提供的检查。生成文件通过工具更新，不手工填充哈希。
 4. 用 Boiler Installer 的快照与构建工具处理需要的输入；[构建指南](BUILD.md)列出了当前命令。
 
-适配仓库中的 `python -B scripts/common-device-sources.py write` 根据机型 TOON 更新共用引用视图和索引；用同一脚本的 `check` 检查结果。安装器的 `python -B scripts/toon_catalog.py generate --catalog-root <adaptation-checkout>` 负责其选定目录中的机型视图，`check` 用于核对。
+在安装器根目录运行 `python -B scripts/toon_catalog.py generate --catalog-root <adaptation-checkout>`，统一更新机型目录与共用引用视图。用同一入口的 `check` 核对。
 
 TOON 写的是需要什么；运行、维护和恢复逻辑由构建器与对应组件提供。把 TOON 用作两台机型共同的购物清单时，同一路径只应收录一份，机型专属文件分别保留。
 

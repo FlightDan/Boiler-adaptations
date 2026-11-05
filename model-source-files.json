@@ -1440,13 +1440,13 @@
     },
     {
       "path": "docs/BUILD.en.md",
-      "size": 7863,
-      "sha256": "11306b2d9fd4476c48e5c8f58809ed42c26eb9a2d388a34d87015bb6aab02c3f"
+      "size": 7629,
+      "sha256": "681e1c478da77788c5859a7af659ac4bc50be83d21581741083bf932440f33d1"
     },
     {
       "path": "docs/BUILD.md",
-      "size": 7310,
-      "sha256": "09fabce9d36d0b6502c8dea68ee7494c149ced3ae98903513f2ebe8f0000b51e"
+      "size": 7237,
+      "sha256": "b5bb2d957b18240fcee54d52d9f55cf79ec0c61b18db9cd872e2a69511f3e305"
     },
     {
       "path": "docs/FINGERPRINT_OVERLAY_AUTHORITY_PREVIEW_20261104.md",
@@ -1475,13 +1475,13 @@
     },
     {
       "path": "docs/TOON.en.md",
-      "size": 4634,
-      "sha256": "e97a34eafc0f89fedc3ccc8889d23a146ad199483850758ba917193cd784bcc7"
+      "size": 4487,
+      "sha256": "d0918a83de7c0172b0eb2ea850d6ae80c35f8c6a9812066f5a4a9cee75ffb8bf"
     },
     {
       "path": "docs/TOON.md",
-      "size": 4205,
-      "sha256": "fdb54312af72a2ad8cffc3127efbf73d9bd406c9cc53ba74183082d749334347"
+      "size": 4075,
+      "sha256": "c533985dab0472701dd509c628ae578ea1a906cf0ce14ae72e761230294ab956"
     },
     {
       "path": "fingerprint-source-lock.json",
@@ -1765,8 +1765,8 @@
     },
     {
       "path": "scripts/common-device-sources.py",
-      "size": 10485,
-      "sha256": "781bd4acaaaf0946bbe09102f6a3e58e5a41573dc5166ea8628e21653bf2e93f"
+      "size": 10443,
+      "sha256": "f87fa26e47fff98c5912c528c58a129e5fdfffaa02326b1f1e2daa623a5c8078"
     },
     {
       "path": "scripts/fingerprint_provenance.py",
@@ -1830,13 +1830,13 @@
     },
     {
       "path": "tests/test_index_models.py",
-      "size": 13614,
-      "sha256": "57999b63bf221321ddf62d65f4c69471446151983ce9fe8152017a662ae46a25"
+      "size": 14425,
+      "sha256": "8b852676ed6358e8dc7ec4a199a87e44b08ad5e6ac9c0f77f653861e6c834c41"
     },
     {
       "path": "tests/test_model_identity.py",
-      "size": 12935,
-      "sha256": "160aa032e3f3c4e00d568849c539498e372ff24c2212fc74a9b5dc565f600319"
+      "size": 13172,
+      "sha256": "1efa704509a1fa0fe1cc0d7d560bc6b190ee65ec1985d2c57bcecc6a97c1a5a5"
     },
     {
       "path": "tests/test_registry.py",
