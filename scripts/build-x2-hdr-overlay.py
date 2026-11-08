@@ -49,6 +49,13 @@ fi"""
     return replace_once(text, old, '# Use the accepted base KWin 1100/472 mapping.').encode('utf-8')
 
 
+def desktop_options(raw):
+    text = raw.decode('utf-8')
+    text = replace_once(text, 'KDE \u684c\u9762 HDR \u6620\u5c04\u4e0e\u6062\u590d\uff08X2mini \u5b89\u5168\u8bd5\u7528\uff09', 'KDE \u684c\u9762 HDR \u6620\u5c04\u4e0e\u6062\u590d')
+    text = replace_once(text, 'KDE desktop HDR mapping and recovery (X2mini safe trial)', 'KDE desktop HDR mapping and recovery')
+    return text.encode('utf-8')
+
+
 def desktop_trial(raw):
     text = raw.decode('utf-8')
     return replace_once(text, "    if args.device_check:\n", "    if args.install_launcher or not any((args.device_check, args.uninstall_launcher, args.recover_startup, args.watchdog)):\n        raise RuntimeError('X2 Mini HDR trial is retired; use the standard HDR controls')\n    if args.device_check:\n").encode('utf-8')
@@ -113,6 +120,7 @@ def build(base, output):
         doc['acceptance'] = '1100/472 software mapping; physical display acceptance is separate.'
         return encoded(doc)
     transform('components/hdr/profile.json', profile)
+    transform('components/options.json', desktop_options)
     transform('components/desktop-hdr/hdr_trial.py', desktop_trial)
     transform('components/desktop-hdr/launch.sh', desktop_launch)
     transform('integration/desktop-hdr/source/launch-stable.sh', desktop_launch)

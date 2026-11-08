@@ -1,4 +1,5 @@
 import importlib.util
+import json
 import os
 from pathlib import Path
 import tempfile
@@ -28,6 +29,14 @@ class OverlayRegression(unittest.TestCase):
             self.assertNotIn(b'export KWIN_X2MINI_HDR_PROFILE', launch)
             for name in ('components/hdr/upstream.lua', 'components/hdr/generate.py', 'maintenance/app/oxp3_maintenance/components.py'):
                 self.assertNotIn(overlay.LEGACY + name, files)
+            options_name = overlay.LEGACY + 'components/options.json'
+            original_options = json.loads((Path(base) / options_name).read_bytes())
+            changed_options = json.loads(files[options_name])
+            old_row = next(row for row in original_options['repairs'] if row['id'] == 'desktop-hdr')
+            new_row = next(row for row in changed_options['repairs'] if row['id'] == 'desktop-hdr')
+            self.assertEqual(new_row['en'], 'KDE desktop HDR mapping and recovery')
+            old_row['en'] = new_row['en']; old_row['zh'] = new_row['zh']
+            self.assertEqual(original_options, changed_options)
             trial = files[overlay.LEGACY + 'components/desktop-hdr/hdr_trial.py']
             self.assertIn(b"args.install_launcher or not any((args.device_check, args.uninstall_launcher, args.recover_startup, args.watchdog))", trial)
             self.assertIn(b"recover_startup(journal, home / '.config/kwinoutputconfig.json')", trial)

@@ -16,7 +16,7 @@ import zipfile
 
 BASE_ANCHOR = 'cb39c94bbe7eb351221c380ebdb7a875a097b52c17e90bfb0f1edc22b12ab684'
 BASE_VERSION = '0.1.0-localtest.20261030.8'
-VERSION = '2026.11.8.1'
+VERSION = '2026.11.8.3'
 MODEL = 'guide:x2-mini'
 IDENTITY = 'device:x2-mini'
 REUSE_RECORD = 'x2-full-reuse.json'
@@ -24,7 +24,7 @@ GENERATED = 'payload/legacy/maintenance/manifest.json'
 BRIDGE_PATHS = {'adapter.py', 'maintenance_adapter.py', 'scripts/apply.sh',
                 'scripts/verify.sh', 'scripts/restore.sh', 'scripts/maintenance.sh',
                 'upstream-repairs/speaker/speaker_route.py', 'upstream-repairs/xevmafix/load.py'}
-HDR_SHARED_PATHS = {'payload/legacy/components/profile.json',
+HDR_SHARED_PATHS = {'payload/legacy/components/options.json', 'payload/legacy/components/profile.json',
     'payload/legacy/components/controls/profile.json',
     'payload/legacy/components/x2mini_hdr_device.py',
     'payload/legacy/maintenance/app/oxp3_maintenance/components.py',
