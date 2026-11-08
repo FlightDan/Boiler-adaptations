@@ -86,8 +86,8 @@ class MultiIndexTests(unittest.TestCase):
     def test_two_models_preserve_history_and_bind_bytes(self):
         result=self.run_build(); self.assertEqual(result['devices'],['devices/oxp3.json','devices/x2-mini.json']); self.assertEqual(result['packages'][0],self.old); self.assertEqual(result['revocations'],self.previous['revocations']); self.assertEqual(result['sequence'],2)
         oxp3,x2=result['packages'][1:]
-        self.assertEqual(x2['name']['en'],'ONEXPLAYER X2 Mini / Mini PRO')
-        self.assertEqual(x2['hardware_matching'],{'mode':'advisory-exact-dmi-v1','pairs':[{'manufacturer':'ONE-NETBOOK','model':'ONEXPLAYER X2 Mini'},{'manufacturer':'ONE-NETBOOK','model':'ONEXPLAYER X2 Mini PRO'}]})
+        self.assertEqual(x2['name']['en'],'ONEXPLAYER X2 Mini')
+        self.assertEqual(x2['hardware_matching'],{'mode':'advisory-exact-dmi-v1','pairs':[{'manufacturer': 'ONE-NETBOOK', 'model': 'ONEXPLAYER X2 Mini'}, {'manufacturer': 'ONE-NETBOOK', 'model': 'ONEXPLAYER X2Mini'}]})
         self.assertIn('physical hardware',x2['notes'][0])
         for entry,model in ((oxp3,'oxp3'),(x2,'x2-mini')):
             self.assertEqual(entry['source_url'],'https://github.com/FlightDan/Boiler-adaptations/tree/'+self.commit+'/brands/onexplayer/'+model)

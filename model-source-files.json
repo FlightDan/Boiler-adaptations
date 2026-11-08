@@ -15,8 +15,8 @@
     },
     {
       "path": "ADAPTATIONS.md",
-      "size": 2838,
-      "sha256": "ecc0c9fb0cf9fa45a7329340a156b89101bdb75bb7fef29ebec06aef27f1c052"
+      "size": 2827,
+      "sha256": "4457282104a33fba77f688537d29272929558e20a9f271bc0ba393edb85ca593"
     },
     {
       "path": "LICENSE",
@@ -35,8 +35,8 @@
     },
     {
       "path": "adaptations.json",
-      "size": 1301,
-      "sha256": "4dd8a98e707fe947d29e70e879f5dfd1dea3742736ff6c657150f7113040c9a1"
+      "size": 1274,
+      "sha256": "58f3803db1a09780016a6d9cd728d91db8b6a34d7c36cac8deee19c64889ef47"
     },
     {
       "path": "brands/onexplayer/common/battery/battery-plugin-index.js",
@@ -730,13 +730,13 @@
     },
     {
       "path": "brands/onexplayer/x2-mini/manifest.json",
-      "size": 16174,
-      "sha256": "95adc68b5df57a5e56e14aaebd924379dd301bef040f6e3f0b4598e5dadae2ba"
+      "size": 16183,
+      "sha256": "646b936335f4a4653077d6a4a5f5ca12427b0587148003b199ca05a83a28d171"
     },
     {
       "path": "brands/onexplayer/x2-mini/model.md",
-      "size": 9081,
-      "sha256": "797a0a46ec6d672c7f450093fb1923700dc75df3780b98367ffb6a186967c741"
+      "size": 9055,
+      "sha256": "eb7512dc8d57f56219a27c57e4bf8f61e8113f5d4031128ea95e45cc0cb3165d"
     },
     {
       "path": "brands/onexplayer/x2-mini/scripts/desktop-hdr/hdr_trial.py",
@@ -1430,13 +1430,13 @@
     },
     {
       "path": "devices/onexplayer/x2-mini.toon",
-      "size": 17327,
-      "sha256": "12f72f4b7bbe71ceb5141a2b85768d86db1f4c2575428d169cc3fb46bb733bf2"
+      "size": 17310,
+      "sha256": "cdcdcbe444b342d68510b7e0915fa59f5b7b201ee2217930d9fc2b2aaf23d3f8"
     },
     {
       "path": "docs/ADAPTATIONS.md",
-      "size": 3017,
-      "sha256": "6bb7ff5bb57f2f757a34c8547ddc0e800b348e73052515622752519280f46349"
+      "size": 3006,
+      "sha256": "87d4f7971b5d9bb73ddcd9c76fa61b8e9973a7374b163d571bbd6b1f6b939b94"
     },
     {
       "path": "docs/BUILD.en.md",
@@ -1475,13 +1475,13 @@
     },
     {
       "path": "docs/TOON.en.md",
-      "size": 4487,
-      "sha256": "d0918a83de7c0172b0eb2ea850d6ae80c35f8c6a9812066f5a4a9cee75ffb8bf"
+      "size": 4476,
+      "sha256": "e23f38525f339747fd44fecd0d8a68c25f4dbd1b4aee531b232aae9fe8193baa"
     },
     {
       "path": "docs/TOON.md",
-      "size": 4075,
-      "sha256": "c533985dab0472701dd509c628ae578ea1a906cf0ce14ae72e761230294ab956"
+      "size": 4064,
+      "sha256": "176fcc7867279d9fd13b8179fa4d8e415779a68d830583669fcb0af2556641f9"
     },
     {
       "path": "fingerprint-source-lock.json",
@@ -1755,13 +1755,13 @@
     },
     {
       "path": "scripts/build-x2-complete.py",
-      "size": 18332,
-      "sha256": "a92d4161170209898b5d23d1b3d1bbc953ee632617a5a4cc2f815b2e9879e360"
+      "size": 18801,
+      "sha256": "755983371ba811a4c06217454b10183ee550c73bfdba0c12dda88455d46dcae5"
     },
     {
       "path": "scripts/build-x2-hdr-overlay.py",
-      "size": 15538,
-      "sha256": "0fbeb08adfcbc40b7ccab5a0d3f806eea79354cfcc53f2c1c7dac57aeced3167"
+      "size": 9756,
+      "sha256": "99ab7e7ad651dc0d7e32431f2be165461381e9bca494577fad52feba58cb18c3"
     },
     {
       "path": "scripts/common-device-sources.py",
@@ -1830,13 +1830,13 @@
     },
     {
       "path": "tests/test_index_models.py",
-      "size": 14425,
-      "sha256": "8b852676ed6358e8dc7ec4a199a87e44b08ad5e6ac9c0f77f653861e6c834c41"
+      "size": 14416,
+      "sha256": "31c4a5342a1b1ba6b64ef1cae58ac4164d83f7f83979154c5154a599a7acdf30"
     },
     {
       "path": "tests/test_model_identity.py",
-      "size": 13172,
-      "sha256": "1efa704509a1fa0fe1cc0d7d560bc6b190ee65ec1985d2c57bcecc6a97c1a5a5"
+      "size": 13791,
+      "sha256": "4e2c99140e44d636d9b75d1407e7fb617f13a27eb5790878401554c3c2d54153"
     },
     {
       "path": "tests/test_registry.py",
@@ -1847,6 +1847,11 @@
       "path": "tests/test_x2_catalog_entrypoints.py",
       "size": 1741,
       "sha256": "d698d0e43212bcd16487ffc5deb297459109a6395bd316ee8b4cdd7403ee9f7e"
+    },
+    {
+      "path": "tests/test_x2_hdr_overlay.py",
+      "size": 3542,
+      "sha256": "8aa0d06d8e322b7a22785563120a1c50d210ad62340c13ac7acd1bb9c2a57c9d"
     },
     {
       "path": "toon-parser-lock.json",
