@@ -27,7 +27,7 @@
 | split-lock | Split-lock 报告洪泛修复 · 需要重启 | 条件适用 | 完整复用 OXP3 公共适配；系统与实际接口依赖独立检查，机型不匹配只提示。 |
 | wifi | BE201 无线 c106 与蓝牙固件 | 条件适用 | Source reference only; verify the actual wireless device and firmware compatibility. |
 | manager | SteamOS Manager 状态与错误修复 | 推荐 | 完整复用 OXP3 公共适配；系统与实际接口依赖独立检查，机型不匹配只提示。 |
-| native-tdp | 原生 TDP 10–40W 控制 | 条件适用 | 完整复用 OXP3 公共适配；系统与实际接口依赖独立检查，机型不匹配只提示；依赖：manager |
+| native-tdp | 原生 TDP 10–40W 控制 | 条件适用 | 现有机型包沿用 10–40 W；X2 Mini + Arc G3 Extreme 的 8 W 源码已实测，安装及维护载荷待接入；依赖：manager |
 | overlay | CPU/GPU/APU 功耗与 PVRAM 叠加层 | 可选 | 完整复用 OXP3 公共适配；系统与实际接口依赖独立检查，机型不匹配只提示。 |
 | fan-driver | OXP3 风扇与充电接口驱动 | 条件适用 | 完整复用 OXP3 公共适配；系统与实际接口依赖独立检查，机型不匹配只提示。 |
 | oxp3-fan | OXP3 风扇 · 自动与曲线 | 可选 | 完整复用 OXP3 公共适配；系统与实际接口依赖独立检查，机型不匹配只提示；依赖：fan-driver、decky |

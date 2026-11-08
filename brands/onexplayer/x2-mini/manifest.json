@@ -252,10 +252,11 @@
         "manager"
       ],
       "sources": [
-        "brands/onexplayer/oxp3/scripts/controls/rapl/provider.py"
+        "brands/onexplayer/oxp3/scripts/controls/rapl/provider.py",
+        "brands/onexplayer/x2-mini/bridge/tdp_sources.py"
       ],
       "status": "shared_oxp3_implementation",
-      "notes": "完整复用 OXP3 公共适配；系统与实际接口依赖独立检查，机型不匹配只提示。"
+      "notes": "现有机型包沿用 10–40 W；X2 Mini + Arc G3 Extreme 的 8 W 源码已实测，安装及维护载荷待接入。"
     },
     {
       "id": "overlay",

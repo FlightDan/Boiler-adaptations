@@ -714,6 +714,11 @@
       "sha256": "d14b0cc281f9f29ce2faf587d02aab384d7beb98dc7c0f071114a05e2a887c6b"
     },
     {
+      "path": "brands/onexplayer/x2-mini/bridge/tdp_sources.py",
+      "size": 2952,
+      "sha256": "90cee1d2de7089fcbfdff453baeef09760377156b23882abeaf0d2754f57c85a"
+    },
+    {
       "path": "brands/onexplayer/x2-mini/common-device-sources.toon",
       "size": 561,
       "sha256": "f7b30feaf31882bde8dc6465bc7322342306ee4762c94e796a6d89458a247686"
@@ -730,13 +735,13 @@
     },
     {
       "path": "brands/onexplayer/x2-mini/manifest.json",
-      "size": 16183,
-      "sha256": "646b936335f4a4653077d6a4a5f5ca12427b0587148003b199ca05a83a28d171"
+      "size": 16258,
+      "sha256": "7281db8d68cbb09011002695a7e062882707cde5f7066f9502b5415b2e4bb838"
     },
     {
       "path": "brands/onexplayer/x2-mini/model.md",
-      "size": 9055,
-      "sha256": "eb7512dc8d57f56219a27c57e4bf8f61e8113f5d4031128ea95e45cc0cb3165d"
+      "size": 9071,
+      "sha256": "2afa04e4e79a7eaedf5a093b9f6d4110184b950db3cd4379a6a235008e50b55b"
     },
     {
       "path": "brands/onexplayer/x2-mini/scripts/desktop-hdr/hdr_trial.py",
@@ -1430,8 +1435,8 @@
     },
     {
       "path": "devices/onexplayer/x2-mini.toon",
-      "size": 17310,
-      "sha256": "cdcdcbe444b342d68510b7e0915fa59f5b7b201ee2217930d9fc2b2aaf23d3f8"
+      "size": 17374,
+      "sha256": "816b4f04cec42b823bc8167b6dca058a02eeb05060d9a8ed854df2330a8f6b06"
     },
     {
       "path": "docs/ADAPTATIONS.md",
@@ -1699,6 +1704,11 @@
       "sha256": "0df9fbd4289a890db80e84e3a8d5036bb79129f851de4d83aed5360ddbb7fe7b"
     },
     {
+      "path": "records/x2-mini-g3e-tdp-20261108.md",
+      "size": 1173,
+      "sha256": "bf5298f2a5d62b3ca22be517e402378524e0cf7c3de20e5d6fddb7562faa2181"
+    },
+    {
       "path": "resource-build-inputs.json",
       "size": 11504,
       "sha256": "727e3b51d67e6967fa00a732f7f39d35a2fa9be372c681f9b2ccaac7ade4ef5c"
@@ -1852,6 +1862,11 @@
       "path": "tests/test_x2_hdr_overlay.py",
       "size": 3542,
       "sha256": "8aa0d06d8e322b7a22785563120a1c50d210ad62340c13ac7acd1bb9c2a57c9d"
+    },
+    {
+      "path": "tests/test_x2_tdp_sources.py",
+      "size": 2443,
+      "sha256": "0984ec82a0c205768f9504c4bbe1bb53ce6353812901d3f766ee4b17351b757e"
     },
     {
       "path": "toon-parser-lock.json",
