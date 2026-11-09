@@ -420,8 +420,8 @@
     },
     {
       "path": "brands/onexplayer/oxp3/manifest.json",
-      "size": 13775,
-      "sha256": "d5ed4e3628681504e248b964a0cfd504dff42317c4307f1368610af1836b8ab1"
+      "size": 13872,
+      "sha256": "c2355209595963c6c0b4b26c392f340175be66760b095b762b9dd07b22c3f85f"
     },
     {
       "path": "brands/onexplayer/oxp3/model.md",
@@ -725,18 +725,18 @@
     },
     {
       "path": "brands/onexplayer/x2-mini/current/fingerprint/69-boiler-x2-fingerprint.rules",
-      "size": 356,
-      "sha256": "808e72d3f63ed9453374f70510a8641f55a367dfa805adb3f89d895244e3668d"
+      "size": 1520,
+      "sha256": "72f6699907d549caa7123a3dff5954f62a048a9ce0b522588392841e2620c5b6"
     },
     {
       "path": "brands/onexplayer/x2-mini/manifest.json",
-      "size": 16447,
-      "sha256": "d2247ff7ef1ae84769bfaa79e425e00550ea89f3a8c2664611da44fe68cb4a6d"
+      "size": 16631,
+      "sha256": "02c55d7ab9187e4a2ae71990ba47eac6d96b3ffed597bd7a736023ffb1de816d"
     },
     {
       "path": "brands/onexplayer/x2-mini/model.md",
-      "size": 9286,
-      "sha256": "b509b2db7a06c969dc7f988d7c4a8cc3144bb50df027e3a6e8440a36601ad424"
+      "size": 9373,
+      "sha256": "79c65fc93e4f5083e22bcaedb9d2dbb8dd01e0a9edb4fb12b3aef244fb391baf"
     },
     {
       "path": "brands/onexplayer/x2-mini/scripts/desktop-hdr/hdr_trial.py",
@@ -857,6 +857,16 @@
       "path": "common/fingerprint/bridge/plugin.json",
       "size": 111,
       "sha256": "53e738e0537c26000f51a6937ac600c30633666cc6d94a6ff7067c24a09eefb7"
+    },
+    {
+      "path": "common/fingerprint/kde/README.md",
+      "size": 4539,
+      "sha256": "cb0ea91640f446c89fae2f1337dceb3ac67591718ae787c9267c91f33620536a"
+    },
+    {
+      "path": "common/fingerprint/kde/install-kde-pam.py",
+      "size": 7020,
+      "sha256": "78dd2617e135b57b93650c7c10834920729dbee7373db9438e35381df872eebb"
     },
     {
       "path": "common/fingerprint/providers/bf63112/source.toon",
@@ -1440,13 +1450,13 @@
     },
     {
       "path": "devices/onexplayer/oxp3.toon",
-      "size": 20958,
-      "sha256": "7347d086d4aeca624eac14ec26153aeaf57c4f5896d99ae37ab5473b7a02f34c"
+      "size": 21033,
+      "sha256": "1d43fef9bc172f53fd56ff37303f13433741140863b610a133f1537272bbdfbe"
     },
     {
       "path": "devices/onexplayer/x2-mini.toon",
-      "size": 17546,
-      "sha256": "7f7bcd8f38f0b36a81147d860e65810076cf7c10d8d43cbf6dee96d7567d6501"
+      "size": 17708,
+      "sha256": "55f15236dbf44c42d75ec75d99391fd146967a80746ab13a93a8a9e046eff985"
     },
     {
       "path": "docs/ADAPTATIONS.md",
@@ -1500,8 +1510,8 @@
     },
     {
       "path": "fingerprint-source-lock.json",
-      "size": 2604,
-      "sha256": "9f42a57dc5bd823e02d85b390a82780be8b937ad853215988ca39ea0b2e42232"
+      "size": 2606,
+      "sha256": "de8b96986ab963a8298ad0d6b99b779f07b08311aa1a63b69b268504e379cc75"
     },
     {
       "path": "licenses/GPL-2.0.txt",
@@ -1542,6 +1552,11 @@
       "path": "records/migrations/fingerprint-dual-libfprint-20261109.md",
       "size": 5354,
       "sha256": "df31fc7b2e71bc9629d63d38a707233d750c92be4906a41936aa17d76550c74a"
+    },
+    {
+      "path": "records/migrations/fingerprint-kde-unlock-20261110.md",
+      "size": 5064,
+      "sha256": "b674c9a8b37e7c5826922aeb44e120514bce36a61747f97bedea34e90bc76590"
     },
     {
       "path": "records/migrations/fingerprint-provider-separation-20261108.md",
@@ -1847,6 +1862,11 @@
       "path": "tests/test_common_device_sources.py",
       "size": 4839,
       "sha256": "1685259401f90040500738131e5f81d7d1c3aa9e8aca737098cc98f0f483c7ed"
+    },
+    {
+      "path": "tests/test_fingerprint_kde_pam.py",
+      "size": 6239,
+      "sha256": "32c09cb1b77917524016c46a73a51378a4c8e8c6f22bc7e2c389df980975d299"
     },
     {
       "path": "tests/test_fingerprint_overlay.py",
