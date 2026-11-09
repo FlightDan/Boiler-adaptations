@@ -90,7 +90,7 @@
       "default": false,
       "dependencies": [],
       "sources": [
-        "brands/onexplayer/oxp3/scripts/integration.py"
+        "brands/onexplayer/x2-mini/scripts/integration.py"
       ],
       "status": "shared_oxp3_implementation",
       "notes": "完整复用 OXP3 公共适配；系统与实际接口依赖独立检查，机型不匹配只提示。"
@@ -102,7 +102,7 @@
       "default": false,
       "dependencies": [],
       "sources": [
-        "brands/onexplayer/oxp3/scripts/integration.py",
+        "brands/onexplayer/x2-mini/scripts/integration.py",
         "brands/onexplayer/oxp3/scripts/flathub.flatpakrepo"
       ],
       "status": "shared_oxp3_implementation",
@@ -144,7 +144,7 @@
       "default": false,
       "dependencies": [],
       "sources": [
-        "brands/onexplayer/oxp3/scripts/integration.py"
+        "brands/onexplayer/x2-mini/scripts/integration.py"
       ],
       "status": "shared_oxp3_implementation",
       "notes": "完整复用 OXP3 公共适配；系统与实际接口依赖独立检查，机型不匹配只提示。"
@@ -198,7 +198,7 @@
       "default": false,
       "dependencies": [],
       "sources": [
-        "brands/onexplayer/oxp3/scripts/integration.py"
+        "brands/onexplayer/x2-mini/scripts/integration.py"
       ],
       "status": "shared_oxp3_implementation",
       "notes": "完整复用 OXP3 公共适配；系统与实际接口依赖独立检查，机型不匹配只提示。"
@@ -246,7 +246,7 @@
       "default": false,
       "dependencies": [],
       "sources": [
-        "brands/onexplayer/oxp3/scripts/integration.py",
+        "brands/onexplayer/x2-mini/scripts/integration.py",
         "brands/onexplayer/oxp3/scripts/controls/compatibility.py"
       ],
       "status": "shared_oxp3_implementation",
@@ -286,7 +286,7 @@
       "default": false,
       "dependencies": [],
       "sources": [
-        "brands/onexplayer/oxp3/scripts/integration.py"
+        "brands/onexplayer/x2-mini/scripts/integration.py"
       ],
       "status": "shared_oxp3_implementation",
       "notes": "完整复用 OXP3 公共适配；系统与实际接口依赖独立检查，机型不匹配只提示。"
@@ -301,7 +301,7 @@
         "decky"
       ],
       "sources": [
-        "brands/onexplayer/oxp3/scripts/integration.py"
+        "brands/onexplayer/x2-mini/scripts/integration.py"
       ],
       "status": "shared_oxp3_implementation",
       "notes": "完整复用 OXP3 公共适配；系统与实际接口依赖独立检查，机型不匹配只提示。"
@@ -331,7 +331,7 @@
         "decky"
       ],
       "sources": [
-        "brands/onexplayer/oxp3/scripts/integration.py"
+        "brands/onexplayer/x2-mini/scripts/integration.py"
       ],
       "status": "shared_oxp3_implementation",
       "notes": "完整复用 OXP3 公共适配；系统与实际接口依赖独立检查，机型不匹配只提示。"

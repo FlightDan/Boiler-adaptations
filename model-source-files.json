@@ -730,8 +730,8 @@
     },
     {
       "path": "brands/onexplayer/x2-mini/manifest.json",
-      "size": 16973,
-      "sha256": "8577b68d49819bbe3afe9236b3f388be408e7328bf727f7a9fe4b0bd8914adb5"
+      "size": 16997,
+      "sha256": "f80e5479ddae0619340c5f30c7e0f8dddf2e0899ce142980d835c013b5e19aa7"
     },
     {
       "path": "brands/onexplayer/x2-mini/model.md",
@@ -762,6 +762,11 @@
       "path": "brands/onexplayer/x2-mini/scripts/desktop-hdr/x2mini_device.py",
       "size": 39391,
       "sha256": "92460af960e53974a603018af396475a82c151eb85a0d40f7e99b95e1846ac42"
+    },
+    {
+      "path": "brands/onexplayer/x2-mini/scripts/integration.py",
+      "size": 57360,
+      "sha256": "08be17862b5c383bd9560704ada2a8daae0e9a0807a90a749776445679a5d2ff"
     },
     {
       "path": "common-device-source-index.json",
@@ -1460,8 +1465,8 @@
     },
     {
       "path": "devices/onexplayer/x2-mini.toon",
-      "size": 18006,
-      "sha256": "1c1e5009715d76627a08d2f6f31919d0f9409c279f461a0b9d1cc592844e3774"
+      "size": 18030,
+      "sha256": "7dae61f305ccfb456252761c5f2c44c0707aed80e16a51e1262d653802b3e023"
     },
     {
       "path": "docs/ADAPTATIONS.md",
@@ -1840,8 +1845,8 @@
     },
     {
       "path": "source-files.txt",
-      "size": 53263,
-      "sha256": "58b90d0284ca3121550d6e77616d5a5bb6a7917af32bb5fc89da2e60118b9431"
+      "size": 53312,
+      "sha256": "20768213a3bcde363bb0f4073585ca51748a01b5e4e87f7409dd50a13d1dc86d"
     },
     {
       "path": "source-lock.json",

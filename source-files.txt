@@ -151,6 +151,7 @@ brands/onexplayer/x2-mini/scripts/desktop-hdr/hdr_trial.py
 brands/onexplayer/x2-mini/scripts/desktop-hdr/install-x2mini-hdr.sh
 brands/onexplayer/x2-mini/scripts/desktop-hdr/launch.sh
 brands/onexplayer/x2-mini/scripts/desktop-hdr/x2mini_device.py
+brands/onexplayer/x2-mini/scripts/integration.py
 common-device-source-index.json
 common/audio/realtek/alc245/speaker-route/final/speaker_route.py
 common/audio/realtek/alc245/speaker-route/licenses/AGPL-3.0.txt
