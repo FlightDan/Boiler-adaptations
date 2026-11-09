@@ -1539,9 +1539,14 @@
       "sha256": "7b56b449ea011d8c0677bc72e8a41ed3c9c0216e3da2803eaa36fc83314946b8"
     },
     {
+      "path": "records/migrations/fingerprint-dual-libfprint-20261109.md",
+      "size": 5354,
+      "sha256": "df31fc7b2e71bc9629d63d38a707233d750c92be4906a41936aa17d76550c74a"
+    },
+    {
       "path": "records/migrations/fingerprint-provider-separation-20261108.md",
-      "size": 3502,
-      "sha256": "46a94e7f328b65a4eaf30360c5d91085f14ac15d5d521349e95ad9a212cd1894"
+      "size": 3699,
+      "sha256": "b872dcd563e851fefc863eb6549bbc21c1987cedd71c10b831562c1501c98764"
     },
     {
       "path": "records/migrations/generic-model-candidate-20261104.md",
@@ -1820,8 +1825,8 @@
     },
     {
       "path": "source-files.txt",
-      "size": 53179,
-      "sha256": "faf7ce5d09150cb695f52e9d353e582ca6119bfc4e5630019930f64d3609f29d"
+      "size": 53237,
+      "sha256": "6d65fce3cbd59d297ce89949c63c91315cbc4b9ffba0cbc7d175e10f71d5273e"
     },
     {
       "path": "source-lock.json",

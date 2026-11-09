@@ -37,7 +37,7 @@ new source record an installable package.
 | Source records and synthetic matching | Implemented in this change; execution results must be reported separately. |
 | Generic bridge source | Existing locked bridge unchanged; no new release or lock. |
 | Model TOON and generated views | Source references only; not an executable package. |
-| Driver/runtime construction and licensing | Blocked: independently verified BF and FTE inputs, complete licenses, ABI and dependencies, and coexistence strategy required. |
+| Driver/runtime construction and licensing | Partially cleared: both backends build, link and test together in one libfprint — recipe, provenance and the exact unproven items are in `fingerprint-dual-libfprint-20261109.md`. Still blocked beyond that: no provider payload, kernel module, package or signature exists, and three FTE wrap tests need a glibc environment. |
 | Installer selection and authenticated target matching | Blocked: source matcher not integrated, target binding and explicit opt-out persistence required. |
 | Maintenance, upgrade, provider switching and interrupted recovery | Blocked: transactional integration, retained ownership, pre-existing installations and conflict tests required. Legacy paths must not be overwritten. |
 | Enrollment, verification, Steam unlock and PIN/password fallback | Blocked: physical-device tests and acceptance required; a captured frame is insufficient. |
