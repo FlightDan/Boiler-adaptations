@@ -1461,12 +1461,12 @@
     {
       "path": "devices/onexplayer/oxp3.toon",
       "size": 21033,
-      "sha256": "1d43fef9bc172f53fd56ff37303f13433741140863b610a133f1537272bbdfbe"
+      "sha256": "d85e5cbe2162913ab2756d597862c0fbdc5eb2d559f5294bd7e592263f0b26b1"
     },
     {
       "path": "devices/onexplayer/x2-mini.toon",
       "size": 18030,
-      "sha256": "7dae61f305ccfb456252761c5f2c44c0707aed80e16a51e1262d653802b3e023"
+      "sha256": "f4100a104e695682479eecf27034e3272fb8a9421203df7fb51bbdfd51885bfe"
     },
     {
       "path": "docs/ADAPTATIONS.md",
