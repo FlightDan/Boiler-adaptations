@@ -1859,11 +1859,6 @@
       "sha256": "e62630c3b9008529224a4c235667bc99aa975d9e77b68f422564c855bb2267a5"
     },
     {
-      "path": "source-files.txt",
-      "size": 53312,
-      "sha256": "20768213a3bcde363bb0f4073585ca51748a01b5e4e87f7409dd50a13d1dc86d"
-    },
-    {
       "path": "source-lock.json",
       "size": 27296,
       "sha256": "b57fe2a5c69d0d5e41ba5a9710c0310eedc4a8b2d8b5048bbfb3a429e9aea9fa"
