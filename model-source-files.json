@@ -199,6 +199,11 @@
       "sha256": "dd7aae623f2196c93824179b012cc65cb66603c1dc02fde799fbcd58d02ef052"
     },
     {
+      "path": "brands/onexplayer/oxp3/bridge/embedded-maintenance-tool.py",
+      "size": 2401,
+      "sha256": "cc8a654b451895efb33a4e036c690feae87e3b1ebd0ab9e3e1a9c9098a3dacf4"
+    },
+    {
       "path": "brands/onexplayer/oxp3/bridge/full_efi_sources.py",
       "size": 1088,
       "sha256": "64fc948c584ba497ba9df419996c93feaf5120d3d64a17287a502729c3e50d0f"
@@ -1814,6 +1819,11 @@
       "sha256": "f87fa26e47fff98c5912c528c58a129e5fdfffaa02326b1f1e2daa623a5c8078"
     },
     {
+      "path": "scripts/derive-legacy-maintenance.py",
+      "size": 5732,
+      "sha256": "26724decbeaab2f8cd84f52534b36965bec75183a7c087ff5a7ed4eeaa01134f"
+    },
+    {
       "path": "scripts/fingerprint_provenance.py",
       "size": 2313,
       "sha256": "607f96c809650fd4f4669e7f897ed02224a88b3b10cd0be565f4b169b1e3ef3f"
@@ -1832,6 +1842,11 @@
       "path": "scripts/prepare-fingerprint.py",
       "size": 5259,
       "sha256": "9dbfb861d5de9da63908051cfd75f0941077755a83e6895c9c28def74b49c81c"
+    },
+    {
+      "path": "scripts/rebase-x2-hdr.py",
+      "size": 8206,
+      "sha256": "dce11b3dabf8627a59fbd935df5fc258d46559ec1fef5ef192fde86dbc473a0f"
     },
     {
       "path": "scripts/refresh-model-source-inventory.py",
