@@ -39,7 +39,7 @@ REPOSITORY = 'FlightDan/Boiler-adaptations'
 INSTALLER_REPOSITORY = 'FlightDan/Boiler-installer'
 BASE_AUTHORITY_COMMIT = '3edd6a340b56628785f05365d62349f7d03c63eb'
 RELEASE_BASES = {'device:oxp3':'3b4c7dce1c6850dd2e3601ef44542676f904a66eeae9d2ce14ad00e3aa9ddbb2',
-                 'device:x2-mini':'96ef91e8b7909ad9a345eef1feed1aac90156e6846e9c2f75fc265d006b273f8'}
+                 'device:x2-mini':'b790d8f457ad517f97aa31ceb06191295eec9b586f5a625d8033f90aaa43eebd'}
 RELEASE_NATIVE = 'a51df24539a63ad82e74ac6b911f28835da19211ee50fd7c90457f15db20936f'
 PLUGIN = 'var/lib/oxp3-installer/decky/runtime/plugins/Boiler-Fingerprint-Unlock/'
 NATIVE = 'var/lib/oxp3-installer/fingerprint/'
