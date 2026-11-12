@@ -181,13 +181,16 @@ def build(base, base_sha256, runtime, native_sha256, source_sha256, output, mode
         raise ValueError('Base package lacks static maintenance contract')
     if release:
         legacy=package.get('legacy_capabilities', [])
-        wifi=[row for row in legacy if row.get('id')=='oxp3:wifi']
         decky=[row for row in legacy if row.get('id')=='oxp3:decky']
-        if (len(wifi)!=1 or wifi[0].get('available') is not False or wifi[0].get('default') is not False
-                or len(decky)!=1 or decky[0].get('available') is not True
+        # BE201 is not checked here. The installer's protocol.manifest rejects a
+        # package that makes the legacy oxp3:wifi handler available while it also
+        # declares resource:intel-be201-firmware; that is the single ownership
+        # boundary. Repeating a weaker form of it in this overlay gave one rule
+        # two definitions and left the base unpinnable.
+        if (len(decky)!=1 or decky[0].get('available') is not True
                 or package.get('selection_contract')!={'kind':'oxp3-legacy-options-v1','component':'oxp3:legacy-adaptation'}
                 or not any(row['id']=='oxp3:legacy-adaptation' for row in package['components'])):
-            raise ValueError('Base model lacks reviewed Decky or BE201 safety contract')
+            raise ValueError('Base model lacks reviewed Decky or legacy selection contract')
     prep.prepare(runtime, native_sha256, source_sha256, output/'prepared')
     stage = output/'package'; stage.mkdir()
     for row in package['files']:

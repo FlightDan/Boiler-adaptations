@@ -1785,13 +1785,13 @@
     },
     {
       "path": "scripts/build-fingerprint-overlay.py",
-      "size": 19485,
-      "sha256": "bd1e8669bb5d340e12bebacaa155f64741024f0ef978d85d8ad612d6a1a3665a"
+      "size": 19688,
+      "sha256": "830cb9407d76b6b69267079fae8ffe794d57fd3c13bd2acc9b86e7f0f769957c"
     },
     {
       "path": "scripts/build-index.py",
-      "size": 35125,
-      "sha256": "af3de3eeee38e633ad05650935e3e4137589cc3f62fa6b8379767969e68ec0de"
+      "size": 35133,
+      "sha256": "040d9c67a20af1af177f9d263c900dceb2a90500aaa0570312f1bb8dc20d2074"
     },
     {
       "path": "scripts/build-keyboard-runtime.py",
@@ -1885,8 +1885,8 @@
     },
     {
       "path": "tests/test_fingerprint_overlay.py",
-      "size": 11381,
-      "sha256": "334c833e2a0cbd67454bd1736853619dea310615fc5d151b1fec969476ad119d"
+      "size": 11536,
+      "sha256": "e4aa239440c59b385867b4d7646ba49743de41fe54984930acf5e919a1fed9cc"
     },
     {
       "path": "tests/test_fingerprint_providers.py",
