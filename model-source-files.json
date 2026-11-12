@@ -1785,8 +1785,8 @@
     },
     {
       "path": "scripts/build-fingerprint-overlay.py",
-      "size": 19688,
-      "sha256": "830cb9407d76b6b69267079fae8ffe794d57fd3c13bd2acc9b86e7f0f769957c"
+      "size": 19971,
+      "sha256": "132ea88af26384e3ac8ce605a7473731b1deff48a4254e13b343cf9e7431ce8b"
     },
     {
       "path": "scripts/build-index.py",
