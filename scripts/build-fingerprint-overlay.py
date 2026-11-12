@@ -198,7 +198,17 @@ def build(base, base_sha256, runtime, native_sha256, source_sha256, output, mode
         shutil.copyfile(confined(base, row['path']), target)
     package = json.loads(encoded(package)); package['version'] = package_version
     if release:
+        # The release source names the builder commit and nothing else. The
+        # reviewed overlay pins the base carried must survive that replacement:
+        # the EFI provider picks its lock from hdr_overlay_sha256, and dropping
+        # it silently falls back to the pre-HDR1100 lock, which then fails on
+        # the very files this base legitimately changed. They move to the
+        # top level, where lock_for() already looks for them.
+        prior_source = package.get('source', {})
+        carried = {key: prior_source[key] for key in ('hdr_overlay_sha256', 'bridge_overlay_sha256')
+                   if isinstance(prior_source.get(key), str)}
         package['source'] = {'kind':'github','repository':source_repository,'commit':source_commit}
+        package.update(carried)
         package['trust'] = {'status':'index-signature-required','official_release':False}
         package['minimum_engine_version'] = '0.1.5'
     component = {'schema_version':1,'kind':'ComponentManifest','id':'oxp3:fingerprint-unlock','version':package_version,

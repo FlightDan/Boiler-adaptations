@@ -112,9 +112,12 @@ class OverlayTests(unittest.TestCase):
         overlay.load_protocol(INSTALLER)
         with tempfile.TemporaryDirectory() as name:
             root=Path(name);base=root/'base';base.mkdir()
+            base_pins={'hdr_overlay_sha256':'1'*64,'bridge_overlay_sha256':'2'*64}
             def package(decky=True):
                 return {'schema_version':1,'kind':'DevicePackage','id':'device:oxp3','version':'0.1.0-test.1',
-                    'source':{'kind':'local','path':'fixture'},'compatibility':{},'files':[],
+                    'source':{'kind':'local','path':'fixture',
+                              'hdr_overlay_sha256':base_pins['hdr_overlay_sha256'],
+                              'bridge_overlay_sha256':base_pins['bridge_overlay_sha256']},'compatibility':{},'files':[],
                     'components':[{'schema_version':1,'kind':'ComponentManifest','id':'oxp3:legacy-adaptation',
                         'version':'0.1.0-test.1','files':[]}],
                     # oxp3:wifi is present but never consulted here: the BE201
@@ -151,6 +154,13 @@ class OverlayTests(unittest.TestCase):
                 self.assertEqual(report['base_source']['commit'],overlay.BASE_AUTHORITY_COMMIT)
                 self.assertEqual(report['installer_source']['commit'],'d'*40)
                 self.assertNotIn(str(root),json.dumps(report))
+                # A released overlay keeps naming its builder commit, and the
+                # base's reviewed overlay pins survive at the top level. The EFI
+                # provider selects its lock by hdr_overlay_sha256; losing it
+                # silently falls back to the pre-HDR1100 lock.
+                self.assertEqual(result.get('hdr_overlay_sha256'), base_pins['hdr_overlay_sha256'])
+                self.assertEqual(result.get('bridge_overlay_sha256'), base_pins['bridge_overlay_sha256'])
+                self.assertNotIn('hdr_overlay_sha256', result['source'])
                 for bad in (package(decky=False),):
                     raw=encoded(bad);(base/'manifest.json').write_bytes(raw)
                     with self.assertRaisesRegex(ValueError,'Decky or legacy selection contract'):
