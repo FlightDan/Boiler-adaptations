@@ -12,7 +12,7 @@
 
 ### 两台机型实际引用的共用设备资源
 
-OXP3 与 X2 Mini 的 `resource_model.common_references` 都引用下表。资源文件中的相对路径从各自的资源目录解析。其他组件及机型专属路径见各自 TOON 的 `components` 和 `build`。
+两台机型的 `resource_model.common_references` 包含两组条目。`resources` 列出前四项共用源码资源，`boot_policies` 列出 GM7 启动策略。两组条目的 `source` 都相对于适配仓库根目录。打开某个 `source.toon` 后，其中的 `files[].path` 相对于该文件所在目录。其他组件及机型专属路径见各自 TOON 的 `components` 和 `build`。
 
 | 设备 | TOON 入口 |
 | --- | --- |
