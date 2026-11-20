@@ -266,17 +266,18 @@
     },
     {
       "id": "native-tdp",
-      "name": "原生 TDP 10–40W 控制",
+      "name": "原生 TDP · PL1 8–40 W",
       "recommendation": "conditional",
       "default": false,
       "dependencies": [
         "manager"
       ],
       "sources": [
-        "brands/onexplayer/oxp3/scripts/controls/rapl/provider.py"
+        "brands/onexplayer/oxp3/scripts/controls/rapl/provider.py",
+        "brands/onexplayer/common/tdp_sources.py"
       ],
       "status": "source_reference_only",
-      "notes": "仅保留已公开常规 RAPL 实现；10–40W 不作为其他机型范围。"
+      "notes": "新版机型包在匹配机型上提供 PL1 8–40 W，SteamOS 与 Decky 共用同一范围。"
     },
     {
       "id": "overlay",
@@ -328,7 +329,9 @@
       ],
       "sources": [
         "brands/onexplayer/oxp3/scripts/controls/cpu/cpu_control.py",
-        "brands/onexplayer/oxp3/scripts/controls/cpu/power_control.py"
+        "brands/onexplayer/oxp3/scripts/controls/cpu/power_control.py",
+        "brands/onexplayer/common/tdp_sources.py",
+        "brands/onexplayer/oxp3/current/plugin-i18n/cpu/index.js"
       ],
       "status": "source_reference_only",
       "notes": "仅保留公开常规控制；未纳入工作区新动态功耗研究。"
