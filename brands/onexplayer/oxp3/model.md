@@ -27,7 +27,7 @@
 | split-lock | Split-lock 报告洪泛修复 · 需要重启 | 条件适用 | 确认存在报告洪泛且启动文件受支持时使用；重启生效，按原事务恢复。 |
 | wifi | BE201 无线 c106 与蓝牙固件 | 条件适用 | Source reference only; verify the actual wireless device and firmware compatibility. |
 | manager | SteamOS Manager 状态与错误修复 | 推荐 | 核对实际 Manager 接口和软件版本；不取消已有硬件检查。 |
-| native-tdp | 原生 TDP 10–40W 控制 | 条件适用 | 仅保留已公开常规 RAPL 实现；10–40W 不作为其他机型范围；依赖：manager |
+| native-tdp | 原生 TDP · PL1 8–40 W | 条件适用 | 新版机型包在匹配机型上提供 PL1 8–40 W，SteamOS 与 Decky 共用同一范围；依赖：manager |
 | overlay | CPU/GPU/APU 功耗与 PVRAM 叠加层 | 可选 | 按实际 CPU/GPU 接口验证读数，缺失指标保持缺失。 |
 | fan-driver | OXP3 风扇与充电接口驱动 | 条件适用 | OXP3 专用寄存器/驱动布局；另需匹配公开驱动载荷。 |
 | oxp3-fan | OXP3 风扇 · 自动与曲线 | 可选 | OXP3 专用风扇界面与曲线；另需原公开插件载荷；依赖：fan-driver、decky |

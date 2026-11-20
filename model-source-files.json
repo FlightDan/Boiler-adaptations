@@ -194,6 +194,11 @@
       "sha256": "fd41a0d19bafdbca7e6450f1db292c187e2c8cac2743edb215c7d889244997fd"
     },
     {
+      "path": "brands/onexplayer/common/tdp_sources.py",
+      "size": 2701,
+      "sha256": "018b6846f710a0850c614784927e5d4ca5da1283fe931620b51951cfd726e0d4"
+    },
+    {
       "path": "brands/onexplayer/oxp3/bridge/.gitignore",
       "size": 33,
       "sha256": "adc0c7acfe8ea99a093fb8a7348a1bf44ece8ce8f405d9e3dcf0b04f08756d36"
@@ -345,8 +350,8 @@
     },
     {
       "path": "brands/onexplayer/oxp3/current/plugin-i18n/cpu/index.js",
-      "size": 24873,
-      "sha256": "2061e8a9dcfb74a4fe16fd9ad555e94aaf5cbf5028175adb78eb81652b6508b3"
+      "size": 24877,
+      "sha256": "18098f47d912db8bec76c7768ed59021ed6a2f1b82a7c5e199119181ec47d624"
     },
     {
       "path": "brands/onexplayer/oxp3/current/plugin-i18n/fan/index.js",
@@ -460,13 +465,13 @@
     },
     {
       "path": "brands/onexplayer/oxp3/manifest.json",
-      "size": 16222,
-      "sha256": "63cc0f1193f89785c99f23321a15de75d50282a5adacde2fa66f5e341973331d"
+      "size": 16407,
+      "sha256": "748a8749b4757dfbf2b0b39e4cadfcd8ea4a8ab2f80831365e9ac62f7e37719d"
     },
     {
       "path": "brands/onexplayer/oxp3/model.md",
-      "size": 7524,
-      "sha256": "cfc33379a73f4aac441389c6126210ba2b4c2c6e3eeb4fd4005c710b4cfb714b"
+      "size": 7540,
+      "sha256": "0d8037cbf6ca8dda1b98d7bc482364ecc12e47a76c0a84471526185e6efe6403"
     },
     {
       "path": "brands/onexplayer/oxp3/scripts/autoflatpaks-compat/README.txt",
@@ -800,13 +805,13 @@
     },
     {
       "path": "brands/onexplayer/x2-mini/manifest.json",
-      "size": 19474,
-      "sha256": "59feb3f0a08732495582851b903c49a0ad708dd335083c1396ef0c3c4f9abd58"
+      "size": 19635,
+      "sha256": "ce2d19cc4ecde2af17a745a743631d84b233ecefd40648adc3fb0943f14e220e"
     },
     {
       "path": "brands/onexplayer/x2-mini/model.md",
-      "size": 9356,
-      "sha256": "9838e06ab86dcedfc20a66204f844b3db647c95b8c06f88e6cda840e54405d13"
+      "size": 9348,
+      "sha256": "0d70c49e7bf1f6a7a8c0741b789f2494714ec8464cab93564a4e6ca7ae43bef0"
     },
     {
       "path": "brands/onexplayer/x2-mini/scripts/build-x2-hdr-overlay.py",
@@ -1715,13 +1720,13 @@
     },
     {
       "path": "devices/onexplayer/oxp3.toon",
-      "size": 22811,
-      "sha256": "4687d261d08517f07e007b67744fa629d9a41443ec2ec6ca187283f07ca081e3"
+      "size": 22963,
+      "sha256": "d2d5f19fd39ca9a8cb178d93136e5500c4e2247911bda6ab51e1309a5c4e76cd"
     },
     {
       "path": "devices/onexplayer/x2-mini.toon",
-      "size": 19831,
-      "sha256": "a2c89b7dcc6492032eef412ae9a3854d172d1e6f068a598b3f79f2449d5cd067"
+      "size": 19959,
+      "sha256": "a0221ef904c4f21916968acd749537e7a04fbf175f43980d4d88510eee7e0810"
     },
     {
       "path": "docs/ADAPTATIONS.md",
@@ -1847,6 +1852,11 @@
       "path": "records/migrations/intel-cpu-microcode-toon-20261118.md",
       "size": 1045,
       "sha256": "88258a615e8f8b497407435ec77ff917a8237daf2f8d7c41d34bccc01f6d7df4"
+    },
+    {
+      "path": "records/migrations/onexplayer-pl1-8w-20261121.md",
+      "size": 1530,
+      "sha256": "8ef5c3619da34448c03ed2d9289bf13303d5f429e3c3a09829acc446506ba334"
     },
     {
       "path": "records/migrations/onexplayer-plugin-fixes-20261120.md",
@@ -2074,6 +2084,11 @@
       "sha256": "0df9fbd4289a890db80e84e3a8d5036bb79129f851de4d83aed5360ddbb7fe7b"
     },
     {
+      "path": "records/x2-mini-g3e-tdp-20261108.md",
+      "size": 1173,
+      "sha256": "bf5298f2a5d62b3ca22be517e402378524e0cf7c3de20e5d6fddb7562faa2181"
+    },
+    {
       "path": "resource-build-inputs.json",
       "size": 11504,
       "sha256": "727e3b51d67e6967fa00a732f7f39d35a2fa9be372c681f9b2ccaac7ade4ef5c"
@@ -2125,8 +2140,8 @@
     },
     {
       "path": "scripts/build-s4-split-model.py",
-      "size": 15708,
-      "sha256": "d34be0397079236db70a1ca8490df2d1d85802cf1424ef34ed8418d429c0bc7b"
+      "size": 20065,
+      "sha256": "fb93ebfb28fe4cf6c64a7f43219044847deadb4ddf5f565d4d3ed747c462a3ff"
     },
     {
       "path": "scripts/build-shared-base.py",
@@ -2257,6 +2272,11 @@
       "path": "tests/test_model_identity.py",
       "size": 13791,
       "sha256": "4e2c99140e44d636d9b75d1407e7fb617f13a27eb5790878401554c3c2d54153"
+    },
+    {
+      "path": "tests/test_onexplayer_tdp_sources.py",
+      "size": 4019,
+      "sha256": "062ed04318ce55bbe295d12f4b60bc75d29c2f17c30147ef828b716628c593ef"
     },
     {
       "path": "tests/test_pam_input.py",

@@ -155,13 +155,13 @@ components[36]:
     status: shared_oxp3_implementation
     notes: 完整复用 OXP3 公共适配；系统与实际接口依赖独立检查，机型不匹配只提示。
   - id: native-tdp
-    name: 原生 TDP 10–40W 控制
+    name: 原生 TDP · PL1 8–40 W
     recommendation: conditional
     default: false
     dependencies[1]: manager
-    sources[1]: brands/onexplayer/oxp3/scripts/controls/rapl/provider.py
+    sources[2]: brands/onexplayer/oxp3/scripts/controls/rapl/provider.py,brands/onexplayer/common/tdp_sources.py
     status: shared_oxp3_implementation
-    notes: 完整复用 OXP3 公共适配；系统与实际接口依赖独立检查，机型不匹配只提示。
+    notes: 新版机型包在匹配机型上提供 PL1 8–40 W，SteamOS 与 Decky 共用同一范围。
   - id: overlay
     name: CPU/GPU/APU 功耗与 PVRAM 叠加层
     recommendation: optional
@@ -191,7 +191,7 @@ components[36]:
     recommendation: optional
     default: false
     dependencies[1]: decky
-    sources[2]: brands/onexplayer/oxp3/scripts/controls/cpu/cpu_control.py,brands/onexplayer/oxp3/scripts/controls/cpu/power_control.py
+    sources[4]: brands/onexplayer/oxp3/scripts/controls/cpu/cpu_control.py,brands/onexplayer/oxp3/scripts/controls/cpu/power_control.py,brands/onexplayer/common/tdp_sources.py,brands/onexplayer/oxp3/current/plugin-i18n/cpu/index.js
     status: shared_oxp3_implementation
     notes: 完整复用 OXP3 公共适配；系统与实际接口依赖独立检查，机型不匹配只提示。
   - id: intel-cpu-microcode
