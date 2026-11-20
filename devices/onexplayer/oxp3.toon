@@ -268,7 +268,7 @@ build:
     model,adaptations/upstream-source-lock.json,099e3f4510db935acbc8fef45bb36296541a78d934050dd66051164b1569fcdc
     model,adaptations/records/oxp3-shared-base/opti031-inputs.json,f8cf3f4007e1ff6f436b0b914bf10762fe3737c0ec013d2bacc36bcd222abfa6
     model,adaptations/fingerprint-source-lock.json,e21c367747cd4e2055b54cbf2eb9ca1b7b5c2c40f0ca2f75fc1f080feaba7285
-    common,adaptations/xevma-kmod-source-lock.json,74a3c7833d2b8127506b07fa0fbc56564913cb38595b241dbe9741a474267d17
+    common,adaptations/metadata/locks/xevma-kmod-source-lock.json,74a3c7833d2b8127506b07fa0fbc56564913cb38595b241dbe9741a474267d17
   inputs[9]{name,kind,path,lock,sha256,note}:
     base,package,adaptations/inputs/oxp3-shared-base-2,adaptations/inputs/oxp3-shared-base-2/manifest.json,510342dec0bfe6ce39389f5e13cae0d504755aa4072d90b73641b4dd2d5aead9,Explicit complete reviewed .20261030.2 package. Fixed public builders reproduce and verify .3 then .4 before final .8; no prebuilt .3/.4 fallback.
     decky,locked-directory,adaptations/inputs/decky-3.3.1,components/locks/decky.json,70650383267d3d9c24a04c8c4c7a9c8c0f89581fb7b7a19b296ae0d1b53c58a4,Prepare Decky 3.3.1 with scripts/prepare-decky.py and the exact PluginLoader/source notices in this lock.
