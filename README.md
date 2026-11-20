@@ -14,6 +14,8 @@ This repository collects device and model adaptations for Boiler. Browse the exi
 <details open>
 <summary>Contribute an adaptation</summary>
 
+[New handheld or individual component: contribution guide and PR evidence](https://github.com/FlightDan/Boiler-installer/blob/main/docs/CONTRIBUTING_ADAPTATIONS.md)
+
 1. Fork this repository.
 2. Add the adaptation under the right brand and model. Put reusable hardware resources in `common/` and reference them from the model's TOON.
 3. Include the model, operating system and kernel versions, what you tested, and screenshots or logs that show the result.

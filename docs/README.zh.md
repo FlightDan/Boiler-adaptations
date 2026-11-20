@@ -14,6 +14,8 @@
 <details open>
 <summary>如何提交新适配</summary>
 
+[新机型与单部件贡献指南（最低实机要求、开发步骤和 PR 模板）](https://github.com/FlightDan/Boiler-installer/blob/main/docs/CONTRIBUTING_ADAPTATIONS.md)
+
 1. Fork 这个仓库。
 2. 在对应品牌和机型目录添加适配；共用硬件资源放在 `common/`，通过机型 TOON 引用。
 3. 写清楚机型、系统和内核版本，以及测试过的功能；附上能说明情况的截图或日志。

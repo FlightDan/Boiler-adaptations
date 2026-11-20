@@ -25,8 +25,8 @@
     },
     {
       "path": "README.md",
-      "size": 2157,
-      "sha256": "c8fd241151ceab700f81d98fab5b8c63ba0a67bd5182b071c046c1befbfc85b0"
+      "size": 2323,
+      "sha256": "ae90a198ce9f56fb6834e69c60c8b9267fb5678fbc17b42e77b9b56b0e7e9ce8"
     },
     {
       "path": "THIRD_PARTY_NOTICES.md",
@@ -845,8 +845,8 @@
     },
     {
       "path": "common-device-source-index.json",
-      "size": 2299,
-      "sha256": "88ef28b51a1131a4e4a1059a280f90a6ff867ab02f15a32e2d33051dab4bfaef"
+      "size": 2550,
+      "sha256": "1d5e3891dc7c1b0b7a479663d8db96946162f5d5aa375a172fea67db961c172b"
     },
     {
       "path": "common/audio/realtek/alc245/speaker-route/final/speaker_route.py",
@@ -1730,18 +1730,18 @@
     },
     {
       "path": "docs/ADAPTATIONS.md",
-      "size": 3896,
-      "sha256": "335750b70d51fb6d93b828a7f676e8e5f5f81319864ab61173c94e6b7432557f"
+      "size": 4075,
+      "sha256": "834f4eee56920b8d5436434a6c537e71bcaafd7332ea4171445bd4388500998d"
     },
     {
       "path": "docs/BUILD.en.md",
-      "size": 7629,
-      "sha256": "681e1c478da77788c5859a7af659ac4bc50be83d21581741083bf932440f33d1"
+      "size": 7795,
+      "sha256": "d12f84ebc33beb1b30498902c378fc0b1acce6d37fab1d97179bc048b2737634"
     },
     {
       "path": "docs/BUILD.md",
-      "size": 7237,
-      "sha256": "b5bb2d957b18240fcee54d52d9f55cf79ec0c61b18db9cd872e2a69511f3e305"
+      "size": 7416,
+      "sha256": "fd66c8af487ae307f1176f1b7956e71f4c533a80aa4109d296a9064cd1f24ef4"
     },
     {
       "path": "docs/FINGERPRINT_OVERLAY_AUTHORITY_PREVIEW_20261104.md",
@@ -1750,18 +1750,18 @@
     },
     {
       "path": "docs/README.zh.md",
-      "size": 1991,
-      "sha256": "00eec37bde49a0fff5ed7bb4014cc0b0f5ce5d682c6ba7a9b79bc867ea7f5d94"
+      "size": 2170,
+      "sha256": "91de784a86387ede41314ac08816644c8f9912c6ab157cccc3863e2c1a00ee14"
     },
     {
       "path": "docs/REGISTRY.en.md",
-      "size": 2627,
-      "sha256": "2f02ba2d2dfe5ee2f18be99cddafdd4319e40bb22cf3321834d4fcf4478096c6"
+      "size": 2415,
+      "sha256": "c154aa81e7f138e4eab106539f4c087a16b622d05d69e87be0423348a95026f7"
     },
     {
       "path": "docs/REGISTRY.md",
-      "size": 2318,
-      "sha256": "337be32c219d3a3d18fe16f641547bd8879b1fac5de209c8b8ec119b1fe4e373"
+      "size": 2154,
+      "sha256": "9ef52870dd751d09b96d5c671eba0920d138008c57c6e73b00d2e4050047e532"
     },
     {
       "path": "docs/RELEASE_0.1.0-layout.1.md",
@@ -2115,8 +2115,8 @@
     },
     {
       "path": "scripts/adaptations.py",
-      "size": 16478,
-      "sha256": "863a4db7f860dbad772677f73733a36e0a80f6575c26e84771b95eee5fb97291"
+      "size": 17376,
+      "sha256": "66dcaab36d2353e755b72680ed2e25d113dfe90593698cdc09df49132627670c"
     },
     {
       "path": "scripts/build-complete-bridge.py",
@@ -2135,8 +2135,8 @@
     },
     {
       "path": "scripts/build-index.py",
-      "size": 35545,
-      "sha256": "bcbe75db3efafacc69b2bd87054a6067a6bac530e8f63fb4014240ab36c5d39a"
+      "size": 37200,
+      "sha256": "43a988656932887b018f1399435b7ecd1699cfe7692ebac776deae26785006cd"
     },
     {
       "path": "scripts/build-keyboard-runtime.py",
@@ -2170,8 +2170,8 @@
     },
     {
       "path": "scripts/common-device-sources.py",
-      "size": 10443,
-      "sha256": "f87fa26e47fff98c5912c528c58a129e5fdfffaa02326b1f1e2daa623a5c8078"
+      "size": 12686,
+      "sha256": "d8bd32f790b4639717fa34d1abf58fbc199009c8aac430b2a1273d392afc32f0"
     },
     {
       "path": "scripts/fingerprint_provenance.py",
@@ -2180,8 +2180,8 @@
     },
     {
       "path": "scripts/model-identity.py",
-      "size": 14404,
-      "sha256": "4e3b3eaed5269f46a849f2583c40c59ea5571c90cb4312c74d332bd618447b35"
+      "size": 14488,
+      "sha256": "fa9f9de48b254ecadac50f7d80d2df33d3325c34f05bf6fe8f723dedf3113029"
     },
     {
       "path": "scripts/prepare-current-inputs.py",
@@ -2235,13 +2235,13 @@
     },
     {
       "path": "tests/test_adaptations.py",
-      "size": 20523,
-      "sha256": "8eacc37fc0359dd4af3f7c9298d8237ca9dc5bb943e880174ce27882fc0ed53e"
+      "size": 20922,
+      "sha256": "ce1f9ed24afb20191dec4dab42a92bfc2142e5e2baca5e7eee874a0e01e06a67"
     },
     {
       "path": "tests/test_common_device_sources.py",
-      "size": 4839,
-      "sha256": "1685259401f90040500738131e5f81d7d1c3aa9e8aca737098cc98f0f483c7ed"
+      "size": 4938,
+      "sha256": "843e262074f862822a336e4922b845e675ba4752b73a5fa3b311d70143a1e367"
     },
     {
       "path": "tests/test_fingerprint_kde_pam.py",
@@ -2275,13 +2275,13 @@
     },
     {
       "path": "tests/test_index_models.py",
-      "size": 15080,
-      "sha256": "e761120d0d7463a50e74ca1b605d8d30fb11836c4a9d687babfa9746c02521d2"
+      "size": 18075,
+      "sha256": "ac0404a969289dda8829ea424d6dd8ca625e1ac0d835b2ad740a1280a5c1b94d"
     },
     {
       "path": "tests/test_model_identity.py",
-      "size": 13791,
-      "sha256": "4e2c99140e44d636d9b75d1407e7fb617f13a27eb5790878401554c3c2d54153"
+      "size": 15689,
+      "sha256": "84809200034f0e85c0de7ef5bd44ed9a4145e18e56e784ee13ea09fa0a308f85"
     },
     {
       "path": "tests/test_onexplayer_tdp_sources.py",

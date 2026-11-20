@@ -1,5 +1,7 @@
 # Boiler 品牌与机型适配
 
+[新机型与单部件贡献指南（最低实机要求、开发步骤和 PR 模板）](https://github.com/FlightDan/Boiler-installer/blob/main/docs/CONTRIBUTING_ADAPTATIONS.md)
+
 这里按品牌、机型整理已有公开适配源码，并记录应该选择哪些组件。
 
 | 要做的事 | 从哪里开始 |
